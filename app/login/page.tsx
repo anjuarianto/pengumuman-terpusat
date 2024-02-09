@@ -20,7 +20,7 @@ export default function Login() {
         <div className="w-[30em] p-16 rounded-lg bg-white shadow-lg">
           {/* title */}
           <div>
-            <h1 className="text-black text-2xl font-bold">
+            <h1 className=" text-2xl font-bold">
               Sign Into Your Account
             </h1>
             <hr className="h-px border-2 rounded-lg border-blue-500 my-4" />
@@ -29,7 +29,7 @@ export default function Login() {
           {/* login form */}
           <form
             onSubmit={loginForm.handleSubmit(onSubmit)}
-            className="flex flex-col items-center gap-4 mt-4 text-black"
+            className="flex flex-col items-center gap-4 mt-4 "
           >
             <div className="w-full p-3 rounded-md border border-gray-300 flex flex-row justify-center items-center gap-2 hover:cursor-pointer" >
               <Image
@@ -38,7 +38,7 @@ export default function Login() {
                 width={25}
                 height={25}
               />
-              <div className="text-black">Google Sign-in</div>
+              <div className="">Google Sign-in</div>
             </div>
             <div>or</div>
             <input
@@ -53,12 +53,12 @@ export default function Login() {
                 type={showPassword ? "text" : "password"}
                 id="password"
                 placeholder="Your password"
-                className="w-full text-black p-2 border-b border-gray-300" // Add pr-10 for padding on the right side
+                className="w-full  p-2 border-b border-gray-300" // Add pr-10 for padding on the right side
                 {...loginForm.register("password", { required: true })}
               />
               <button
                 type="button"
-                className="absolute p-3 cursor-pointer text-xl text-black"
+                className="absolute p-3 cursor-pointer text-xl "
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? <FaEye /> : <FaEyeSlash />}
@@ -72,7 +72,7 @@ export default function Login() {
               Login
             </button>
             <Link
-              href={"/"}
+              href={"/home"}
               className=" pt-2 text-blue-500 hover:text-blue-700 hover:underline"
             >
               Forgot Password?

@@ -20,6 +20,12 @@ const config: Config = {
         'xl': "1280px",
         '2xl': '1536px',
       },
+      colors: {
+        'link-blue': '#9ccbe2',
+        'gray-1':'#292e32',
+        'gray-2':'#40474f',
+        'gray-3':'#535a61',
+      },
     },
   },
   plugins: [],

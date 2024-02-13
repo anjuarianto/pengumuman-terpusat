@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 
 
-import { IoMdMenu, IoMdClose } from "react-icons/io";
+import { IoMdMenu, IoMdClose,IoIosLogOut  } from "react-icons/io";
 
 interface NavItem {
   label: string;
@@ -18,28 +18,28 @@ const NAV_ITEMS: Array<NavItem> = [
   },
   {
     label: "Room",
-    page: "room",
+    page: "home",
   },
   {
     label: "Calendar",
-    page: "calendar",
+    page: "home",
   },
 
 ];
 
-export default function Navbar() {
+export default function Navbar({name}:{name:string}) {
 
   const [navbar, setNavbar] = useState(false);
 
 
   return (
-    <header className="w-full mx-auto  px-4 sm:px-20 fixed top-0 z-50 shadow bg-stone-900 border-b">
+    <header className="fixed top-0 z-50 w-full px-4 py-2 mx-auto border-b shadow sm:px-20 bg-main-4">
       <div className="justify-between md:items-center md:flex">
         <div>
           <div className="flex items-center justify-between py-1 md:py-1 md:block">
             <Link href={"/home"}>
               <div className="container flex items-center space-x-2">
-                <h2 className="text-2xl font-bold text-neutral-100">Christopher Russell</h2>
+                <h2 className="text-2xl font-bold text-neutral-100">Pengumuman Terpusat</h2>
               </div>
             </Link>
             
@@ -55,12 +55,15 @@ export default function Navbar() {
         </div>
 
         <div>
+          
           <div
             className={`flex-1 justify-self-center pb-3 mt-8 md:block md:pb-0 md:mt-0 ${
               navbar ? "block" : "hidden"
             }`}
           >
+            
             <div className="items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0">
+              
               {NAV_ITEMS.map((item, idx) => {
                 return (
                   
@@ -79,6 +82,8 @@ export default function Navbar() {
                   
                 );
               })}
+              <div className="text-white">{name}</div>
+              <button className="text-white hover:text-sky-600"><IoIosLogOut  className="inline-block mr-1" /> Logout</button>
               
             </div>
           </div>

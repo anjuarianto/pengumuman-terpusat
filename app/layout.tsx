@@ -22,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${poppins.variable}`}>
+    <html lang="en" className={`${poppins.variable} md:bg-main-1` }>
       <body >{children}</body>
     </html>
   );

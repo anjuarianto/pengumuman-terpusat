@@ -25,6 +25,11 @@ const config: Config = {
         'gray-1':'#292e32',
         'gray-2':'#40474f',
         'gray-3':'#535a61',
+        'main-1':'#eff4fb',
+        'main-2':'#dae2f0',
+        'main-3':'#535a61',
+        'main-4':'#20abfc',
+        
       },
     },
   },

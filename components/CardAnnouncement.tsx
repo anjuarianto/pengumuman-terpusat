@@ -3,24 +3,33 @@ import React, { useState } from "react";
 
 import { FaEdit, FaTrash, FaCommentAlt } from "react-icons/fa";
 
-export default function CardAnnouncement() {
+export default function CardAnnouncement({receiver,title,date,time,content}:{
+  receiver: { value: string; label: string; };
+  title: string;
+  date: string;
+  time: string;
+  content: string;
+}) {
   return (
     <>
-      <div className="py-1">
-        <div className="flex flex-col gap-2 p-2 rounded-lg hover:bg-gray-1">
+      <div className="p-2 bg-white rounded-lg hover:cursor-default">
+        <div className="flex flex-col gap-2 p-2 rounded-lg ">
           <div className="flex flex-row items-center gap-2 text-sm ">
-            <span>• Pak John</span> <span className="text-gray-300">15 January 2024 09:12:55</span>
+            <span>• {receiver.label}</span>{" "}
+            <span className="text-main-3">{date}{" "}{time} </span>
           </div>
-          <h1 className="font-bold text-2xl">Judul Pengumuman</h1>
-          <p className="py-2 text-gray-300">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          <h1 className="text-2xl font-bold">{title}</h1>
+          <p className="py-2 ">
+            {content}
+          </p>
           <div className="flex flex-row gap-4 text-sm">
-            <button className="px-4 py-1 border flex flex-row items-center gap-2 rounded-lg hover:cursor-pointer">
+            <button className="flex flex-row items-center gap-2 px-4 py-1 border rounded-lg ">
               <FaCommentAlt /> Reply
             </button>
-            <button className="px-4 py-1 border flex flex-row items-center gap-2 rounded-lg hover:cursor-pointer">
+            <button className="flex flex-row items-center gap-2 px-4 py-1 border rounded-lg ">
               <FaEdit /> Edit
             </button>
-            <button className="px-4 py-1 border flex flex-row items-center gap-2 rounded-lg hover:cursor-pointer">
+            <button className="flex flex-row items-center gap-2 px-4 py-1 border rounded-lg ">
               <FaTrash /> Delete
             </button>
           </div>

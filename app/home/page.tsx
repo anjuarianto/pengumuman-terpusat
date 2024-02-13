@@ -1,73 +1,199 @@
-"use client;";
-
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
-import { FaCalendarPlus, FaPlus } from "react-icons/fa";
+import { FaCalendarPlus, FaPlus, FaSearch } from "react-icons/fa";
 import CardAnnouncement from "@/components/CardAnnouncement";
+import { Modal } from "@mui/material";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import Select from "react-select";
+
+type PengumumanData = {
+  receiver: { value: string; label: string; }[];
+  title: string;
+  date: string;
+  time: string;
+  content: string;
+};
+
+const receiverOptions = [
+  { value: 'kris', label: 'kris' },
+  { value: 'kris2', label: 'kris2' },
+  { value: 'kris3', label: 'kris 3' },
+  // Add more options as needed
+];
+
+const PengumumanDummyData = [
+  {
+    receiver: { value: 'John Doe', label: 'John Doe' },
+    title: 'Important Meeting',
+    date: '2024-02-13',
+    time: '08:00',
+    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed aliquet tellus quis felis vulputate, sit amet efficitur lorem placerat.'
+  },
+  {
+    receiver: { value: 'Olivia Taylor2', label: 'Olivia Taylor' },
+    title: 'Upcoming Event',
+    date: '2024-02-14',
+    time: '10:30',
+    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque enim et est bibendum, vel aliquam lacus placerat.'
+  },
+  {
+    receiver: { value: 'Michael Wilson', label: 'Michael Wilson' },
+    title: 'Club Meeting',
+    date: '2024-02-15',
+    time: '13:45',
+    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam lacinia justo ac urna condimentum, sit amet congue odio consequat.'
+  },
+  {
+    receiver: { value: 'Emily Brown', label: 'Emily Brown' },
+    title: 'Guest Speaker Lecture',
+    date: '2024-02-16',
+    time: '16:00',
+    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sed enim a nunc tristique eleifend at eget leo.'
+  },
+  {
+    receiver: { value: 'Ava Garcia', label: 'Ava Garcia' },
+    title: 'Seminar Announcement',
+    date: '2024-02-17',
+    time: '19:15',
+    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et enim eu nunc suscipit aliquam nec vitae purus.'
+  }
+];
+
 
 export default function Home() {
+  const [open, setOpen] = useState(false);
+
+  const pengumumanForm = useForm<PengumumanData>();
+
+  const searchForm = useForm<any>();
+
+
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    pengumumanForm.reset()
+    setOpen(false);
+  };
+
+  const onSubmit: SubmitHandler<PengumumanData> = async (data) => {
+    console.log(data);
+    alert(data.receiver[0].value+ data.title+ data.date+" "+data.time+ data.content)
+  };
+  const onSubmitSearch: SubmitHandler<any> = async (data) => {
+    console.log(data);
+  };
+
   return (
     <>
-      {/* <Navbar ></Navbar> */}
-      <div className="flex flex-col items-center w-screen h-full md:bg-gray-1 pt-16 text-white">
-        <div className="flex flex-row justify-center h-screen w-2/3 bg-gray-2 divide-x">
-          
-          
+      <Navbar name="namaUser"></Navbar>
+      <div className="flex flex-col items-center w-full h-full pt-16 ">
+        <div className="w-2/5 p-2 ">
+          <div className="flex flex-row items-center gap-4 text-white">
+            <div
+              className="flex flex-row items-center gap-2 px-6 py-2 transition-all border rounded-lg shadow-md basis 1/5 bg-main-4 hover:shadow-lg hover:cursor-pointer"
+              onClick={handleOpen}
+            >
+              <FaCalendarPlus />
+              <span>Add News </span>
+            </div>
+            {/* <form className="px-2 py-1 my-2 text-center border border-white rounded-full shadow-lg basis-3/5 bg-main-4">
+              search ...
+            </form> */}
+            <form
+              className="relative mx-auto text-gray-600 "
+              onSubmit={searchForm.handleSubmit(onSubmitSearch)}
+            >
+              <input
+                className="h-10 px-5 pr-16 text-sm bg-white border-2 border-gray-300 rounded-lg focus:outline-none"
+                type="search"
+                placeholder="Search"
+                {...searchForm.register("search")}
+              />
+              <button
+                type="submit"
+                className="absolute top-0 right-0 mt-3 mr-4"
+              >
+                {/* <svg
+                  className="w-4 h-4 text-gray-600 fill-current"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 56.966 56.966"
+                  width="512px"
+                  height="512px"
+                >
+                  <path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" />
+                </svg> */}
+                <FaSearch />
+              </button>
+            </form>
+            ;
+            <div className="px-6 py-2 text-center border border-white rounded-lg shadow-lg basis-1/5 bg-main-4">
+              General
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-row justify-center w-2/3 h-screen ">
           {/* roomlist  */}
-          <div className="w-1/5 h-screen  ">
-            <div className="m-auto p-8 ">
+          <div className="w-1/5 h-screen ">
+            <div className="p-6 m-2 bg-white rounded-lg">
               <div className="flex flex-row ">
                 <h2 className="text-left grow ">Room List</h2>{" "}
                 <FaPlus className="p-1 text-2xl hover:cursor-pointer"></FaPlus>
               </div>
 
-              <div className="py-1 px-2 my-2 bg-slate-600 text-center rounded-lg shadow-lg border border-white">
+              <div className="px-2 py-1 my-2 text-center text-white border border-white rounded-lg shadow-lg bg-main-4">
                 General
               </div>
-              <div className="py-1 px-2 my-2 bg-slate-600 text-center rounded-lg shadow-lg border border-white">
+              <div className="px-2 py-1 my-2 text-center text-white border border-white rounded-lg shadow-lg bg-main-4">
                 Room 1
               </div>
-              <div className="py-1 px-2 my-2 bg-slate-600 text-center rounded-lg shadow-lg border border-white">
+              <div className="px-2 py-1 my-2 text-center text-white border border-white rounded-lg shadow-lg bg-main-4">
                 Room 2
               </div>
             </div>
           </div>
 
           {/* main content */}
-          <div className="w-3/5 h-screen  px-6">
-            <div className="flex flex-row gap-4 items-center py-6">
-              <div className="basis 1/5 p-1 bg-slate-600 flex flex-row items-center gap-2 border rounded-lg hover:cursor-pointer">
-                Add News <FaCalendarPlus />
-              </div>
-              <form  className="basis-3/5 py-1 px-2 my-2 bg-slate-600 text-center rounded-full shadow-lg border border-white">
-                search ...
-              </form>
-              <div className="basis-1/5 py-1 px-2 my-2 bg-slate-600 text-center rounded-lg shadow-lg border border-white">
-                General
-              </div>
-            </div>
+          <div className="w-3/5 h-screen ">
+            <div className="flex flex-col gap-4 m-2 rounded-lg ">
+              {/* <CardAnnouncement></CardAnnouncement>
+              <CardAnnouncement></CardAnnouncement> */}
 
-            <div className="flex flex-col items divide-y border-y">
-                <CardAnnouncement></CardAnnouncement>
-                <CardAnnouncement></CardAnnouncement>
+              {PengumumanDummyData.map((data, index) => (
+                  <CardAnnouncement
+                    key={index}
+                    receiver={data.receiver}
+                    title={data.title}
+                    date={data.date}
+                    time={data.time}
+                    content={data.content}
+                  />
+                ))}
             </div>
           </div>
 
           {/* calendar and upcoming */}
-          <div className="w-1/5 h-screen   divide-y" >
-            <div className="m-6 py-12 text-center bg-slate-600">Calendar</div>
-            <div className="m-6 ">
-              <h2 className="py-2 text-center text-xl ">Upcoming</h2>
-              <div className="divide-y">
-                <div className="flex flex-col px-2 py-1 bg-slate-600">
+          <div className="flex flex-col w-1/5 h-screen gap-4 ">
+            <div className="p-6 py-12 m-2 text-center bg-white rounded-lg bg-main-4">
+              Calendar
+            </div>
+
+            <div className="p-6 m-2 bg-white rounded-lg ">
+              <h2 className="py-2 text-xl text-center ">Upcoming</h2>
+              <div className="divide-y ">
+                <div className="flex flex-col px-2 py-1 ">
                   <span className="font-bold">Judul 1</span>{" "}
                   <span className="text-sm">15 January 2024</span>
                 </div>
-                <div className="flex flex-col px-2 py-1 bg-slate-600">
+                <div className="flex flex-col px-2 py-1 ">
                   <span className="font-bold">Judul 1</span>{" "}
                   <span className="text-sm">15 January 2024</span>
                 </div>
-                <div className="flex flex-col px-2 py-1 bg-slate-600">
+                <div className="flex flex-col px-2 py-1 ">
                   <span className="font-bold">Judul 1</span>{" "}
                   <span className="text-sm">15 January 2024</span>
                 </div>
@@ -76,6 +202,98 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      <Modal open={open}>
+        <div
+          className="flex flex-col items-center justify-center h-screen"
+          onClick={handleClose}
+        >
+          <div
+            className="flex flex-col items-center w-2/5 h-auto bg-white rounded-lg shadow-lg "
+            onClick={(e) => {
+              //Prevent event propagation only for this inner div
+              e.stopPropagation();
+            }}
+          >
+            <div className="w-full h-full py-4 text-2xl font-bold text-center text-white rounded-t-lg bg-main-4">
+              Add Pengumuman
+            </div>
+            <div className="w-full px-24 py-4">
+              <form
+                onSubmit={pengumumanForm.handleSubmit(onSubmit)}
+                className="flex flex-col w-full gap-4"
+              >
+                <Controller
+                  name="receiver"
+                  control={pengumumanForm.control}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      placeholder="Kepada :..."
+                      isMulti
+                      isSearchable
+                      options={receiverOptions}
+                      className="basic-multi-select"
+                      classNamePrefix="select"
+                    />
+                  )}
+                />
+                {/* <input
+                  type="text"
+                  id="receiver"
+                  required
+                  placeholder="Kepada : ..."
+                  className="p-2 border border-gray-300 rounded-md "
+                  {...pengumumanForm.register("receiver", { required: true })}
+                /> */}
+                <input
+                  type="text"
+                  id="title"
+                  required
+                  placeholder="Judul : ..."
+                  className="p-2 border border-gray-300 rounded-md "
+                  {...pengumumanForm.register("title", { required: true })}
+                />
+                <div className="flex flex-row gap-2">
+                  <input
+                    type="date"
+                    id="date"
+                    required
+                    className="p-2 border border-gray-300 rounded-md basis-1/2"
+                    {...pengumumanForm.register("date", { required: true })}
+                  />
+                  <input
+                    type="time"
+                    id="time"
+                    required
+                    className="p-2 border border-gray-300 rounded-md basis-1/2"
+                    {...pengumumanForm.register("time", { required: true })}
+                  />
+                </div>
+
+                <textarea
+                  id="content"
+                  placeholder="Isi pengumuman..."
+                  required
+                  className="p-2 border border-gray-300 rounded-md "
+                  style={{ minHeight: "4rem" }} // Minimum height of 4 rows
+                  rows={4}
+                  {...pengumumanForm.register("content", { required: true })}
+                ></textarea>
+                <div className="flex flex-col items-center">
+                  <button
+                    type="submit"
+                    className="px-8 py-2 mt-4 text-white bg-blue-500 rounded-full w-fit hover:bg-blue-600"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          {/* </div> */}
+        </div>
+      </Modal>
     </>
   );
 }

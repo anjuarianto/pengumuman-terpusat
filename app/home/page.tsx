@@ -8,7 +8,8 @@ import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import Select from "react-select";
 
 type PengumumanData = {
-  receiver: { value: string; label: string; }[];
+  receiver: { value: string; label: string }[];
+  sender: string;
   title: string;
   date: string;
   time: string;
@@ -16,50 +17,54 @@ type PengumumanData = {
 };
 
 const receiverOptions = [
-  { value: 'kris', label: 'kris' },
-  { value: 'kris2', label: 'kris2' },
-  { value: 'kris3', label: 'kris 3' },
+  { value: "kris", label: "kris" },
+  { value: "kris2", label: "kris2" },
+  { value: "kris3", label: "kris 3" },
   // Add more options as needed
 ];
 
 const PengumumanDummyData = [
   {
-    receiver: { value: 'John Doe', label: 'John Doe' },
-    title: 'Important Meeting',
-    date: '2024-02-13',
-    time: '08:00',
-    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed aliquet tellus quis felis vulputate, sit amet efficitur lorem placerat.'
+    receiver: { value: "John Doe", label: "John Doe" },
+    title: "Important Meeting",
+    date: "2024-02-13",
+    time: "08:00",
+    content:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed aliquet tellus quis felis vulputate, sit amet efficitur lorem placerat.",
   },
   {
-    receiver: { value: 'Olivia Taylor2', label: 'Olivia Taylor' },
-    title: 'Upcoming Event',
-    date: '2024-02-14',
-    time: '10:30',
-    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque enim et est bibendum, vel aliquam lacus placerat.'
+    receiver: { value: "Olivia Taylor2", label: "Olivia Taylor" },
+    title: "Upcoming Event",
+    date: "2024-02-14",
+    time: "10:30",
+    content:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque enim et est bibendum, vel aliquam lacus placerat.",
   },
   {
-    receiver: { value: 'Michael Wilson', label: 'Michael Wilson' },
-    title: 'Club Meeting',
-    date: '2024-02-15',
-    time: '13:45',
-    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam lacinia justo ac urna condimentum, sit amet congue odio consequat.'
+    receiver: { value: "Michael Wilson", label: "Michael Wilson" },
+    title: "Club Meeting",
+    date: "2024-02-15",
+    time: "13:45",
+    content:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam lacinia justo ac urna condimentum, sit amet congue odio consequat.",
   },
   {
-    receiver: { value: 'Emily Brown', label: 'Emily Brown' },
-    title: 'Guest Speaker Lecture',
-    date: '2024-02-16',
-    time: '16:00',
-    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sed enim a nunc tristique eleifend at eget leo.'
+    receiver: { value: "Emily Brown", label: "Emily Brown" },
+    title: "Guest Speaker Lecture",
+    date: "2024-02-16",
+    time: "16:00",
+    content:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sed enim a nunc tristique eleifend at eget leo.",
   },
   {
-    receiver: { value: 'Ava Garcia', label: 'Ava Garcia' },
-    title: 'Seminar Announcement',
-    date: '2024-02-17',
-    time: '19:15',
-    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et enim eu nunc suscipit aliquam nec vitae purus.'
-  }
+    receiver: { value: "Ava Garcia", label: "Ava Garcia" },
+    title: "Seminar Announcement",
+    date: "2024-02-17",
+    time: "19:15",
+    content:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et enim eu nunc suscipit aliquam nec vitae purus.",
+  },
 ];
-
 
 export default function Home() {
   const [open, setOpen] = useState(false);
@@ -68,20 +73,49 @@ export default function Home() {
 
   const searchForm = useForm<any>();
 
+  const loadPengumumanData = async () => {
+    try {
+      // const response = a
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
+  const loadRoomData = async () => {
+    try {
+      // const response = a
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    loadPengumumanData();
+    loadRoomData();
+
+    return;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
   const handleOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
-    pengumumanForm.reset()
+    pengumumanForm.reset();
     setOpen(false);
   };
 
   const onSubmit: SubmitHandler<PengumumanData> = async (data) => {
-    console.log(data);
-    alert(data.receiver[0].value+ data.title+ data.date+" "+data.time+ data.content)
+    const cleanData = {
+      title: data.title,
+      receiver: data.receiver[0].value,
+      sender: "sender",
+      date: data.date,
+      time: data.time,
+      content: data.content,
+    };
+    console.log(cleanData);
   };
   const onSubmitSearch: SubmitHandler<any> = async (data) => {
     console.log(data);
@@ -164,15 +198,15 @@ export default function Home() {
               <CardAnnouncement></CardAnnouncement> */}
 
               {PengumumanDummyData.map((data, index) => (
-                  <CardAnnouncement
-                    key={index}
-                    receiver={data.receiver}
-                    title={data.title}
-                    date={data.date}
-                    time={data.time}
-                    content={data.content}
-                  />
-                ))}
+                <CardAnnouncement
+                  key={index}
+                  receiver={data.receiver}
+                  title={data.title}
+                  date={data.date}
+                  time={data.time}
+                  content={data.content}
+                />
+              ))}
             </div>
           </div>
 
@@ -283,7 +317,7 @@ export default function Home() {
                 <div className="flex flex-col items-center">
                   <button
                     type="submit"
-                    className="px-8 py-2 mt-4 text-white bg-blue-500 rounded-full w-fit hover:bg-blue-600"
+                    className="px-24 py-2 mt-4 text-white bg-blue-500 rounded-lg w-fit hover:bg-blue-600"
                   >
                     Submit
                   </button>

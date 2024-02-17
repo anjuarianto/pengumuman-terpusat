@@ -1,5 +1,11 @@
-import React from "react";
-
+"use client";
+import React, { useState, useEffect } from "react";
+import {useRouter} from "next/navigation";
 export default function Page() {
-  return <>base</>;
+  const router = useRouter()
+
+  useEffect(() => {
+    router.push("/login")
+  });
+  return <></>;
 }

@@ -1,11 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Navbar from "@/components/Navbar";
 import { FaCalendarPlus, FaPlus, FaSearch } from "react-icons/fa";
 import CardAnnouncement from "@/components/CardAnnouncement";
 import { Modal } from "@mui/material";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import Select from "react-select";
+import Navbar from "@/components/Navbar";
+
 
 type PengumumanData = {
   receiver: { value: string; label: string }[];
@@ -123,18 +124,18 @@ export default function Home() {
 
   return (
     <>
-      <Navbar name="namaUser"></Navbar>
+      <Navbar></Navbar>
       <div className="flex flex-col items-center w-full h-full pt-16 ">
         <div className="w-2/5 p-2 ">
           <div className="flex flex-row items-center gap-4 text-white">
             <div
-              className="flex flex-row items-center gap-2 px-6 py-2 transition-all border rounded-lg shadow-md basis 1/5 bg-main-4 hover:shadow-lg hover:cursor-pointer"
+              className="flex flex-row items-center gap-2 px-6 py-2 transition-all  rounded-lg shadow-md basis 1/5 bg-orange hover:bg-orange-h hover:shadow-lg hover:cursor-pointer"
               onClick={handleOpen}
             >
               <FaCalendarPlus />
               <span>Add News </span>
             </div>
-            {/* <form className="px-2 py-1 my-2 text-center border border-white rounded-full shadow-lg basis-3/5 bg-main-4">
+            {/* <form className="px-2 py-1 my-2 text-center border border-white rounded-full shadow-lg basis-3/5 bg-orange">
               search ...
             </form> */}
             <form
@@ -163,8 +164,8 @@ export default function Home() {
                 <FaSearch />
               </button>
             </form>
-            ;
-            <div className="px-6 py-2 text-center border border-white rounded-lg shadow-lg basis-1/5 bg-main-4">
+            
+            <div className="px-6 py-2 text-center rounded-lg shadow-lg basis-1/5 bg-orange">
               General
             </div>
           </div>
@@ -179,13 +180,13 @@ export default function Home() {
                 <FaPlus className="p-1 text-2xl hover:cursor-pointer"></FaPlus>
               </div>
 
-              <div className="px-2 py-1 my-2 text-center text-white border border-white rounded-lg shadow-lg bg-main-4">
+              <div className="px-2 py-1 my-2 text-center text-white rounded-lg shadow-lg bg-orange hover:bg-orange-h">
                 General
               </div>
-              <div className="px-2 py-1 my-2 text-center text-white border border-white rounded-lg shadow-lg bg-main-4">
+              <div className="px-2 py-1 my-2 text-center text-white rounded-lg shadow-lg bg-orange hover:bg-orange-h">
                 Room 1
               </div>
-              <div className="px-2 py-1 my-2 text-center text-white border border-white rounded-lg shadow-lg bg-main-4">
+              <div className="px-2 py-1 my-2 text-center text-white rounded-lg shadow-lg bg-orange hover:bg-orange-h">
                 Room 2
               </div>
             </div>
@@ -212,7 +213,7 @@ export default function Home() {
 
           {/* calendar and upcoming */}
           <div className="flex flex-col w-1/5 h-screen gap-4 ">
-            <div className="p-6 py-12 m-2 text-center bg-white rounded-lg bg-main-4">
+            <div className="p-6 py-12 m-2 text-center bg-white rounded-lg">
               Calendar
             </div>
 
@@ -249,7 +250,7 @@ export default function Home() {
               e.stopPropagation();
             }}
           >
-            <div className="w-full h-full py-4 text-2xl font-bold text-center text-white rounded-t-lg bg-main-4">
+            <div className="w-full h-full py-4 text-2xl font-bold text-center text-white rounded-t-lg bg-dark-blue ">
               Add Pengumuman
             </div>
             <div className="w-full px-24 py-4">

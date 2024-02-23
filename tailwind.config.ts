@@ -29,6 +29,11 @@ const config: Config = {
         'main-2':'#dae2f0',
         'main-3':'#535a61',
         'main-4':'#20abfc',
+        'dark-blue':'#2B507C',
+        'dark-blue-h':'#346195',
+        'light-blue':'#DCEBF7',
+        'orange':'#D68E3D',
+        'orange-h':'#E89A42',
         
       },
     },

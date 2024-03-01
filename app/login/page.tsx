@@ -1,12 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import { FaEye, FaEyeSlash,FaSignInAlt,FaUserPlus   } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaSignInAlt, FaUserPlus } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 export default function Login() {
   const router = useRouter();
@@ -22,22 +23,58 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
 
+
+  useEffect(() => {
+    tokenCheck()
+
+    return;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const tokenCheck = async () => {
+    try {
+      const accToken = Cookies.get("accessToken");
+      console.log(accToken)
+      if (accToken) {
+        router.push("/home");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+
   const onSubmitLogin: SubmitHandler<{
     email: string;
     password: string;
   }> = async (data) => {
     try {
-      console.log(data);
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/login",
+        data,
+        {
+          // headers: {
+          //   "Authorization": "Bearer 5|8SXXpyhxRkR8pB6iMArXRDOe0qfrEXV6ygVJw5qld370500c",
+          // },
+        }
+      );
+      console.log(response.data.access_token);
 
-      // const response = await axios.post("/login", data);
-      // router.push("/home");
 
-      // // Show success message with SweetAlert2
-      // await Swal.fire({
-      //   icon: "success",
-      //   title: "Success",
-      //   text: "Login successful!",
-      // });
+      // Store token in cookie
+      Cookies.set("accessToken", response.data.access_token);
+      router.push("/home");
+
+
+
+      // Show success message with SweetAlert2
+      await Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Login successful!",
+      });
+
+
     } catch (error) {
       await Swal.fire({
         icon: "error",
@@ -59,7 +96,6 @@ export default function Login() {
         email: data.email,
         password: data.password,
       });
-
       // const response = await axios.post("/register", data);
       // router.push("/home");
 
@@ -84,7 +120,9 @@ export default function Login() {
         <div className="w-[30em] flex flex-row gap-2 ">
           <div
             className={`flex flex-row items-center justify-center gap-1 transform grow text-center py-2 rounded-t-lg shadow-t-lg  ${
-              !isLoggedIn ? "bg-main-4 text-white hover:cursor-pointer" : "bg-white"
+              !isLoggedIn
+                ? "bg-main-4 text-white hover:cursor-pointer"
+                : "bg-white"
             }`}
             onClick={() => {
               setIsLoggedIn(true);
@@ -94,17 +132,19 @@ export default function Login() {
           </div>
           <div
             className={`flex flex-row items-center justify-center gap-1 transform grow text-center py-2 rounded-t-lg shadow-t-lg  ${
-              isLoggedIn ? "bg-main-4 text-white hover:cursor-pointer" : "bg-white "
+              isLoggedIn
+                ? "bg-main-4 text-white hover:cursor-pointer"
+                : "bg-white "
             }`}
             onClick={() => {
               setIsLoggedIn(false);
             }}
           >
-            <FaUserPlus ></FaUserPlus> Register
+            <FaUserPlus></FaUserPlus> Register
           </div>
         </div>
 
-        <div className="w-[30em] p-16 rounded-lg bg-white shadow-lg">
+        <div className="w-[30em] p-16 rounded-b-lg bg-white shadow-lg">
           {/* title */}
           <div>
             <h1 className="text-2xl font-bold ">
@@ -156,6 +196,11 @@ export default function Login() {
                     {showPassword ? <FaEye /> : <FaEyeSlash />}
                   </button>
                 </div>
+                <input
+                  type="hidden"
+                  name="_token"
+                  value="/sanctum/csrf-cookie"
+                />
 
                 <button
                   type="submit"

@@ -6,7 +6,10 @@ import { Modal } from "@mui/material";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import Select from "react-select";
 import Navbar from "@/components/Navbar";
-
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
+import EditorText from "@/components/EditorText";
 
 type PengumumanData = {
   receiver: { value: string; label: string }[];
@@ -15,6 +18,14 @@ type PengumumanData = {
   date: string;
   time: string;
   content: string;
+};
+
+type Pengumuman = {
+  created_by: string;
+  id: number;
+  judul: string;
+  konten: string;
+  waktu: string;
 };
 
 const receiverOptions = [
@@ -68,15 +79,47 @@ const PengumumanDummyData = [
 ];
 
 export default function Home() {
+  const router = useRouter();
+  const [pengumuman, setPengumuman] = useState<Pengumuman[]>([]);
   const [open, setOpen] = useState(false);
+  // const [editorLoaded, setEditorLoaded] = useState(true);
+  // const [data, setData] = useState("");
 
-  const pengumumanForm = useForm<PengumumanData>();
+  const pengumumanForm = useForm<PengumumanData>({
+    mode: "onChange",
+  });
 
   const searchForm = useForm<any>();
 
+  useEffect(() => {
+    tokenCheck().then(() => {
+      loadPengumumanData();
+      // loadRoomData();
+    });
+
+    console.log(pengumuman);
+    return;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
   const loadPengumumanData = async () => {
     try {
-      // const response = a
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/pengumuman",
+
+        {
+          headers: {
+            Authorization:
+              // "Bearer 27|HBtoUhr6TVjtV0CB0YKzwobzPWogxoIZGzkV8fK7ae8863d4",
+              "Bearer " + Cookies.get("accessToken"),
+          },
+        }
+      );
+      console.log(response.data.data.data);
+      const pengumumanData: Pengumuman[] = response.data.data.data;
+      setPengumuman(pengumumanData);
+
+      // console.log(pengumuman)
     } catch (err) {
       console.log(err);
     }
@@ -90,13 +133,16 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
-    loadPengumumanData();
-    loadRoomData();
-
-    return;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+  const tokenCheck = async () => {
+    try {
+      const accToken = Cookies.get("accessToken");
+      if (!accToken || accToken.length == 0) {
+        router.push("/login");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleOpen = () => {
     setOpen(true);
@@ -121,7 +167,11 @@ export default function Home() {
   const onSubmitSearch: SubmitHandler<any> = async (data) => {
     console.log(data);
   };
-
+  useEffect(() => {
+    console.log(pengumuman);
+    console.log("^^^^^^ pengumuman"); // Log updated state
+    console.log(pengumuman[0]);
+  }, [pengumuman]);
   return (
     <>
       <Navbar></Navbar>
@@ -164,7 +214,7 @@ export default function Home() {
                 <FaSearch />
               </button>
             </form>
-            
+
             <div className="px-6 py-2 text-center rounded-lg shadow-lg basis-1/5 bg-orange">
               General
             </div>
@@ -198,7 +248,7 @@ export default function Home() {
               {/* <CardAnnouncement></CardAnnouncement>
               <CardAnnouncement></CardAnnouncement> */}
 
-              {PengumumanDummyData.map((data, index) => (
+              {/* {PengumumanDummyData.map((data, index) => (
                 <CardAnnouncement
                   key={index}
                   receiver={data.receiver}
@@ -206,6 +256,16 @@ export default function Home() {
                   date={data.date}
                   time={data.time}
                   content={data.content}
+                />
+              ))} */}
+              {pengumuman.map((data, index) => (
+                <CardAnnouncement
+                  key={index}
+                  receiver={{ value: data.created_by, label: data.created_by }}
+                  title={data.judul}
+                  date={data.waktu}
+                  time={data.waktu}
+                  content={data.konten}
                 />
               ))}
             </div>
@@ -315,6 +375,14 @@ export default function Home() {
                   rows={4}
                   {...pengumumanForm.register("content", { required: true })}
                 ></textarea>
+
+                {/* <EditorText name="description"
+                  onChange={(data) => {
+                    setData(data);
+                  }}
+                  editorLoaded={editorLoaded}/>
+                
+                {JSON.stringify(data)} */}
                 <div className="flex flex-col items-center">
                   <button
                     type="submit"

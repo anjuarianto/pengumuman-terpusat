@@ -16,7 +16,7 @@ export default function CardAnnouncement({receiver,title,date,time,content}:{
         <div className="flex flex-col gap-2 p-2 rounded-lg ">
           <div className="flex flex-row items-center gap-2 text-sm ">
             <span>• {receiver.label}</span>{" "}
-            <span className="text-main-3">{date}{" "}{time} </span>
+            <span className="text-main-3">{date} </span>
           </div>
           <h1 className="text-2xl font-bold">{title}</h1>
           <p className="py-2 ">

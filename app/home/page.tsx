@@ -9,10 +9,15 @@ import Navbar from "@/components/Navbar";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import EditorText from "@/components/EditorText";
+import dynamic from "next/dynamic";
+
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
 
 type PengumumanData = {
-  receiver: { value: string; label: string }[];
+  room: { value: string; label: string }[];
   sender: string;
   title: string;
   date: string;
@@ -27,13 +32,6 @@ type Pengumuman = {
   konten: string;
   waktu: string;
 };
-
-const receiverOptions = [
-  { value: "kris", label: "kris" },
-  { value: "kris2", label: "kris2" },
-  { value: "kris3", label: "kris 3" },
-  // Add more options as needed
-];
 
 const PengumumanDummyData = [
   {
@@ -78,10 +76,25 @@ const PengumumanDummyData = [
   },
 ];
 
+const CustomEditor = dynamic(
+  () => {
+    return import("../../components/Editor");
+  },
+  { ssr: false }
+);
+
 export default function Home() {
   const router = useRouter();
   const [pengumuman, setPengumuman] = useState<Pengumuman[]>([]);
+  const [roomOptions, setRoomOptions] = useState<
+    {
+      value: string;
+      label: string;
+    }[]
+  >([]);
+
   const [open, setOpen] = useState(false);
+  const [openCal, setOpenCal] = useState(false);
   // const [editorLoaded, setEditorLoaded] = useState(true);
   // const [data, setData] = useState("");
 
@@ -94,10 +107,9 @@ export default function Home() {
   useEffect(() => {
     tokenCheck().then(() => {
       loadPengumumanData();
-      // loadRoomData();
+      loadRoomData();
     });
 
-    console.log(pengumuman);
     return;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
@@ -115,11 +127,8 @@ export default function Home() {
           },
         }
       );
-      console.log(response.data.data.data);
       const pengumumanData: Pengumuman[] = response.data.data.data;
       setPengumuman(pengumumanData);
-
-      // console.log(pengumuman)
     } catch (err) {
       console.log(err);
     }
@@ -127,7 +136,26 @@ export default function Home() {
 
   const loadRoomData = async () => {
     try {
-      // const response = a
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/room",
+
+        {
+          headers: {
+            Authorization:
+              // "Bearer 1|BHGEg2Zf3jETFJiAcK1II0Axlx9We6t03DNZuYuT34d7f4b6",
+              "Bearer " + Cookies.get("accessToken"),
+          },
+        }
+      );
+      console.log(response.data.data);
+
+      // Map the data into the desired structure
+      const mappedData = response.data.data.map((room: any) => ({
+        value: room.id,
+        label: room.name,
+      }));
+      // Set the mapped data into state
+      setRoomOptions(mappedData);
     } catch (err) {
       console.log(err);
     }
@@ -151,12 +179,13 @@ export default function Home() {
   const handleClose = () => {
     pengumumanForm.reset();
     setOpen(false);
+    setOpenCal(false)
   };
 
   const onSubmit: SubmitHandler<PengumumanData> = async (data) => {
     const cleanData = {
       title: data.title,
-      receiver: data.receiver[0].value,
+      room: data.room[0].value,
       sender: "sender",
       date: data.date,
       time: data.time,
@@ -167,11 +196,7 @@ export default function Home() {
   const onSubmitSearch: SubmitHandler<any> = async (data) => {
     console.log(data);
   };
-  useEffect(() => {
-    console.log(pengumuman);
-    console.log("^^^^^^ pengumuman"); // Log updated state
-    console.log(pengumuman[0]);
-  }, [pengumuman]);
+
   return (
     <>
       <Navbar></Navbar>
@@ -229,10 +254,13 @@ export default function Home() {
                 <h2 className="text-left grow ">Room List</h2>{" "}
                 <FaPlus className="p-1 text-2xl hover:cursor-pointer"></FaPlus>
               </div>
-
-              <div className="px-2 py-1 my-2 text-center text-white rounded-lg shadow-lg bg-orange hover:bg-orange-h">
-                General
+                
+              {roomOptions.map((data, index) => (
+                <div key={index} className="px-2 py-1 my-2 text-center text-white rounded-lg shadow-lg bg-orange hover:bg-orange-h">
+                {data.label}
               </div>
+              ))}
+              
               <div className="px-2 py-1 my-2 text-center text-white rounded-lg shadow-lg bg-orange hover:bg-orange-h">
                 Room 1
               </div>
@@ -245,19 +273,7 @@ export default function Home() {
           {/* main content */}
           <div className="w-3/5 h-screen ">
             <div className="flex flex-col gap-4 m-2 rounded-lg ">
-              {/* <CardAnnouncement></CardAnnouncement>
-              <CardAnnouncement></CardAnnouncement> */}
-
-              {/* {PengumumanDummyData.map((data, index) => (
-                <CardAnnouncement
-                  key={index}
-                  receiver={data.receiver}
-                  title={data.title}
-                  date={data.date}
-                  time={data.time}
-                  content={data.content}
-                />
-              ))} */}
+  
               {pengumuman.map((data, index) => (
                 <CardAnnouncement
                   key={index}
@@ -273,8 +289,8 @@ export default function Home() {
 
           {/* calendar and upcoming */}
           <div className="flex flex-col w-1/5 h-screen gap-4 ">
-            <div className="p-6 py-12 m-2 text-center bg-white rounded-lg">
-              Calendar
+            <div className="p-6 py-12 m-2 font-bold text-xl text-center bg-white rounded-lg hover:cursor-pointer" onClick={()=>{setOpenCal(true)}}>
+              Click to open calendar 
             </div>
 
             <div className="p-6 m-2 bg-white rounded-lg ">
@@ -318,71 +334,71 @@ export default function Home() {
                 onSubmit={pengumumanForm.handleSubmit(onSubmit)}
                 className="flex flex-col w-full gap-4"
               >
-                <Controller
-                  name="receiver"
-                  control={pengumumanForm.control}
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      placeholder="Kepada :..."
-                      isMulti
-                      isSearchable
-                      options={receiverOptions}
-                      className="basic-multi-select"
-                      classNamePrefix="select"
-                    />
-                  )}
-                />
-                {/* <input
-                  type="text"
-                  id="receiver"
-                  required
-                  placeholder="Kepada : ..."
-                  className="p-2 border border-gray-300 rounded-md "
-                  {...pengumumanForm.register("receiver", { required: true })}
-                /> */}
-                <input
-                  type="text"
-                  id="title"
-                  required
-                  placeholder="Judul : ..."
-                  className="p-2 border border-gray-300 rounded-md "
-                  {...pengumumanForm.register("title", { required: true })}
-                />
-                <div className="flex flex-row gap-2">
-                  <input
-                    type="date"
-                    id="date"
-                    required
-                    className="p-2 border border-gray-300 rounded-md basis-1/2"
-                    {...pengumumanForm.register("date", { required: true })}
-                  />
-                  <input
-                    type="time"
-                    id="time"
-                    required
-                    className="p-2 border border-gray-300 rounded-md basis-1/2"
-                    {...pengumumanForm.register("time", { required: true })}
+                <div>
+                  <label className=" text-gray-700 font-bold">Room</label>
+                  <Controller
+                    name="room"
+                    control={pengumumanForm.control}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        placeholder="Kepada :..."
+                        isMulti
+                        isSearchable
+                        options={roomOptions}
+                        className="basic-multi-select"
+                        classNamePrefix="select"
+                      />
+                    )}
                   />
                 </div>
 
-                <textarea
-                  id="content"
-                  placeholder="Isi pengumuman..."
-                  required
-                  className="p-2 border border-gray-300 rounded-md "
-                  style={{ minHeight: "4rem" }} // Minimum height of 4 rows
-                  rows={4}
-                  {...pengumumanForm.register("content", { required: true })}
-                ></textarea>
+                <div>
+                  <label className=" text-gray-700 font-bold">Judul</label>
+                  <input
+                    type="text"
+                    id="title"
+                    required
+                    placeholder="Judul : ..."
+                    className="p-2 border border-gray-300 rounded-md w-full"
+                    {...pengumumanForm.register("title", { required: true })}
+                  />
+                </div>
+                <div>
+                  <label className=" text-gray-700 font-bold">Waktu</label>
 
-                {/* <EditorText name="description"
-                  onChange={(data) => {
-                    setData(data);
-                  }}
-                  editorLoaded={editorLoaded}/>
-                
-                {JSON.stringify(data)} */}
+                  <div className="flex flex-row gap-2">
+                    <input
+                      type="date"
+                      id="date"
+                      required
+                      className="p-2 border border-gray-300 rounded-md basis-1/2"
+                      {...pengumumanForm.register("date", { required: true })}
+                    />
+                    <input
+                      type="time"
+                      id="time"
+                      required
+                      className="p-2 border border-gray-300 rounded-md basis-1/2"
+                      {...pengumumanForm.register("time", { required: true })}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className=" text-gray-700 font-bold">Konten</label>
+                  <Controller
+                    name="content"
+                    control={pengumumanForm.control}
+                    render={({ field: { onChange, value } }) => (
+                      <CustomEditor
+                        initialData={value}
+                        setValue={onChange} // Pass setValue function to update form field value
+                        register={pengumumanForm.register("content")}
+                      />
+                    )}
+                  />
+                </div>
+
                 <div className="flex flex-col items-center">
                   <button
                     type="submit"
@@ -392,6 +408,64 @@ export default function Home() {
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+          {/* </div> */}
+        </div>
+      </Modal>
+      <Modal open={openCal}>
+        <div
+          className="flex flex-col items-center justify-center h-screen"
+          onClick={handleClose}
+        >
+          <div
+            className="flex flex-col items-center w-3/5 h-auto bg-white rounded-lg shadow-lg "
+            onClick={(e) => {
+              //Prevent event propagation only for this inner div
+              e.stopPropagation();
+            }}
+          >
+            <div className="w-full h-full py-4 text-2xl font-bold text-center text-white rounded-t-lg bg-dark-blue ">
+              Calendar
+            </div>
+            <div className="w-full px-24 py-4">
+              <FullCalendar
+                plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
+                headerToolbar={{
+                  left: "prev,today,next",
+                  center: "title",
+                  right: "dayGridMonth,timeGridWeek,timeGridDay",
+                }}
+                eventTimeFormat={{
+                  hour: "numeric",
+                  minute: "2-digit",
+                  meridiem: true,
+                }}
+                // customButtons={{
+                //   addEvent: {
+                //     text: "add event",
+                //     click: () => {},
+                //   },
+                // }}
+                initialView="dayGridMonth"
+                events={[
+                  {
+                    title: "event 1",
+                    start: "2024-03-11T10:00:00",
+                    end: "2024-03-11T11:00:00",
+                  },
+                  {
+                    title: "event 1.5",
+                    start: "2024-03-11T15:00:00",
+                    end: "2024-03-11T11:00:00",
+                  },
+                  {
+                    title: "event 2",
+                    start: "2024-03-21T10:00:00",
+                    end: "2024-03-23T11:00:00",
+                  },
+                ]}
+              />
             </div>
           </div>
           {/* </div> */}

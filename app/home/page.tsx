@@ -10,11 +10,37 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
+import Swal from "sweetalert2";
 
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import Editor from "ckeditor5-custom-build";
+
+const editorConfiguration = {
+  toolbar: [
+    "heading",
+    "|",
+    "bold",
+    "italic",
+    "link",
+    "bulletedList",
+    "numberedList",
+    "|",
+    "outdent",
+    "indent",
+    "|",
+    "imageUpload",
+    "blockQuote",
+    "insertTable",
+    "mediaEmbed",
+    "undo",
+    "redo",
+  ],
+};
 
 type PengumumanData = {
   room: { value: string; label: string }[];
@@ -31,6 +57,7 @@ type Pengumuman = {
   judul: string;
   konten: string;
   waktu: string;
+
 };
 
 const PengumumanDummyData = [
@@ -76,12 +103,7 @@ const PengumumanDummyData = [
   },
 ];
 
-const CustomEditor = dynamic(
-  () => {
-    return import("../../components/Editor");
-  },
-  { ssr: false }
-);
+
 
 export default function Home() {
   const router = useRouter();
@@ -92,7 +114,7 @@ export default function Home() {
       label: string;
     }[]
   >([]);
-
+  const [editorData, setEditorData] = useState<string>("");
   const [open, setOpen] = useState(false);
   const [openCal, setOpenCal] = useState(false);
   // const [editorLoaded, setEditorLoaded] = useState(true);
@@ -118,7 +140,7 @@ export default function Home() {
     try {
       const response = await axios.get(
         "http://127.0.0.1:8000/api/pengumuman",
-
+        
         {
           headers: {
             Authorization:
@@ -128,6 +150,8 @@ export default function Home() {
         }
       );
       const pengumumanData: Pengumuman[] = response.data.data.data;
+      console.log(pengumumanData)
+      console.log("ppengumumanm ^^^");
       setPengumuman(pengumumanData);
     } catch (err) {
       console.log(err);
@@ -147,7 +171,8 @@ export default function Home() {
           },
         }
       );
-      console.log(response.data.data);
+      
+      
 
       // Map the data into the desired structure
       const mappedData = response.data.data.map((room: any) => ({
@@ -179,20 +204,55 @@ export default function Home() {
   const handleClose = () => {
     pengumumanForm.reset();
     setOpen(false);
-    setOpenCal(false)
+    setOpenCal(false);
   };
 
   const onSubmit: SubmitHandler<PengumumanData> = async (data) => {
-    const cleanData = {
-      title: data.title,
-      room: data.room[0].value,
-      sender: "sender",
-      date: data.date,
-      time: data.time,
-      content: data.content,
-    };
-    console.log(cleanData);
+    try {
+      const formatedTime = data.date + " " + data.time;
+
+      const cleanData = await {
+        judul: data.title,
+        room_id: data.room[0].value,
+        waktu: formatedTime,
+        konten: editorData,
+      };
+
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/pengumuman",
+        cleanData,
+        {
+          headers: {
+            Authorization:
+              // "Bearer 27|HBtoUhr6TVjtV0CB0YKzwobzPWogxoIZGzkV8fK7ae8863d4",
+              "Bearer " + Cookies.get("accessToken"),
+          },
+        }
+      );
+
+
+       // Show success message with SweetAlert2
+       await Swal.fire({
+        icon: "success",
+        title: "Success",
+        customClass: {
+          container: "my-swal-popup ",
+        },
+        text: "Login successful!",
+      });
+    } catch (err) {
+      console.log(err);
+      await Swal.fire({
+        icon: "error",
+        title: "Error",
+        customClass: {
+          container: "my-swal-popup ",
+        },
+        text: "Login failed. Please try again later.",
+      });
+    }
   };
+
   const onSubmitSearch: SubmitHandler<any> = async (data) => {
     console.log(data);
   };
@@ -254,13 +314,16 @@ export default function Home() {
                 <h2 className="text-left grow ">Room List</h2>{" "}
                 <FaPlus className="p-1 text-2xl hover:cursor-pointer"></FaPlus>
               </div>
-                
+
               {roomOptions.map((data, index) => (
-                <div key={index} className="px-2 py-1 my-2 text-center text-white rounded-lg shadow-lg bg-orange hover:bg-orange-h">
-                {data.label}
-              </div>
+                <div
+                  key={index}
+                  className="px-2 py-1 my-2 text-center text-white rounded-lg shadow-lg bg-orange hover:bg-orange-h"
+                >
+                  {data.label}
+                </div>
               ))}
-              
+
               <div className="px-2 py-1 my-2 text-center text-white rounded-lg shadow-lg bg-orange hover:bg-orange-h">
                 Room 1
               </div>
@@ -273,7 +336,6 @@ export default function Home() {
           {/* main content */}
           <div className="w-3/5 h-screen ">
             <div className="flex flex-col gap-4 m-2 rounded-lg ">
-  
               {pengumuman.map((data, index) => (
                 <CardAnnouncement
                   key={index}
@@ -281,6 +343,7 @@ export default function Home() {
                   title={data.judul}
                   date={data.waktu}
                   time={data.waktu}
+                  room_id={data.id}
                   content={data.konten}
                 />
               ))}
@@ -289,8 +352,13 @@ export default function Home() {
 
           {/* calendar and upcoming */}
           <div className="flex flex-col w-1/5 h-screen gap-4 ">
-            <div className="p-6 py-12 m-2 font-bold text-xl text-center bg-white rounded-lg hover:cursor-pointer" onClick={()=>{setOpenCal(true)}}>
-              Click to open calendar 
+            <div
+              className="p-6 py-12 m-2 font-bold text-xl text-center bg-white rounded-lg hover:cursor-pointer"
+              onClick={() => {
+                setOpenCal(true);
+              }}
+            >
+              Click to open calendar
             </div>
 
             <div className="p-6 m-2 bg-white rounded-lg ">
@@ -390,10 +458,20 @@ export default function Home() {
                     name="content"
                     control={pengumumanForm.control}
                     render={({ field: { onChange, value } }) => (
-                      <CustomEditor
-                        initialData={value}
-                        setValue={onChange} // Pass setValue function to update form field value
-                        register={pengumumanForm.register("content")}
+                      // <CustomEditor
+                      //   initialData={value}
+                      //   setValue={onChange} // Pass setValue function to update form field value
+                      //   register={pengumumanForm.register("content")}
+                      // />
+                      <CKEditor
+                        editor={Editor}
+                        config={editorConfiguration}
+                        data={editorData}
+                        onChange={(event, editor) => {
+                          const data = editor.getData();
+                          console.log({ event, editor, data });
+                          setEditorData(data);
+                        }}
                       />
                     )}
                   />

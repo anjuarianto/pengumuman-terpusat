@@ -33,6 +33,7 @@ function CustomEditor(props: any) {
       onChange={(event, editor) => {
         const data = editor.getData();
         console.log({ event, editor, data });
+        return data;
       }}
     />
   );

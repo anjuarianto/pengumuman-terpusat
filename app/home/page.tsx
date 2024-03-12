@@ -44,7 +44,7 @@ const editorConfiguration = {
 
 type PengumumanData = {
   room: { value: string; label: string }[];
-  sender: string;
+  mahasiswa: { value: string; label: string }[];
   title: string;
   date: string;
   time: string;
@@ -57,53 +57,7 @@ type Pengumuman = {
   judul: string;
   konten: string;
   waktu: string;
-
 };
-
-const PengumumanDummyData = [
-  {
-    receiver: { value: "John Doe", label: "John Doe" },
-    title: "Important Meeting",
-    date: "2024-02-13",
-    time: "08:00",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed aliquet tellus quis felis vulputate, sit amet efficitur lorem placerat.",
-  },
-  {
-    receiver: { value: "Olivia Taylor2", label: "Olivia Taylor" },
-    title: "Upcoming Event",
-    date: "2024-02-14",
-    time: "10:30",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque enim et est bibendum, vel aliquam lacus placerat.",
-  },
-  {
-    receiver: { value: "Michael Wilson", label: "Michael Wilson" },
-    title: "Club Meeting",
-    date: "2024-02-15",
-    time: "13:45",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam lacinia justo ac urna condimentum, sit amet congue odio consequat.",
-  },
-  {
-    receiver: { value: "Emily Brown", label: "Emily Brown" },
-    title: "Guest Speaker Lecture",
-    date: "2024-02-16",
-    time: "16:00",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sed enim a nunc tristique eleifend at eget leo.",
-  },
-  {
-    receiver: { value: "Ava Garcia", label: "Ava Garcia" },
-    title: "Seminar Announcement",
-    date: "2024-02-17",
-    time: "19:15",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et enim eu nunc suscipit aliquam nec vitae purus.",
-  },
-];
-
-
 
 export default function Home() {
   const router = useRouter();
@@ -114,11 +68,49 @@ export default function Home() {
       label: string;
     }[]
   >([]);
+
+  const [mahasiswaOptionsAll, setMahasiswaOptionsAll] = useState<
+    {
+      value: string;
+      label: string;
+    }[]
+  >([]);
+  const [mahasiswaOptions, setMahasiswaOptions] = useState<
+    {
+      value: string;
+      label: string;
+    }[]
+  >([]);
+
   const [editorData, setEditorData] = useState<string>("");
   const [open, setOpen] = useState(false);
   const [openCal, setOpenCal] = useState(false);
-  // const [editorLoaded, setEditorLoaded] = useState(true);
-  // const [data, setData] = useState("");
+  const [roomSelected, setRoomSelected] = useState(false);
+
+  const handleRoomChange = async (value: any) => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/room/${value.value}`,
+
+        {
+          headers: {
+            Authorization:
+              // "Bearer 1|BHGEg2Zf3jETFJiAcK1II0Axlx9We6t03DNZuYuT34d7f4b6",
+              "Bearer " + Cookies.get("accessToken"),
+          },
+        }
+      );
+
+      const mappedData = response.data.data.members.map((mahasiswa: any) => ({
+        value: (mahasiswa.is_single_user ? 1 : 0) + "|" + mahasiswa.id,
+        label: mahasiswa.name,
+      }));
+
+      setMahasiswaOptions(mappedData);
+
+      setRoomSelected(!!value);
+    } catch (err) {}
+  };
 
   const pengumumanForm = useForm<PengumumanData>({
     mode: "onChange",
@@ -128,6 +120,7 @@ export default function Home() {
 
   useEffect(() => {
     tokenCheck().then(() => {
+      loadMahasiswaRoomData();
       loadPengumumanData();
       loadRoomData();
     });
@@ -140,7 +133,7 @@ export default function Home() {
     try {
       const response = await axios.get(
         "http://127.0.0.1:8000/api/pengumuman",
-        
+
         {
           headers: {
             Authorization:
@@ -150,8 +143,6 @@ export default function Home() {
         }
       );
       const pengumumanData: Pengumuman[] = response.data.data.data;
-      console.log(pengumumanData)
-      console.log("ppengumumanm ^^^");
       setPengumuman(pengumumanData);
     } catch (err) {
       console.log(err);
@@ -171,8 +162,6 @@ export default function Home() {
           },
         }
       );
-      
-      
 
       // Map the data into the desired structure
       const mappedData = response.data.data.map((room: any) => ({
@@ -181,6 +170,28 @@ export default function Home() {
       }));
       // Set the mapped data into state
       setRoomOptions(mappedData);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const loadMahasiswaRoomData = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/api/mahasiswa", {
+        headers: {
+          Authorization:
+            // "Bearer 1|BHGEg2Zf3jETFJiAcK1II0Axlx9We6t03DNZuYuT34d7f4b6",
+            "Bearer " + Cookies.get("accessToken"),
+        },
+      });
+
+      // Map the data into the desired structure
+      const mappedData = response.data.data.map((Mahasiswa: any) => ({
+        value: Mahasiswa.id,
+        label: Mahasiswa.name,
+      }));
+      // Set the mapped data into state
+      setMahasiswaOptionsAll(mappedData);
     } catch (err) {
       console.log(err);
     }
@@ -203,12 +214,14 @@ export default function Home() {
 
   const handleClose = () => {
     pengumumanForm.reset();
+    setEditorData("");
     setOpen(false);
     setOpenCal(false);
   };
 
   const onSubmit: SubmitHandler<PengumumanData> = async (data) => {
     try {
+      console.log(data.mahasiswa);
       const formatedTime = data.date + " " + data.time;
 
       const cleanData = await {
@@ -230,9 +243,8 @@ export default function Home() {
         }
       );
 
-
-       // Show success message with SweetAlert2
-       await Swal.fire({
+      // Show success message with SweetAlert2
+      await Swal.fire({
         icon: "success",
         title: "Success",
         customClass: {
@@ -287,15 +299,6 @@ export default function Home() {
                 type="submit"
                 className="absolute top-0 right-0 mt-3 mr-4"
               >
-                {/* <svg
-                  className="w-4 h-4 text-gray-600 fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 56.966 56.966"
-                  width="512px"
-                  height="512px"
-                >
-                  <path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" />
-                </svg> */}
                 <FaSearch />
               </button>
             </form>
@@ -306,7 +309,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex flex-row justify-center w-2/3 h-screen ">
+        <div className="flex flex-row justify-center w-full h-screen px-12">
           {/* roomlist  */}
           <div className="w-1/5 h-screen ">
             <div className="p-6 m-2 bg-white rounded-lg">
@@ -411,15 +414,41 @@ export default function Home() {
                       <Select
                         {...field}
                         placeholder="Kepada :..."
-                        isMulti
                         isSearchable
                         options={roomOptions}
                         className="basic-multi-select"
                         classNamePrefix="select"
+                        onChange={handleRoomChange}
                       />
                     )}
                   />
                 </div>
+
+                {roomSelected && (
+                  <div>
+                    <label className=" text-gray-700 font-bold">
+                      Mahasiswa
+                    </label>
+                    <Controller
+                      name="mahasiswa"
+                      control={pengumumanForm.control}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          placeholder="Kepada :..."
+                          isMulti
+                          isSearchable
+                          options={mahasiswaOptions}
+                          className="basic-multi-select"
+                          classNamePrefix="select"
+                          onChange={(value: any) => {
+                            console.log(value);
+                          }}
+                        />
+                      )}
+                    />
+                  </div>
+                )}
 
                 <div>
                   <label className=" text-gray-700 font-bold">Judul</label>
@@ -469,7 +498,6 @@ export default function Home() {
                         data={editorData}
                         onChange={(event, editor) => {
                           const data = editor.getData();
-                          console.log({ event, editor, data });
                           setEditorData(data);
                         }}
                       />

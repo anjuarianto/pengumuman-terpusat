@@ -36,7 +36,9 @@ export default function CardAnnouncement({
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const apiUrl = `http://127.0.0.1:8000/pengumuman/${room_id}`;
+        console.log(room_id)
+
+        const apiUrl = `http://127.0.0.1:8000/api/pengumuman/${room_id}`;
         await axios
           .delete(apiUrl, {
             headers: {

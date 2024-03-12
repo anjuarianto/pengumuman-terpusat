@@ -35,6 +35,10 @@ export default function Navbar() {
         </span>
         <button
           className="flex flex-row items-center gap-2 w-fit px-4 py-2 rounded-md mx-12  hover:bg-dark-blue-h font-bold"
+          onClick={()=>{router.push("/user")}}
+        >Edit User</button>
+        <button
+          className="flex flex-row items-center gap-2 w-fit px-4 py-2 rounded-md mx-12  hover:bg-dark-blue-h font-bold"
           onClick={Logout}
         >
           <IoIosLogOut /> logout

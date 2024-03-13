@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
+import { FaAngleLeft } from "react-icons/fa";
 
 import MUIDataTable, {
   MUIDataTableColumn,
@@ -15,6 +16,7 @@ import { FaTrash, FaEdit, FaPlus } from "react-icons/fa";
 export default function User() {
   const router = useRouter();
 
+  const [options, setOptions] = useState<string>("room");
   const [RoomData, setRoomData] = useState<
     {
       id: number;
@@ -48,14 +50,14 @@ export default function User() {
       name: "description",
       label: "Description",
     },
-    {
-      name: "created_at",
-      label: "created_at",
-    },
-    {
-      name: "updated_at",
-      label: "updated_at",
-    },
+    // {
+    //   name: "created_at",
+    //   label: "created_at",
+    // },
+    // {
+    //   name: "updated_at",
+    //   label: "updated_at",
+    // },
 
     {
       name: "action",
@@ -162,6 +164,7 @@ export default function User() {
     return;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
+
   const tokenCheck = async () => {
     try {
       const accToken = Cookies.get("accessToken");
@@ -200,7 +203,6 @@ export default function User() {
           year: "numeric",
         }),
       }));
-
       setUserData(convertedData);
     } catch (err) {
       console.log(err);
@@ -219,6 +221,7 @@ export default function User() {
           },
         }
       );
+
       // Convert timestamps for created_at and updated_at
       const convertedData = response.data.data.map((room: any) => ({
         ...room,
@@ -233,25 +236,61 @@ export default function User() {
           year: "numeric",
         }),
       }));
+      
+
       // Set the mapped data into state
       setRoomData(convertedData);
     } catch (err) {
       console.log(err);
     }
   };
-
+  const handleGoBack = () => {
+    router.back(); // Navigate to previous route
+  };
   return (
     <>
       <Navbar></Navbar>
       <div className=" flex flex-col items-center w-full h-full pt-16 ">
         <div className="flex flex-row justify-center w-full h-screen px-12">
           <div className="w-full h-screen ">
+            <div className="flex flex-row gap-4 items-center mb-6 ">
+              <Tooltip title="Back to home" placement="top" arrow>
+                <button
+                  className="p-3  rounded-lg  bg-white hover:bg-dark-blue-h hover:text-white"
+                  onClick={handleGoBack}
+                >
+                  <FaAngleLeft />
+                </button>
+              </Tooltip>
+              <div
+                className={`  w-fit  rounded-lg  shadow-lg 
+            `}
+              >
+                <button
+                  className={`${
+                    options === "room" ? "bg-dark-blue text-white" : "bg-white hover:text-white hover:bg-dark-blue-h"
+                  } rounded-l-lg px-4 py-2`}
+                  onClick={() => setOptions("room")}
+                >
+                  Room List
+                </button>
+                <button
+                  className={`${
+                    options === "user" ? "bg-dark-blue text-white" : "bg-white hover:text-white hover:bg-dark-blue-h"
+                  } rounded-r-lg px-4 py-2`}
+                  onClick={() => setOptions("user")}
+                >
+                  User List
+                </button>
+              </div>
+            </div>
+
             <Paper>
               <TableContainer>
                 <MUIDataTable
-                  title={"Room List"}
-                  data={RoomData}
-                  columns={columnsRoom}
+                  title={options === "room" ? "Room List" : "User List"}
+                  data={options === "room" ? RoomData : userData}
+                  columns={options === "room" ? columnsRoom : columnsUser}
                   options={{
                     rowsPerPage: 10,
                     selectableRows: "none",
@@ -267,7 +306,7 @@ export default function User() {
                 />
               </TableContainer>
             </Paper>
-            <Paper>
+            {/* <Paper>
               <TableContainer>
                 <MUIDataTable
                   title={"User List"}
@@ -287,7 +326,7 @@ export default function User() {
                   }}
                 />
               </TableContainer>
-            </Paper>
+            </Paper> */}
           </div>
         </div>
       </div>

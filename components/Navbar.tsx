@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { IoIosLogOut } from "react-icons/io";
+import { FaSignOutAlt ,FaEdit  } from "react-icons/fa";
 import Image from "next/image";
 import logo from "../public/assets/logo.png";
 import Cookies from "js-cookie";
@@ -36,12 +36,12 @@ export default function Navbar() {
         <button
           className="flex flex-row items-center gap-2 w-fit px-4 py-2 rounded-md mx-12  hover:bg-dark-blue-h font-bold"
           onClick={()=>{router.push("/user")}}
-        >Edit User</button>
+        ><FaEdit/> Edit User</button>
         <button
           className="flex flex-row items-center gap-2 w-fit px-4 py-2 rounded-md mx-12  hover:bg-dark-blue-h font-bold"
           onClick={Logout}
         >
-          <IoIosLogOut /> logout
+          <FaSignOutAlt /> Logout
         </button>
       </div>
     </div>

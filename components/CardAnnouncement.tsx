@@ -6,26 +6,28 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 
+type EditPengumuman = {
+  id: number;
+  room: { value: string; label: string };
+  title: string;
+  date: string;
+  time: string;
+  room_id: number;
+  content: string;
+  editForm: (id: number) => void;
+};
 
 export default function CardAnnouncement({
-  receiver,
+  id,
+  room,
   title,
   date,
   time,
   room_id,
   content,
-}: {
-  receiver: { value: string; label: string };
-  title: string;
-  date: string;
-  time: string;
-  room_id:number;
-  content: string;
-}) {
-
-
-  const deletePengumuman = async ()=>{
-
+  editForm,
+}: EditPengumuman) {
+  const deletePengumuman = async () => {
     Swal.fire({
       title: `Delete ${title} ?`,
       text: "You won't be able to revert this!",
@@ -36,7 +38,7 @@ export default function CardAnnouncement({
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        console.log(room_id)
+        console.log(room_id);
 
         const apiUrl = `http://127.0.0.1:8000/api/pengumuman/${room_id}`;
         await axios
@@ -48,33 +50,24 @@ export default function CardAnnouncement({
             },
           })
           .then(async (response) => {
-            await Swal.fire(
-              "Deleted!",
-              response.data.message,
-              "success"
-            );
+            await Swal.fire("Deleted!", response.data.message, "success");
           })
           .then(async () => {
             await window.location.reload();
           })
           .catch((error) => {
-            Swal.fire(
-              "Gagal",
-              error,
-              "error"
-            );
+            Swal.fire("Gagal", error, "error");
           });
       }
     });
-  }
-
+  };
 
   return (
     <>
       <div className="p-2 bg-white rounded-lg hover:cursor-default">
         <div className="flex flex-col gap-2 p-2 rounded-lg ">
           <div className="flex flex-row items-center gap-2 text-sm ">
-            <span>• {receiver.label}</span>{" "}
+            <span>• {room.label}</span>{" "}
             <span className="text-main-3">{date} </span>
           </div>
           <h1 className="text-2xl font-bold">{title}</h1>
@@ -85,11 +78,16 @@ export default function CardAnnouncement({
             <button className="flex flex-row items-center gap-2 px-4 py-1 border rounded-lg hover:bg-gray-200">
               <FaCommentAlt /> Reply
             </button>
-            <button className="flex flex-row items-center gap-2 px-4 py-1 border rounded-lg ">
+            <button
+              className="flex flex-row items-center gap-2 px-4 py-1 border rounded-lg hover:bg-gray-200"
+              onClick={() => {
+                editForm(id);
+              }}
+            >
               <FaEdit /> Edit
             </button>
             <button
-              className="flex flex-row items-center gap-2 px-4 py-1 border rounded-lg "
+              className="flex flex-row items-center gap-2 px-4 py-1 border rounded-lg hover:bg-gray-200"
               onClick={deletePengumuman}
             >
               <FaTrash /> Delete

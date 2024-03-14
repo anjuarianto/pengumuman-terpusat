@@ -72,12 +72,7 @@ export default function Home() {
     }[]
   >([]);
 
-  const [mahasiswaOptionsAll, setMahasiswaOptionsAll] = useState<
-    {
-      value: string;
-      label: string;
-    }[]
-  >([]);
+
   const [mahasiswaOptions, setMahasiswaOptions] = useState<
     {
       value: string;
@@ -86,7 +81,10 @@ export default function Home() {
   >([]);
 
   const [editorData, setEditorData] = useState<string>("");
+  const [editorDataEdit, setEditorDataEdit] = useState<string>("");
   const [open, setOpen] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+
   const [openCal, setOpenCal] = useState(false);
   const [roomSelected, setRoomSelected] = useState(false);
   const [isOpenRoomModal, setIsOpenRoomModal] = useState(false);
@@ -136,11 +134,11 @@ export default function Home() {
     mode: "onChange",
   });
 
+
   const searchForm = useForm<any>();
 
   useEffect(() => {
     tokenCheck().then(() => {
-      loadMahasiswaRoomData();
       loadPengumumanData();
       loadRoomData();
     });
@@ -195,27 +193,7 @@ export default function Home() {
     }
   };
 
-  const loadMahasiswaRoomData = async () => {
-    try {
-      const response = await axios.get("http://127.0.0.1:8000/api/mahasiswa", {
-        headers: {
-          Authorization:
-            // "Bearer 1|BHGEg2Zf3jETFJiAcK1II0Axlx9We6t03DNZuYuT34d7f4b6",
-            "Bearer " + Cookies.get("accessToken"),
-        },
-      });
 
-      // Map the data into the desired structure
-      const mappedData = response.data.data.map((Mahasiswa: any) => ({
-        value: Mahasiswa.id,
-        label: Mahasiswa.name,
-      }));
-      // Set the mapped data into state
-      setMahasiswaOptionsAll(mappedData);
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   const tokenCheck = async () => {
     try {
@@ -238,6 +216,25 @@ export default function Home() {
     setOpen(false);
     setOpenCal(false);
   };
+
+  const editForm = async(id:number)=>{
+    
+    // const response = await axios.get(
+    //   `http://127.0.0.1:8000/api/pengumuman/${id}`,
+
+    //   {
+    //     headers: {
+    //       Authorization:
+    //         // "Bearer 1|BHGEg2Zf3jETFJiAcK1II0Axlx9We6t03DNZuYuT34d7f4b6",
+    //         "Bearer " + Cookies.get("accessToken"),
+    //     },
+    //   }
+    // );
+
+
+    console.log(id)
+  }
+   
 
   const onSubmit: SubmitHandler<PengumumanData> = async (data) => {
     try {
@@ -270,7 +267,7 @@ export default function Home() {
         customClass: {
           container: "my-swal-popup ",
         },
-        text: "Login successful!",
+        text: "Success",
       });
     } catch (err) {
       console.log(err);
@@ -280,7 +277,7 @@ export default function Home() {
         customClass: {
           container: "my-swal-popup ",
         },
-        text: "Login failed. Please try again later.",
+        text: "Failed",
       });
     }
   };
@@ -332,6 +329,27 @@ export default function Home() {
         <div className="flex flex-row justify-center w-full h-screen px-12">
           {/* roomlist  */}
           <RoomList openModal={openRoomModal} reloadRoomData={reloadRoomData}></RoomList>
+=========
+          <div className="w-1/5 h-screen ">
+            <div className="p-6 m-2 bg-white rounded-lg">
+              <div className="flex flex-row ">
+                <h2 className="text-left grow ">Room List</h2>{" "}
+                <FaPlus className="p-1 text-2xl hover:cursor-pointer"></FaPlus>
+              </div>
+
+              {roomOptions.map((data, index) => (
+                <div
+                  key={index}
+                  className="px-2 py-1 my-2 text-center text-white rounded-lg shadow-lg bg-orange hover:bg-orange-h"
+                >
+                  {data.label}
+                </div>
+              ))}
+
+             
+            </div>
+          </div>
+>>>>>>>>> Temporary merge branch 2
 
           {/* main content */}
           <div className="w-3/5 h-screen ">
@@ -339,12 +357,14 @@ export default function Home() {
               {pengumuman.map((data, index) => (
                 <CardAnnouncement
                   key={index}
-                  receiver={{ value: data.created_by, label: data.created_by }}
+                  id = {data.id}
+                  room={{ value: data.created_by, label: data.created_by }}
                   title={data.judul}
                   date={data.waktu}
                   time={data.waktu}
                   room_id={data.id}
                   content={data.konten}
+                  editForm={()=>editForm(data.id)}
                 />
               ))}
             </div>
@@ -484,6 +504,136 @@ export default function Home() {
                     name="content"
                     control={pengumumanForm.control}
                     render={({ field: { onChange, value } }) => (
+               
+                      <CKEditor
+                        editor={Editor}
+                        config={editorConfiguration}
+                        data={editorData}
+                        onChange={(event, editor) => {
+                          const data = editor.getData();
+                          setEditorData(data);
+                        }}
+                      />
+                    )}
+                  />
+                </div>
+
+                <div className="flex flex-col items-center">
+                  <button
+                    type="submit"
+                    className="px-24 py-2 mt-4 text-white bg-blue-500 rounded-lg w-fit hover:bg-blue-600"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          {/* </div> */}
+        </div>
+      </Modal>
+      <Modal open={openEdit}>
+        <div
+          className="flex flex-col items-center justify-center h-screen"
+          onClick={handleClose}
+        >
+          <div
+            className="flex flex-col items-center w-2/5 h-auto bg-white rounded-lg shadow-lg "
+            onClick={(e) => {
+              //Prevent event propagation only for this inner div
+              e.stopPropagation();
+            }}
+          >
+            <div className="w-full h-full py-4 text-2xl font-bold text-center text-white rounded-t-lg bg-dark-blue ">
+              Add Pengumuman
+            </div>
+            <div className="w-full px-24 py-4">
+              <form
+                onSubmit={pengumumanForm.handleSubmit(onSubmit)}
+                className="flex flex-col w-full gap-4"
+              >
+                <div>
+                  <label className=" text-gray-700 font-bold">Room</label>
+                  <Controller
+                    name="room"
+                    control={pengumumanForm.control}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        placeholder="Kepada :..."
+                        isSearchable
+                        options={roomOptions}
+                        className="basic-multi-select"
+                        classNamePrefix="select"
+                        onChange={handleRoomChange}
+                      />
+                    )}
+                  />
+                </div>
+
+                {roomSelected && (
+                  <div>
+                    <label className=" text-gray-700 font-bold">
+                      Mahasiswa
+                    </label>
+                    <Controller
+                      name="mahasiswa"
+                      control={pengumumanForm.control}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          placeholder="Kepada :..."
+                          isMulti
+                          isSearchable
+                          options={mahasiswaOptions}
+                          className="basic-multi-select"
+                          classNamePrefix="select"
+                          onChange={(value: any) => {
+                            console.log(value);
+                          }}
+                        />
+                      )}
+                    />
+                  </div>
+                )}
+
+                <div>
+                  <label className=" text-gray-700 font-bold">Judul</label>
+                  <input
+                    type="text"
+                    id="title"
+                    required
+                    placeholder="Judul : ..."
+                    className="p-2 border border-gray-300 rounded-md w-full"
+                    {...pengumumanForm.register("title", { required: true })}
+                  />
+                </div>
+                <div>
+                  <label className=" text-gray-700 font-bold">Waktu</label>
+
+                  <div className="flex flex-row gap-2">
+                    <input
+                      type="date"
+                      id="date"
+                      required
+                      className="p-2 border border-gray-300 rounded-md basis-1/2"
+                      {...pengumumanForm.register("date", { required: true })}
+                    />
+                    <input
+                      type="time"
+                      id="time"
+                      required
+                      className="p-2 border border-gray-300 rounded-md basis-1/2"
+                      {...pengumumanForm.register("time", { required: true })}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className=" text-gray-700 font-bold">Konten</label>
+                  <Controller
+                    name="content"
+                    control={pengumumanForm.control}
+                    render={({ field: { onChange, value } }) => (
                       // <CustomEditor
                       //   initialData={value}
                       //   setValue={onChange} // Pass setValue function to update form field value
@@ -516,6 +666,8 @@ export default function Home() {
           {/* </div> */}
         </div>
       </Modal>
+
+      {/* modal for calendar */}
       <Modal open={openCal}>
         <div
           className="flex flex-col items-center justify-center h-screen"

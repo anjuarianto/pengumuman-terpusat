@@ -20,6 +20,9 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import Editor from "ckeditor5-custom-build";
 
+import RoomList from "@/components/Home/RoomList";
+import ModalRoomList from "@/components/Home/ModalRoomList";
+
 const editorConfiguration = {
   toolbar: [
     "heading",
@@ -84,7 +87,24 @@ export default function Home() {
 
   const [openCal, setOpenCal] = useState(false);
   const [roomSelected, setRoomSelected] = useState(false);
+  const [isOpenRoomModal, setIsOpenRoomModal] = useState(false);
 
+  const openRoomModal = () => {
+    setIsOpenRoomModal(true);
+  };
+
+  const reloadRoomData = async () => {
+    try {
+      await loadRoomData();
+    } catch (error) {
+      console.error('Error reloading room data:', error);
+    }
+  };
+
+  const closeRoomModal = () => {
+    setIsOpenRoomModal(false);
+    loadRoomData();
+  };
   const handleRoomChange = async (value: any) => {
     try {
       const response = await axios.get(
@@ -198,7 +218,7 @@ export default function Home() {
   };
 
   const editForm = async(id:number)=>{
-    
+
     // const response = await axios.get(
     //   `http://127.0.0.1:8000/api/pengumuman/${id}`,
 
@@ -214,7 +234,7 @@ export default function Home() {
 
     console.log(id)
   }
-   
+
 
   const onSubmit: SubmitHandler<PengumumanData> = async (data) => {
     try {
@@ -308,6 +328,7 @@ export default function Home() {
 
         <div className="flex flex-row justify-center w-full h-screen px-12">
           {/* roomlist  */}
+          <RoomList openModal={openRoomModal} reloadRoomData={reloadRoomData}></RoomList>
           <div className="w-1/5 h-screen ">
             <div className="p-6 m-2 bg-white rounded-lg">
               <div className="flex flex-row ">
@@ -324,7 +345,7 @@ export default function Home() {
                 </div>
               ))}
 
-             
+
             </div>
           </div>
 
@@ -481,7 +502,7 @@ export default function Home() {
                     name="content"
                     control={pengumumanForm.control}
                     render={({ field: { onChange, value } }) => (
-               
+
                       <CKEditor
                         editor={Editor}
                         config={editorConfiguration}
@@ -703,6 +724,8 @@ export default function Home() {
           {/* </div> */}
         </div>
       </Modal>
+      <ModalRoomList isOpen={isOpenRoomModal} onClose={() => setIsOpenRoomModal(false)}></ModalRoomList>
+
     </>
   );
 }

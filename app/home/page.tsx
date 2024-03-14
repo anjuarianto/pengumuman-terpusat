@@ -22,6 +22,7 @@ import Editor from "ckeditor5-custom-build";
 
 import RoomList from "@/components/Home/RoomList";
 import ModalRoomList from "@/components/Home/ModalRoomList";
+import {PengumumanList} from "@/components/Home/PengumumamanList";
 
 const editorConfiguration = {
   toolbar: [
@@ -60,6 +61,7 @@ type Pengumuman = {
   judul: string;
   konten: string;
   waktu: string;
+  can_reply: boolean
 };
 
 export default function Home() {
@@ -330,25 +332,8 @@ export default function Home() {
           {/* roomlist  */}
           <RoomList openModal={openRoomModal} reloadRoomData={reloadRoomData}></RoomList>
 
-
           {/* main content */}
-          <div className="w-3/5 h-screen ">
-            <div className="flex flex-col gap-4 m-2 rounded-lg ">
-              {pengumuman.map((data, index) => (
-                <CardAnnouncement
-                  key={index}
-                  id = {data.id}
-                  room={{ value: data.created_by, label: data.created_by }}
-                  title={data.judul}
-                  date={data.waktu}
-                  time={data.waktu}
-                  room_id={data.id}
-                  content={data.konten}
-                  editForm={()=>editForm(data.id)}
-                />
-              ))}
-            </div>
-          </div>
+          <PengumumanList pengumuman={pengumuman} editForm={editForm} />
 
           {/* calendar and upcoming */}
           <div className="flex flex-col w-1/5 h-screen gap-4 ">

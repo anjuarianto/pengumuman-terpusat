@@ -218,7 +218,7 @@ export default function Home() {
   };
 
   const editForm = async(id:number)=>{
-
+    
     // const response = await axios.get(
     //   `http://127.0.0.1:8000/api/pengumuman/${id}`,
 
@@ -234,7 +234,7 @@ export default function Home() {
 
     console.log(id)
   }
-
+   
 
   const onSubmit: SubmitHandler<PengumumanData> = async (data) => {
     try {
@@ -329,6 +329,7 @@ export default function Home() {
         <div className="flex flex-row justify-center w-full h-screen px-12">
           {/* roomlist  */}
           <RoomList openModal={openRoomModal} reloadRoomData={reloadRoomData}></RoomList>
+=========
           <div className="w-1/5 h-screen ">
             <div className="p-6 m-2 bg-white rounded-lg">
               <div className="flex flex-row ">
@@ -345,9 +346,10 @@ export default function Home() {
                 </div>
               ))}
 
-
+             
             </div>
           </div>
+>>>>>>>>> Temporary merge branch 2
 
           {/* main content */}
           <div className="w-3/5 h-screen ">
@@ -502,7 +504,7 @@ export default function Home() {
                     name="content"
                     control={pengumumanForm.control}
                     render={({ field: { onChange, value } }) => (
-
+               
                       <CKEditor
                         editor={Editor}
                         config={editorConfiguration}

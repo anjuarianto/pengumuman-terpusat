@@ -20,6 +20,9 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import Editor from "ckeditor5-custom-build";
 
+import RoomList from "@/components/Home/RoomList";
+import ModalRoomList from "@/components/Home/ModalRoomList";
+
 const editorConfiguration = {
   toolbar: [
     "heading",
@@ -86,7 +89,24 @@ export default function Home() {
   const [open, setOpen] = useState(false);
   const [openCal, setOpenCal] = useState(false);
   const [roomSelected, setRoomSelected] = useState(false);
+  const [isOpenRoomModal, setIsOpenRoomModal] = useState(false);
 
+  const openRoomModal = () => {
+    setIsOpenRoomModal(true);
+  };
+
+  const reloadRoomData = async () => {
+    try {
+      await loadRoomData();
+    } catch (error) {
+      console.error('Error reloading room data:', error);
+    }
+  };
+
+  const closeRoomModal = () => {
+    setIsOpenRoomModal(false);
+    loadRoomData();
+  };
   const handleRoomChange = async (value: any) => {
     try {
       const response = await axios.get(
@@ -311,30 +331,7 @@ export default function Home() {
 
         <div className="flex flex-row justify-center w-full h-screen px-12">
           {/* roomlist  */}
-          <div className="w-1/5 h-screen ">
-            <div className="p-6 m-2 bg-white rounded-lg">
-              <div className="flex flex-row ">
-                <h2 className="text-left grow ">Room List</h2>{" "}
-                <FaPlus className="p-1 text-2xl hover:cursor-pointer"></FaPlus>
-              </div>
-
-              {roomOptions.map((data, index) => (
-                <div
-                  key={index}
-                  className="px-2 py-1 my-2 text-center text-white rounded-lg shadow-lg bg-orange hover:bg-orange-h"
-                >
-                  {data.label}
-                </div>
-              ))}
-
-              <div className="px-2 py-1 my-2 text-center text-white rounded-lg shadow-lg bg-orange hover:bg-orange-h">
-                Room 1
-              </div>
-              <div className="px-2 py-1 my-2 text-center text-white rounded-lg shadow-lg bg-orange hover:bg-orange-h">
-                Room 2
-              </div>
-            </div>
-          </div>
+          <RoomList openModal={openRoomModal} reloadRoomData={reloadRoomData}></RoomList>
 
           {/* main content */}
           <div className="w-3/5 h-screen ">
@@ -577,6 +574,8 @@ export default function Home() {
           {/* </div> */}
         </div>
       </Modal>
+      <ModalRoomList isOpen={isOpenRoomModal} onClose={() => setIsOpenRoomModal(false)}></ModalRoomList>
+
     </>
   );
 }

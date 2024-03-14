@@ -15,6 +15,7 @@ type EditPengumuman = {
   room_id: number;
   content: string;
   editForm: (id: number) => void;
+  canReply: boolean
 };
 
 export default function CardAnnouncement({
@@ -26,6 +27,7 @@ export default function CardAnnouncement({
   room_id,
   content,
   editForm,
+    canReply
 }: EditPengumuman) {
   const deletePengumuman = async () => {
     Swal.fire({
@@ -75,9 +77,11 @@ export default function CardAnnouncement({
           <p className="py-2" dangerouslySetInnerHTML={{ __html: content }} />
 
           <div className="flex flex-row gap-4 text-sm">
+         {canReply && (
             <button className="flex flex-row items-center gap-2 px-4 py-1 border rounded-lg hover:bg-gray-200">
               <FaCommentAlt /> Reply
             </button>
+          )}
             <button
               className="flex flex-row items-center gap-2 px-4 py-1 border rounded-lg hover:bg-gray-200"
               onClick={() => {

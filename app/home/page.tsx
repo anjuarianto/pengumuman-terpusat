@@ -329,27 +329,7 @@ export default function Home() {
         <div className="flex flex-row justify-center w-full h-screen px-12">
           {/* roomlist  */}
           <RoomList openModal={openRoomModal} reloadRoomData={reloadRoomData}></RoomList>
-=========
-          <div className="w-1/5 h-screen ">
-            <div className="p-6 m-2 bg-white rounded-lg">
-              <div className="flex flex-row ">
-                <h2 className="text-left grow ">Room List</h2>{" "}
-                <FaPlus className="p-1 text-2xl hover:cursor-pointer"></FaPlus>
-              </div>
 
-              {roomOptions.map((data, index) => (
-                <div
-                  key={index}
-                  className="px-2 py-1 my-2 text-center text-white rounded-lg shadow-lg bg-orange hover:bg-orange-h"
-                >
-                  {data.label}
-                </div>
-              ))}
-
-             
-            </div>
-          </div>
->>>>>>>>> Temporary merge branch 2
 
           {/* main content */}
           <div className="w-3/5 h-screen ">
@@ -726,7 +706,10 @@ export default function Home() {
           {/* </div> */}
         </div>
       </Modal>
-      <ModalRoomList isOpen={isOpenRoomModal} onClose={() => setIsOpenRoomModal(false)}></ModalRoomList>
+      <ModalRoomList isOpen={isOpenRoomModal} onClose={() => {
+        setIsOpenRoomModal(false);
+        reloadRoomData();
+      }}></ModalRoomList>
 
     </>
   );

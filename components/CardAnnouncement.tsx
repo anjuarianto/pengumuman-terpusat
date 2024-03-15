@@ -18,7 +18,6 @@ type EditPengumuman = {
   can_reply: boolean;
   can_edit: boolean;
   can_delete: boolean;
-
 };
 
 export default function CardAnnouncement({
@@ -103,7 +102,6 @@ export default function CardAnnouncement({
                 onClick={deletePengumuman}
               >
                 <FaTrash /> Delete
-                
               </button>
             )}
           </div>

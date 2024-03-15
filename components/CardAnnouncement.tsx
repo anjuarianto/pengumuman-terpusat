@@ -86,7 +86,7 @@ export default function CardAnnouncement({
                 <FaCommentAlt /> Reply
               </button>
             )}
-            {!can_edit && (
+            {can_edit && (
               <button
                 className="flex flex-row items-center gap-2 px-4 py-1 border rounded-lg hover:bg-gray-200"
                 onClick={() => {

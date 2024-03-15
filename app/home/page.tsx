@@ -21,7 +21,8 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import Editor from "ckeditor5-custom-build";
 
 import RoomList from "@/components/Home/RoomList";
-// import ModalRoomList from "@/components/Home/ModalRoomList";
+import ModalRoomList from "@/components/Home/ModalRoomList";
+import {PengumumanList} from "@/components/Home/PengumumamanList";
 
 const editorConfiguration = {
   toolbar: [
@@ -347,6 +348,7 @@ export default function Home() {
           ></RoomList>
 
           {/* main content */}
+
           <div className="w-3/5 h-screen ">
             <div className="flex flex-col gap-4 m-2 rounded-lg ">
               {pengumuman.map((data, index) => (
@@ -367,6 +369,9 @@ export default function Home() {
               ))}
             </div>
           </div>
+
+           {/* <PengumumanList pengumuman={pengumuman} editForm={editForm} /> */}
+
 
           {/* calendar and upcoming */}
           <div className="flex flex-col w-1/5 h-screen gap-4 ">
@@ -723,7 +728,13 @@ export default function Home() {
           {/* </div> */}
         </div>
       </Modal>
-      {/* <ModalRoomList isOpen={isOpenRoomModal} onClose={() => setIsOpenRoomModal(false)}></ModalRoomList> */}
+
+      <ModalRoomList isOpen={isOpenRoomModal} onClose={() => {
+        setIsOpenRoomModal(false);
+        reloadRoomData();
+      }}></ModalRoomList>
+
+
     </>
   );
 }

@@ -103,6 +103,7 @@ export default function CardAnnouncement({
                 onClick={deletePengumuman}
               >
                 <FaTrash /> Delete
+                
               </button>
             )}
           </div>

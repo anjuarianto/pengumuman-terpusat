@@ -61,7 +61,9 @@ type Pengumuman = {
   judul: string;
   konten: string;
   waktu: string;
-  can_reply: boolean
+  can_reply: boolean;
+  can_edit: boolean;
+  can_delete: boolean;
 };
 
 export default function Home() {
@@ -74,7 +76,6 @@ export default function Home() {
     }[]
   >([]);
 
-
   const [mahasiswaOptions, setMahasiswaOptions] = useState<
     {
       value: string;
@@ -86,6 +87,7 @@ export default function Home() {
   const [editorDataEdit, setEditorDataEdit] = useState<string>("");
   const [open, setOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
+  const [seachData,setSearchData] = useState<string>("")
 
   const [openCal, setOpenCal] = useState(false);
   const [roomSelected, setRoomSelected] = useState(false);
@@ -99,7 +101,7 @@ export default function Home() {
     try {
       await loadRoomData();
     } catch (error) {
-      console.error('Error reloading room data:', error);
+      console.error("Error reloading room data:", error);
     }
   };
 
@@ -136,7 +138,6 @@ export default function Home() {
     mode: "onChange",
   });
 
-
   const searchForm = useForm<any>();
 
   useEffect(() => {
@@ -147,10 +148,12 @@ export default function Home() {
 
     return;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+  }, [open, seachData]);
 
-  const loadPengumumanData = async () => {
+  const loadPengumumanData = async (search?:string) => {
     try {
+      if(search?.length!===0)
+
       const response = await axios.get(
         "http://127.0.0.1:8000/api/pengumuman",
 
@@ -195,8 +198,6 @@ export default function Home() {
     }
   };
 
-
-
   const tokenCheck = async () => {
     try {
       const accToken = Cookies.get("accessToken");
@@ -219,8 +220,7 @@ export default function Home() {
     setOpenCal(false);
   };
 
-  const editForm = async(id:number)=>{
-    
+  const editForm = async (id: number) => {
     // const response = await axios.get(
     //   `http://127.0.0.1:8000/api/pengumuman/${id}`,
 
@@ -233,10 +233,8 @@ export default function Home() {
     //   }
     // );
 
-
-    console.log(id)
-  }
-   
+    console.log(id);
+  };
 
   const onSubmit: SubmitHandler<PengumumanData> = async (data) => {
     try {
@@ -286,6 +284,12 @@ export default function Home() {
 
   const onSubmitSearch: SubmitHandler<any> = async (data) => {
     console.log(data);
+    setSearchData(data)
+
+  };
+  const handleInputChange = (event:any) => {
+    console.log('Search term changed:', event.target.value);
+    loadPengumumanData();
   };
 
   return (
@@ -312,7 +316,9 @@ export default function Home() {
                 className="h-10 px-5 pr-16 text-sm bg-white border-2 border-gray-300 rounded-lg focus:outline-none"
                 type="search"
                 placeholder="Search"
-                {...searchForm.register("search")}
+                {...searchForm.register("search",{
+          onChange: handleInputChange,
+        })}
               />
               <button
                 type="submit"
@@ -330,10 +336,36 @@ export default function Home() {
 
         <div className="flex flex-row justify-center w-full h-screen px-12">
           {/* roomlist  */}
-          <RoomList openModal={openRoomModal} reloadRoomData={reloadRoomData}></RoomList>
+          <RoomList
+            openModal={openRoomModal}
+            reloadRoomData={reloadRoomData}
+          ></RoomList>
 
           {/* main content */}
-          <PengumumanList pengumuman={pengumuman} editForm={editForm} />
+
+          <div className="w-3/5 h-screen ">
+            <div className="flex flex-col gap-4 m-2 rounded-lg ">
+              {pengumuman.map((data, index) => (
+                <CardAnnouncement
+                  key={index}
+                  id={data.id}
+                  room={{ value: data.created_by, label: data.created_by }}
+                  title={data.judul}
+                  date={data.waktu}
+                  time={data.waktu}
+                  room_id={data.id}
+                  content={data.konten}
+                  editForm={() => editForm(data.id)}
+                  can_reply={data.can_reply}
+                  can_edit={data.can_edit}
+                  can_delete={data.can_delete}
+                />
+              ))}
+            </div>
+          </div>
+
+           {/* <PengumumanList pengumuman={pengumuman} editForm={editForm} /> */}
+
 
           {/* calendar and upcoming */}
           <div className="flex flex-col w-1/5 h-screen gap-4 ">
@@ -469,7 +501,6 @@ export default function Home() {
                     name="content"
                     control={pengumumanForm.control}
                     render={({ field: { onChange, value } }) => (
-               
                       <CKEditor
                         editor={Editor}
                         config={editorConfiguration}
@@ -691,10 +722,12 @@ export default function Home() {
           {/* </div> */}
         </div>
       </Modal>
+
       <ModalRoomList isOpen={isOpenRoomModal} onClose={() => {
         setIsOpenRoomModal(false);
         reloadRoomData();
       }}></ModalRoomList>
+
 
     </>
   );

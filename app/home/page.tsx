@@ -86,7 +86,7 @@ export default function Home() {
   const [editorDataEdit, setEditorDataEdit] = useState<string>("");
   const [open, setOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
-  const [seachData, setSearchData] = useState<string>("");
+  const [seachData,setSearchData] = useState<string>("")
 
   const [openCal, setOpenCal] = useState(false);
   const [roomSelected, setRoomSelected] = useState(false);
@@ -147,21 +147,16 @@ export default function Home() {
 
     return;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+  }, [open, seachData]);
 
-  const loadPengumumanData = async (search?: string) => {
+  const loadPengumumanData = async (search?:string) => {
     try {
-      if (search?.length !== 0) {
-      }
+      if(search?.length!===0)
 
       const response = await axios.get(
         "http://127.0.0.1:8000/api/pengumuman",
 
         {
-          params: {
-            search: search,
-            page: 1,
-          },
           headers: {
             Authorization:
               // "Bearer 27|HBtoUhr6TVjtV0CB0YKzwobzPWogxoIZGzkV8fK7ae8863d4",
@@ -288,12 +283,12 @@ export default function Home() {
 
   const onSubmitSearch: SubmitHandler<any> = async (data) => {
     console.log(data);
-    setSearchData(data);
-  };
-  const handleInputChange = (event: any) => {
-    console.log("Search term changed:", event.target.value);
+    setSearchData(data)
 
-    loadPengumumanData(event.target.value);
+  };
+  const handleInputChange = (event:any) => {
+    console.log('Search term changed:', event.target.value);
+    loadPengumumanData();
   };
 
   return (
@@ -320,9 +315,9 @@ export default function Home() {
                 className="h-10 px-5 pr-16 text-sm bg-white border-2 border-gray-300 rounded-lg focus:outline-none"
                 type="search"
                 placeholder="Search"
-                {...searchForm.register("search", {
-                  onChange: handleInputChange,
-                })}
+                {...searchForm.register("search",{
+          onChange: handleInputChange,
+        })}
               />
               <button
                 type="submit"

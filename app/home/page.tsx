@@ -147,16 +147,22 @@ export default function Home() {
 
     return;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, seachData]);
+  }, [open]);
 
   const loadPengumumanData = async (search?:string) => {
     try {
-      if(search?.length!===0)
+      if(search?.length!==0){
+
+      }
 
       const response = await axios.get(
         "http://127.0.0.1:8000/api/pengumuman",
 
         {
+          params: {
+            search: search,
+            page:1
+          },
           headers: {
             Authorization:
               // "Bearer 27|HBtoUhr6TVjtV0CB0YKzwobzPWogxoIZGzkV8fK7ae8863d4",
@@ -288,7 +294,7 @@ export default function Home() {
   };
   const handleInputChange = (event:any) => {
     console.log('Search term changed:', event.target.value);
-    loadPengumumanData();
+    loadPengumumanData(event.target.value);
   };
 
   return (

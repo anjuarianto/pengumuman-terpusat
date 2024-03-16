@@ -6,9 +6,9 @@ import Cookies from "js-cookie";
 
 type RoomListProps = {
     openModal: () => void;
-    reloadRoomData: () => void;
+    isModalOpen: boolean;
 };
-export default function RoomList({openModal, reloadRoomData}: RoomListProps) {
+export default function RoomList({openModal, isModalOpen}: RoomListProps) {
 
 
         const [roomList, setRoomList] = useState<{label: string, value: string}[]>([]);
@@ -37,8 +37,10 @@ export default function RoomList({openModal, reloadRoomData}: RoomListProps) {
         };
 
     useEffect(() => {
-        loadRoomData();
-    }, [reloadRoomData]);
+        if(!isModalOpen) {
+            loadRoomData();
+        }
+    }, [openModal]);
 
     return (
             <div className="w-1/5 h-screen ">

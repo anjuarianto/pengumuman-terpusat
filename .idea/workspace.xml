@@ -5,11 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dc99540b-b64c-4216-92cf-f0e7ec66a7d1" name="Changes" comment="feat: make list pengumuman modular">
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/components/Home/PengumumamanList.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/home/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/home/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/CardAnnouncement.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/CardAnnouncement.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/Home/RoomList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Home/RoomList.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/Home/PengumumanModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Home/PengumumanModal.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,8 +46,14 @@
       </UrlAndAccount>
     </option>
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/node_modules/react-tooltip/dist/react-tooltip.d.ts" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/package.json" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:\xampp\php\php.exe" />
   <component name="ProjectColorInfo">{
@@ -65,8 +69,8 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "full.screen.before.presentation.mode": "false",
-    "git-widget-placeholder": "separate-pengumuman-component",
-    "last_opened_file_path": "//wsl.localhost/Ubuntu-22.04/home/ubuntu/personal/current-project/skripsi-nikke-frontend",
+    "git-widget-placeholder": "room-id-di-state-pada-halaman-home",
+    "last_opened_file_path": "//wsl.localhost/Ubuntu-22.04/home/ubuntu/personal/current-project/skripsi-nikke-frontend/components/Home",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.standard": "true",
     "node.js.detected.package.tslint": "true",
@@ -75,11 +79,16 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_interpreter_path": "wsl://Ubuntu-22.04@/home/ubuntu/.nvm/versions/node/v20.6.1/bin/node",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "com.intellij.platform.ide.impl.presentationAssistant.PresentationAssistantConfigurable",
+    "settings.editor.selected.configurable": "actions.on.save",
     "ts.external.directory.path": "\\\\wsl.localhost\\Ubuntu-22.04\\home\\ubuntu\\personal\\current-project\\skripsi-nikke-frontend\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="\\wsl.localhost\Ubuntu-22.04\home\ubuntu\personal\current-project\skripsi-nikke-frontend\components\Home" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -100,6 +109,15 @@
       <workItem from="1710424299865" duration="5497000" />
       <workItem from="1710430283030" duration="4465000" />
       <workItem from="1710435175718" duration="5579000" />
+      <workItem from="1710577026747" duration="581000" />
+      <workItem from="1710577633412" duration="36559000" />
+      <workItem from="1710664469323" duration="23000" />
+      <workItem from="1710679983707" duration="212000" />
+      <workItem from="1710685693931" duration="128000" />
+      <workItem from="1710688804841" duration="11371000" />
+      <workItem from="1710833140666" duration="227000" />
+      <workItem from="1710833552303" duration="1661000" />
+      <workItem from="1710839297755" duration="122000" />
     </task>
     <task id="LOCAL-00001" summary="feat: mahasiswa join room">
       <option name="closed" value="true" />
@@ -117,7 +135,15 @@
       <option name="project" value="LOCAL" />
       <updated>1710438205622</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="feat: make list pengumuman modular">
+      <option name="closed" value="true" />
+      <created>1710623241942</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1710623241942</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

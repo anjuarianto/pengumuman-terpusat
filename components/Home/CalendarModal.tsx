@@ -1,16 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Modal } from "@mui/material";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import { Tooltip } from 'react-tooltip';
 
 type CalendarModalProps = {
     openCal: boolean;
     handleClose: () => void;
+    myCalendarData: any;
 };
 
-const CalendarModal: React.FC<CalendarModalProps> = ({ openCal, handleClose }) => {
+const CalendarModal: React.FC<CalendarModalProps> = ({ openCal, handleClose, myCalendarData }) => {
+    const [tooltipText, setTooltipText] = useState('');
+
     return (
         <Modal open={openCal}>
             <div
@@ -41,24 +45,15 @@ const CalendarModal: React.FC<CalendarModalProps> = ({ openCal, handleClose }) =
                                 meridiem: true,
                             }}
                             initialView="dayGridMonth"
-                            events={[
-                                {
-                                    title: "event 1",
-                                    start: "2024-03-11T10:00:00",
-                                    end: "2024-03-11T11:00:00",
-                                },
-                                {
-                                    title: "event 1.5",
-                                    start: "2024-03-11T15:00:00",
-                                    end: "2024-03-11T11:00:00",
-                                },
-                                {
-                                    title: "event 2",
-                                    start: "2024-03-21T10:00:00",
-                                    end: "2024-03-23T11:00:00",
-                                },
-                            ]}
+                            events={myCalendarData}
+                            eventDidMount={function(info) {
+                                // setTooltipText(info.event.title);
+                                console.log(info.event);
+                            }}
                         />
+                        <div data-tooltip-id="my-tooltip" data-tooltip-content="Hello world!">
+                            <Tooltip id="my-tooltip" />
+                        </div>
                     </div>
                 </div>
             </div>

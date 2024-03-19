@@ -86,7 +86,7 @@ export default function Home() {
       setReloadPengumuman(false, )
     });
 
-  }, [isModalOpenPengumuman, reloadPengumuman, openCal]);
+  }, [isModalOpenPengumuman, reloadPengumuman, openCal, roomId]);
 
   const loadPengumumanData = async () => {
     try {
@@ -128,6 +128,10 @@ export default function Home() {
     setIsModalOpenPengumuman(true);
   };
 
+  const handleRoomIdChange = (id) => {
+      setRoomId(id);
+    }
+
   const handleClose = () => {
     setOpenCal(false);
   };
@@ -161,6 +165,8 @@ export default function Home() {
           <RoomList
             openModal={openRoomModal}
             isModalOpen={isOpenRoomModal}
+            setRoomId={(id: string) => handleRoomIdChange(parseInt(id))}
+            roomActive={roomId}
           ></RoomList>
 
           {/* pengumuman */}

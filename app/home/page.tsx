@@ -35,8 +35,6 @@ export default function Home() {
   const [isOpenRoomModal, setIsOpenRoomModal] = useState(false);
   const [pengumumanIsEdit, setpengumumanIsEdit] = useState<number | null>(null);
   const [reloadPengumuman, setReloadPengumuman] = useState(false);
-  const [calendarData, setCalendarData] = useState<any>();
-  const [myData, setMyData] = useState<any>();
   const openRoomModal = () => {
     setIsOpenRoomModal(true);
   };
@@ -44,32 +42,6 @@ export default function Home() {
   const toggleModalPengumuman = () => {
     setIsModalOpenPengumuman(!isModalOpenPengumuman);
   };
-
-    const loadMyData = async () => {
-        try {
-            const response = await axios.get(
-                "http://127.0.0.1:8000/api/me",
-                {
-                    headers: {
-                        Authorization:
-                            "Bearer " + Cookies.get("accessToken"),
-                    },
-                }
-            );
-
-            setMyData(response.data);
-
-            const pengumumanData = response.data.pengumuman.map((data: any) => ({
-                title: data.judul,
-                start: data.waktu,
-                end: data.waktu,
-            }));
-
-            setCalendarData(pengumumanData);
-        } catch (err) {
-            console.log(err);
-        }
-    };
 
   const searchForm = useForm<any>();
 
@@ -79,13 +51,9 @@ export default function Home() {
         loadPengumumanData();
       }
 
-      if(!openCal) {
-        loadMyData();
-      }
-      setReloadPengumuman(false, )
+      setReloadPengumuman(false)
     });
-
-  }, [isModalOpenPengumuman, reloadPengumuman, openCal]);
+  }, [isModalOpenPengumuman, reloadPengumuman]);
 
   const loadPengumumanData = async () => {
     try {
@@ -152,7 +120,7 @@ export default function Home() {
       <Navbar></Navbar>
       <div className="flex flex-col items-center w-full h-full pt-16 ">
 
-        <Toolbar openModalFormPengumuman={toggleModalPengumuman} handleInputChange={handleInputChange} myData={myData} />
+        <Toolbar openModalFormPengumuman={toggleModalPengumuman} handleInputChange={handleInputChange} />
 
         <div className="flex flex-row justify-center w-full h-screen px-12">
 
@@ -207,7 +175,6 @@ export default function Home() {
       <CalendarModal
           openCal={openCal}
           handleClose={handleClose}
-        myCalendarData={calendarData}
       />
 
 

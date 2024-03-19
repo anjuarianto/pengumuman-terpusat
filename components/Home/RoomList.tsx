@@ -10,6 +10,7 @@ type RoomListProps = {
 };
 export default function RoomList({openModal, isModalOpen}: RoomListProps) {
 
+
         const [roomList, setRoomList] = useState<{label: string, value: string}[]>([]);
         const loadRoomData = async () => {
             try {

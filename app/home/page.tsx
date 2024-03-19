@@ -37,6 +37,7 @@ export default function Home() {
   const [reloadPengumuman, setReloadPengumuman] = useState(false);
   const [calendarData, setCalendarData] = useState<any>();
   const [myData, setMyData] = useState<any>();
+  const [roomId, setRoomId] = useState<number>(11);
   const openRoomModal = () => {
     setIsOpenRoomModal(true);
   };
@@ -95,6 +96,7 @@ export default function Home() {
         {
           params: {
             search: searchForm.getValues().search,
+            room_id: roomId,
             page: 1,
           },
           headers: {
@@ -194,6 +196,7 @@ export default function Home() {
           isModalOpen={isModalOpenPengumuman}
           onClose={handleClosePengumumanModal}
           isEdit={pengumumanIsEdit}
+          roomActive={roomId}
       ></PengumumanModal>
 
       <ModalRoomList

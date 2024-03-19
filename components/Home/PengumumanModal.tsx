@@ -54,17 +54,6 @@ export default function PengumumanModal({
 }: PengumumanModal) {
   
   const [editorData, setEditorData] = useState<string>("");
-  const [roomSelected, setRoomSelected] = useState(false);
-  const [roomSelectedValue, setRoomSelectedValue] = useState<{
-    value: string;
-    label: string;
-  }>();
-  const [roomOptions, setRoomOptions] = useState<
-    {
-      value: string;
-      label: string;
-    }[]
-  >([]);
 
   const [editPengumumanData, setEditPengumumanData] = useState<{
     title: string;
@@ -193,9 +182,7 @@ export default function PengumumanModal({
     onClose();
     pengumumanForm.reset();
     setEditorData("");
-    setRoomSelected(false);
     setMahasiswaSelectedValue(false);
-    setRoomSelected(false);
     setEditPengumumanData(null);
   };
 
@@ -205,7 +192,7 @@ export default function PengumumanModal({
 
       const cleanData = {
         judul: data.title,
-        room_id: roomSelectedValue ? roomSelectedValue.value : "",
+        room_id: data.room,
         waktu: formatedTime,
         konten: editorData,
         recipients: mahasiswaSelectedValue.map((recipient) => { return recipient.value }),
@@ -276,26 +263,7 @@ export default function PengumumanModal({
                 onSubmit={pengumumanForm.handleSubmit(onSubmit)}
                 className="flex flex-col w-full gap-4"
               >
-                <input type="hidden" name="hiddenField" value={roomActive} />
-                <div>
-                  <label className=" text-gray-700 font-bold">Room</label>
-                  <Controller
-                    name="room"
-                    control={pengumumanForm.control}
-                    render={({ field }) => (
-                      <Select
-                        {...field}
-                        name="room"
-                        placeholder="Pilih Kelas"
-                        value={editPengumumanData?.isEdit ? roomSelectedValue : undefined}
-                        isSearchable
-                        options={roomOptions}
-                        onChange={handleRoomChange}
-                      />
-                    )}
-                  />
-                </div>
-
+                <input type="hidden" value={roomActive} {...pengumumanForm.register("room", { required: true })} />
 
                 <div>
                   <label className=" text-gray-700 font-bold">

@@ -7,10 +7,13 @@ import Cookies from "js-cookie";
 type RoomListProps = {
     openModal: () => void;
     isModalOpen: boolean;
+    setRoomId: (id: string) => void;
+    roomActive: number;
 };
-export default function RoomList({openModal, isModalOpen}: RoomListProps) {
+export default function RoomList({openModal, isModalOpen, setRoomId, roomActive}: RoomListProps) {
 
         const [roomList, setRoomList] = useState<{label: string, value: string}[]>([]);
+
         const loadRoomData = async () => {
             try {
                 const response = await axios.get(
@@ -52,7 +55,8 @@ export default function RoomList({openModal, isModalOpen}: RoomListProps) {
                     {roomList.map((data, index) => (
                         <div
                             key={index}
-                            className="px-2 py-1 my-2 text-center text-white rounded-lg shadow-lg bg-orange hover:bg-orange-h"
+                            className={`px-2 py-1 my-2 text-center text-white rounded-lg shadow-lg ${roomActive == parseInt(data.value) ? 'bg-amber-800' : 'bg-orange'} hover:bg-amber-800`}
+                            onClick={() => setRoomId(data.value)}
                         >
                             {data.label}
                         </div>

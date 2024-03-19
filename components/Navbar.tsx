@@ -13,7 +13,8 @@ export default function Navbar() {
   const Logout = async () => {
     try {
       Cookies.remove("accessToken");
-      window.location.reload();
+      router.push("/login")
+      
     } catch (err) {
       console.log(err);
     }

@@ -37,7 +37,7 @@ export default function Home() {
   const [reloadPengumuman, setReloadPengumuman] = useState(false);
   const [calendarData, setCalendarData] = useState<any>();
   const [myData, setMyData] = useState<any>();
-  const [roomId, setRoomId] = useState<number>(11);
+  const [roomId, setRoomId] = useState<number>(1);
   const openRoomModal = () => {
     setIsOpenRoomModal(true);
   };

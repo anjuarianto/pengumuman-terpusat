@@ -21,29 +21,26 @@ type Room = {
     name: string;
     is_single_user: boolean;
   }[];
-  created_at: string;
-  updated_at: string;
 };
 
 type ModalRoomProps = {
   isModalOpen: boolean;
-  isEdit: number | null;
+  isEdit: number;
   onClose: () => void;
 };
 
 const ModalRoom: React.FC<ModalRoomProps> = ({ isModalOpen, isEdit , onClose}) => {
   const RoomForm = useForm<Room>();
-  const [roomData, setRoomData] = useState<Room | null >(null);
-
-  const [memberSelected, setMemberSelected] = useState<{
-    value: string;
-    label: string;
-  }[]>([]);
-
+  const [name, setName] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [roomData, setRoomData] = useState<Room | null>(null);
+  const [memberSelected, setMemberSelected] = useState<any>([]);
   const [memberOptions, setMemberOptions] = useState<{
     value: string;
     label: string;
   }[]>([]);
+
+
 
   const loadAllUser = async () => {
     try {
@@ -59,40 +56,43 @@ const ModalRoom: React.FC<ModalRoomProps> = ({ isModalOpen, isEdit , onClose}) =
       console.log(error);
     }
   }
-  const loadRoomDataById = async (value: number | null) => {
+  const loadRoomDataById = async (value: number) => {
     try {
       const response = await axios.get(`${API_URL}/${value}`, { headers: HEADERS});
 
-      const data = {
-        id: response.data.id,
-        name: response.data.name,
-        description: response.data.description,
-        members: response.data.members,
-        created_at: response.data.created_at,
-        updated_at: response.data.updated_at,
-      };
+      const members = response.data.data.members.map((member: any) => ({
+        label:member.name,
+        value: "1" + "|" + member.id
+      }));
 
-      setRoomData(data);
+      setMemberSelected(members);
+      setName(response.data.data.name);
+      setDescription(response.data.data.description);
+
     } catch(error) {
       console.error(error);
     }
   }
 
   const handleClose = () => {
+    onClose();
     RoomForm.reset();
-    onClose && onClose();
+    setMemberSelected([]);
+    setRoomData(null);
   }
 
   const onSubmit: SubmitHandler<Room> = async (data) => {
     try {
 
+      const members = memberSelected.map((member: any) => member.value);
+      console.log(members)
       const response = await axios({
         method: isEdit ? "PUT" : "POST",
         url: isEdit ? `${API_URL}/${isEdit}` : API_URL,
         data: {
-            name: data.name,
-            description: data.description,
-            members: memberSelected.map((member) => member.value)
+            name: name,
+            description: description,
+            members: members
         },
         headers: HEADERS
       });
@@ -125,10 +125,12 @@ const ModalRoom: React.FC<ModalRoomProps> = ({ isModalOpen, isEdit , onClose}) =
   useEffect(() => {
 
     if (isModalOpen && isEdit) {
+      loadAllUser()
       loadRoomDataById(isEdit);
     }
 
-    if(isModalOpen) {
+
+    if(isModalOpen && !isEdit) {
       loadAllUser()
     }
 
@@ -140,7 +142,7 @@ const ModalRoom: React.FC<ModalRoomProps> = ({ isModalOpen, isEdit , onClose}) =
     <Modal open={isModalOpen}>
       <div
         className="flex flex-col items-center justify-center h-screen"
-        onClick={onClose}
+        onClick={handleClose}
       >
         <div
           className="flex flex-col items-center w-2/5 h-auto bg-white rounded-lg shadow-lg "
@@ -163,7 +165,7 @@ const ModalRoom: React.FC<ModalRoomProps> = ({ isModalOpen, isEdit , onClose}) =
                   id="title"
                   required
                   placeholder="Judul"
-                  defaultValue={roomData?.name}
+                  defaultValue={isEdit ? name : ""}
                   className="p-2 border border-gray-300 rounded-md w-full"
                   {...RoomForm.register("name", { required: true })}
                 />
@@ -177,7 +179,7 @@ const ModalRoom: React.FC<ModalRoomProps> = ({ isModalOpen, isEdit , onClose}) =
                   id="title"
                   required
                   placeholder="Description"
-                  defaultValue={roomData?.description}
+                  defaultValue={isEdit ? description : ''}
                   className="p-2 border border-gray-300 rounded-md w-full"
                   {...RoomForm.register("description", { required: true })}
                 />

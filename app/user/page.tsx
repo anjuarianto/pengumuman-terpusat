@@ -16,19 +16,6 @@ import { TableContainer, Paper, Tooltip, Modal } from "@mui/material";
 import { FaTrash, FaEdit, FaPlus } from "react-icons/fa";
 import Swal from "sweetalert2";
 
-type Room = {
-  id: number;
-  name: string;
-  description: string;
-  members: {
-    id: number;
-    name: string;
-    is_single_user: boolean;
-  }[];
-  created_at: string;
-  updated_at: string;
-};
-
 type User = {
   id: number;
   name: string;
@@ -83,7 +70,6 @@ export default function User() {
   }>();
 
   const UserForm = useForm<User>();
-  const RoomForm = useForm<Room>();
 
   const columnsUserGroup: MUIDataTableColumn[] = [
     {
@@ -221,16 +207,8 @@ export default function User() {
                     <button
                       className="p-2 text-white bg-blue-500 hover:bg-blue-600 font-bold rounded-lg "
                       onClick={() => {
-                        setEditRoomData({
-                          id: tableMeta.rowData[0],
-                          name: tableMeta.rowData[1],
-                          description: tableMeta.rowData[2],
-                          members: tableMeta.rowData[3],
-                          created_at: tableMeta.rowData[2],
-                          updated_at: tableMeta.rowData[2],
-                        })
-
-                        handleOpen("edit", "room", tableMeta.rowData[0])
+                        setIsModalRoomOpen(true);
+                        setIsModalRoomEdit(tableMeta.rowData[0])
                       }}
                     >
                       <FaEdit />
@@ -327,16 +305,6 @@ export default function User() {
                     <button
                       className="p-2 text-white bg-blue-500 hover:bg-blue-600 font-bold rounded-lg "
                       onClick={() => {
-                        setEditUserData({
-                          id: tableMeta.rowData[0],
-                          name: tableMeta.rowData[1],
-                          email: tableMeta.rowData[2],
-                          created_at: tableMeta.rowData[2],
-                          updated_at: tableMeta.rowData[3],
-                          isEdit: true,
-                        });
-                        console.log("whwtat????????????????");
-                        handleOpen("edit", "user");
                       }}
                     >
                       <FaEdit />
@@ -534,19 +502,11 @@ export default function User() {
       UserForm.reset();
       setOpenUser(true);
     }
-    if (options === "add" && dataType === "room") {
-      RoomForm.reset();
-      setIsModalRoomOpen(true);
-    }
-    if (options === "edit" && dataType === "room") {
-      RoomForm.reset();
-      setIsModalRoomOpen(true);
-      setIsModalRoomEdit(id);
-    }
   };
   const handleClose = () => {
     setOpenUser(false);
     setIsModalRoomOpen(false);
+    setIsModalRoomEdit(null)
   };
 
   const onSubmitUser: SubmitHandler<User> = async (data) => {
@@ -614,7 +574,7 @@ export default function User() {
               </div>
               <button
                   className="bg-dark-blue text-white rounded-lg px-4 py-2"
-                  onClick={() => handleOpen("add", "room")}
+                  onClick={() => setIsModalRoomOpen(true)}
               >
                 {options === "room" ? 'Tambah Room' : 'Tambah User'}
               </button>

@@ -36,16 +36,16 @@ export default function ModalRoomList({isOpen, onClose}: ModalProps) {
             console.log(error)
         }
     }
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get<DataItem[]>(API_URL, HEADERS);
-                setData(response.data);
-            } catch (error) {
-                console.log(error)
-            }
-        };
+    const fetchData = async () => {
+        try {
+            const response = await axios.get<DataItem[]>(API_URL, HEADERS);
+            setData(response.data.data)
+        } catch (error) {
+            console.log(error)
+        }
+    };
 
+    useEffect(() => {
         fetchData();
         setReload(false)
     }, [reload]); // Add any dependencies here
@@ -77,7 +77,7 @@ export default function ModalRoomList({isOpen, onClose}: ModalProps) {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {data.data.map((item: DataItem) => (
+                                    {data.map((item: DataItem) => (
                                         <TableRow key={item.id}>
                                             <TableCell>{item.id}</TableCell>
                                             <TableCell>{item.name}</TableCell>

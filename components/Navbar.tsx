@@ -7,7 +7,11 @@ import Image from "next/image";
 import logo from "../public/assets/logo.png";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import DropdownNavbar from "@/components/DropdownNavbar";
 
+const session = Cookies.get("session");
+const email = session ? JSON.parse(session).email : undefined;
+const role = session ? JSON.parse(session).role : undefined;
 export default function Navbar() {
   const router = useRouter();
   const Logout = async () => {
@@ -34,16 +38,12 @@ export default function Navbar() {
           Selamat Datang di Website Pengumuman Terpusat Teknik Informatika Itera
           Untuk Mengetahui Informasi
         </span>
-        <button
-          className="flex flex-row items-center gap-2 w-fit px-4 py-2 rounded-md mx-12  hover:bg-dark-blue-h font-bold"
-          onClick={()=>{router.push("/user")}}
-        ><FaEdit/> Edit User</button>
-        <button
-          className="flex flex-row items-center gap-2 w-fit px-4 py-2 rounded-md mx-12  hover:bg-dark-blue-h font-bold"
-          onClick={Logout}
-        >
-          <FaSignOutAlt /> Logout
-        </button>
+        <span
+          className="flex flex-row items-center w-fit gap-2 py-2 rounded-md mx-12 font-bold"
+        ><FaEdit/>{email} | ({role})</span>
+
+        <DropdownNavbar logout={Logout} />
+
       </div>
     </div>
   );

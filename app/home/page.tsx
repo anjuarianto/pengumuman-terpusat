@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import redirect from "next/navigation";
 
 // Home Component
 import RoomList from "@/components/Home/RoomList";
@@ -38,6 +39,8 @@ export default function Home() {
   const [calendarData, setCalendarData] = useState<any>();
   const [myData, setMyData] = useState<any>();
   const [roomId, setRoomId] = useState<number>(1);
+  const [navigate, setNavigate] = useState("");
+
   const openRoomModal = () => {
     setIsOpenRoomModal(true);
   };
@@ -80,13 +83,21 @@ export default function Home() {
         loadPengumumanData();
       }
 
+      if(navigate) {
+        router.push("/user");
+      }
+
+      if(navigate) {
+        loadMyData();
+      }
+
       if(!openCal) {
         loadMyData();
       }
-      setReloadPengumuman(false, )
+      setReloadPengumuman(false)
     });
 
-  }, [isModalOpenPengumuman, reloadPengumuman, openCal, roomId]);
+  }, [isModalOpenPengumuman, reloadPengumuman, openCal, roomId, navigate]);
 
   const loadPengumumanData = async () => {
     try {
@@ -155,10 +166,19 @@ export default function Home() {
 
   return (
     <>
-      <Navbar></Navbar>
+      <Navbar>
+      </Navbar>
       <div className="flex flex-col items-center w-full h-full pt-16 ">
 
-        <Toolbar openModalFormPengumuman={toggleModalPengumuman} handleInputChange={handleInputChange} myData={myData} />
+        <Toolbar
+            openModalFormPengumuman={toggleModalPengumuman}
+            handleInputChange={handleInputChange}
+            myData={myData}
+            roomActive={roomId}
+            setRoomId={() =>{
+                setRoomId(1);
+            }}
+        />
 
         <div className="flex flex-row justify-center w-full h-screen px-12">
 

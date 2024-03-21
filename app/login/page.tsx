@@ -9,6 +9,13 @@ import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 
+type SessionType = {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+} | null;
+
 export default function Login() {
   const router = useRouter();
 
@@ -22,6 +29,7 @@ export default function Login() {
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
+  const [session, setSession] = useState<SessionType>(null);
 
 
   useEffect(() => {
@@ -43,6 +51,21 @@ export default function Login() {
     }
   };
 
+  const getSessionData = async (accesToken :string) => {
+      try {
+      const response = await axios.get(`http://127.0.0.1:8000/api/me`, {
+        headers: {
+          "Authorization": "Bearer " + accesToken,
+        },
+      });
+
+      setSession(response.data);
+      } catch (err) {
+        console.log(err)
+      }
+
+  }
+
 
   const onSubmitLogin: SubmitHandler<{
     email: string;
@@ -52,17 +75,12 @@ export default function Login() {
       const response = await axios.post(
         "http://127.0.0.1:8000/api/login",
         data,
-        {
-          // headers: {
-          //   "Authorization": "Bearer 5|8SXXpyhxRkR8pB6iMArXRDOe0qfrEXV6ygVJw5qld370500c",
-          // },
-        }
       );
-      console.log(response.data.access_token);
-
 
       // Store token in cookie
       Cookies.set("accessToken", response.data.access_token);
+      Cookies.set("session", JSON.stringify(response.data.session));
+
       router.push("/home");
 
 
@@ -91,20 +109,7 @@ export default function Login() {
     confirmPassword: string;
   }> = async (data) => {
     try {
-      console.log({
-        name: data.name,
-        email: data.email,
-        password: data.password,
-      });
-      // const response = await axios.post("/register", data);
-      // router.push("/home");
 
-      // // Show success message with SweetAlert2
-      // await Swal.fire({
-      //   icon: "success",
-      //   title: "Success",
-      //   text: "Login successful!",
-      // });
     } catch (error) {
       await Swal.fire({
         icon: "error",

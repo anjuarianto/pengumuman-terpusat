@@ -1,20 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Modal } from "@mui/material";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import { Tooltip } from 'react-tooltip';
 
 type CalendarModalProps = {
     openCal: boolean;
     handleClose: () => void;
-    myCalendarData: any;
 };
 
-const CalendarModal: React.FC<CalendarModalProps> = ({ openCal, handleClose, myCalendarData }) => {
-    const [tooltipText, setTooltipText] = useState('');
-
+const CalendarModal: React.FC<CalendarModalProps> = ({ openCal, handleClose, myCalendarData}) => {
     return (
         <Modal open={openCal}>
             <div
@@ -46,14 +42,7 @@ const CalendarModal: React.FC<CalendarModalProps> = ({ openCal, handleClose, myC
                             }}
                             initialView="dayGridMonth"
                             events={myCalendarData}
-                            eventDidMount={function(info) {
-                                // setTooltipText(info.event.title);
-                                console.log(info.event);
-                            }}
                         />
-                        <div data-tooltip-id="my-tooltip" data-tooltip-content="Hello world!">
-                            <Tooltip id="my-tooltip" />
-                        </div>
                     </div>
                 </div>
             </div>

@@ -82,6 +82,7 @@ export default function PengumumanModal({
 
   useEffect(() => {
     if (roomActive) {
+      console.log(roomActive)
       handleRoomChange(roomActive);
     }
 
@@ -109,13 +110,6 @@ export default function PengumumanModal({
         }
       );
 
-      // Map the data into the desired structure
-      const mappedData = response.data.data.map((room: any) => ({
-        value: room.id,
-        label: room.name,
-      }));
-      // Set the mapped data into state
-      setRoomOptions(mappedData);
     } catch (err) {
       console.log(err);
     }

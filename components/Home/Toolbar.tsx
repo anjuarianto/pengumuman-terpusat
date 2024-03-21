@@ -7,9 +7,11 @@ type ToolbarProps = {
     onSubmitSearch: (data: any) => void;
     handleInputChange: (event: any) => void;
     myData : any;
+    roomActive: number;
+    setRoomId: (id: number) => void;
 }
 
-const Toolbar: React.FC<ToolbarProps> = ({ openModalFormPengumuman, onSubmitSearch, handleInputChange, myData }) => {
+const Toolbar: React.FC<ToolbarProps> = ({ openModalFormPengumuman, onSubmitSearch, handleInputChange, myData, roomActive, setRoomId }) => {
     const searchForm = useForm<any>();
     const canCreate = myData?.permissions.includes("create-pengumuman");
 
@@ -48,7 +50,9 @@ const Toolbar: React.FC<ToolbarProps> = ({ openModalFormPengumuman, onSubmitSear
                     </button>
                 </form>
 
-                <div className="px-6 py-2 text-center rounded-lg shadow-lg basis-1/5 bg-orange">
+                <div
+                    onClick={setRoomId}
+                    className={`px-6 py-2 text-center rounded-lg shadow-lg basis-1/5 ${roomActive == 1 ? 'bg-amber-800' : 'bg-orange'}`}>
                     General
                 </div>
             </div>

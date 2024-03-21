@@ -2,11 +2,11 @@
 import React, { useState } from "react";
 
 import { FaEdit, FaTrash, FaCommentAlt } from "react-icons/fa";
-
+import { useRouter } from "next/navigation";
 type EditPengumuman = {
   id: number;
   room: { id: number; name: string };
-  title: string;W
+  title: string;
   date: string;
   time: string;
   created_by: string;
@@ -17,6 +17,7 @@ type EditPengumuman = {
   can_edit: boolean;
   can_delete: boolean;
   deletePengumuman: (id: number) => void;
+  openDetailModal: (id:number) => void;
 };
 
 export default function CardAnnouncement({
@@ -31,21 +32,24 @@ export default function CardAnnouncement({
   can_reply,
   can_edit,
   can_delete,
-    deletePengumuman
+  deletePengumuman,
+    openDetailModal
 }: EditPengumuman) {
-
+  const router = useRouter();
 
   return (
     <>
-      <div className="p-2 bg-white rounded-lg hover:cursor-default">
+      <div className="p-2 bg-white rounded-lg hover:cursor-default" onClick={() => openDetailModal(id)}>
         <div className="flex flex-col gap-2 p-2 rounded-lg ">
-          <div className="flex flex-row items-center gap-2 text-sm justify-between" >
+          <div className="flex flex-row items-center gap-2 text-sm justify-between">
             <div>
               <span>• {created_by}</span>{" "}
               <span className="text-main-3">{date} </span>
             </div>
 
-            <span className="float-right bg-orange text-white rounded-2xl p-2">{room.name}</span>
+            <span className="float-right bg-orange text-white rounded-2xl p-2">
+              {room.name}
+            </span>
           </div>
           <h1 className="text-2xl font-bold">{title}</h1>
 
@@ -53,14 +57,22 @@ export default function CardAnnouncement({
 
           <div className="flex flex-row gap-4 text-sm">
             {can_reply && (
-              <button className="flex flex-row items-center gap-2 px-4 py-1 border rounded-lg hover:bg-gray-200">
+              <button
+                className="flex flex-row items-center gap-2 px-4 py-1 border rounded-lg hover:bg-gray-200"
+                onClick={(e) => {
+                    e.stopPropagation();
+                    router.push(`/home/${id}`)
+                  }
+                }
+              >
                 <FaCommentAlt /> Reply
               </button>
             )}
             {can_edit && (
               <button
                 className="flex flex-row items-center gap-2 px-4 py-1 border rounded-lg hover:bg-gray-200"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   editForm(id);
                 }}
               >
@@ -70,8 +82,9 @@ export default function CardAnnouncement({
             {can_delete && (
               <button
                 className="flex flex-row items-center gap-2 px-4 py-1 border rounded-lg hover:bg-gray-200"
-                onClick={() => {
-                  deletePengumuman(id)
+                onClick={(e) => {
+                  e.stopPropagation();
+                  deletePengumuman(id);
                 }}
               >
                 <FaTrash /> Delete

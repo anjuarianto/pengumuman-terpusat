@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import { FaAngleLeft } from "react-icons/fa";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import Select from "react-select";
+import ModalRoom from "@/components/Master/ModalRoom";
 
 import MUIDataTable, {
   MUIDataTableColumn,
@@ -15,19 +15,6 @@ import { useRouter } from "next/navigation";
 import { TableContainer, Paper, Tooltip, Modal } from "@mui/material";
 import { FaTrash, FaEdit, FaPlus } from "react-icons/fa";
 import Swal from "sweetalert2";
-
-type Room = {
-  id: number;
-  name: string;
-  description: string;
-  members: {
-    id: number;
-    name: string;
-    is_single_user: boolean;
-  }[];
-  created_at: string;
-  updated_at: string;
-};
 
 type User = {
   id: number;
@@ -53,7 +40,8 @@ export default function User() {
   const router = useRouter();
 
   const [openUser, setOpenUser] = useState(false);
-  const [openRoom, setOpenRoom] = useState(false);
+  const [isModalRoomOpen, setIsModalRoomOpen] = useState(false);
+  const [isModalRoomEdit, setIsModalRoomEdit] = useState<number | null>(null);
   const [options, setOptions] = useState<string>("room");
   const [RoomData, setRoomData] = useState<Room[]>([]);
   const [userData, setUserData] = useState<User[]>([]);
@@ -82,7 +70,6 @@ export default function User() {
   }>();
 
   const UserForm = useForm<User>();
-  const RoomForm = useForm<Room>();
 
   const columnsUserGroup: MUIDataTableColumn[] = [
     {
@@ -220,16 +207,8 @@ export default function User() {
                     <button
                       className="p-2 text-white bg-blue-500 hover:bg-blue-600 font-bold rounded-lg "
                       onClick={() => {
-                        setEditRoomData({
-                          id: tableMeta.rowData[0],
-                          name: tableMeta.rowData[1],
-                          description: tableMeta.rowData[2],
-                          members: tableMeta.rowData[3],
-                          created_at: tableMeta.rowData[2],
-                          updated_at: tableMeta.rowData[2],
-                        })
-
-                        handleOpen("edit", "room")
+                        setIsModalRoomOpen(true);
+                        setIsModalRoomEdit(tableMeta.rowData[0])
                       }}
                     >
                       <FaEdit />
@@ -304,10 +283,6 @@ export default function User() {
       name: "email",
       label: "Email",
     },
-    // {
-    //   name: "email_verified_at",
-    //   label: "Email verified at",
-    // },
     {
       name: "created_at",
       label: "created_at",
@@ -330,16 +305,6 @@ export default function User() {
                     <button
                       className="p-2 text-white bg-blue-500 hover:bg-blue-600 font-bold rounded-lg "
                       onClick={() => {
-                        setEditUserData({
-                          id: tableMeta.rowData[0],
-                          name: tableMeta.rowData[1],
-                          email: tableMeta.rowData[2],
-                          created_at: tableMeta.rowData[2],
-                          updated_at: tableMeta.rowData[3],
-                          isEdit: true,
-                        });
-                        console.log("whwtat????????????????");
-                        handleOpen("edit", "user");
                       }}
                     >
                       <FaEdit />
@@ -528,7 +493,7 @@ export default function User() {
     router.back(); // Navigate to previous route
   };
 
-  const handleOpen = (options: string, dataType: string) => {
+  const handleOpen = (options: string, dataType: string, id:number) => {
     if (options === "add" && dataType === "user") {
       UserForm.reset();
       setOpenUser(true);
@@ -537,54 +502,13 @@ export default function User() {
       UserForm.reset();
       setOpenUser(true);
     }
-    if (options === "add" && dataType === "room") {
-      RoomForm.reset();
-      setOpenRoom(true);
-    }
-    if (options === "edit" && dataType === "room") {
-      RoomForm.reset();
-      setOpenRoom(true);
-    }
   };
   const handleClose = () => {
     setOpenUser(false);
-    setOpenRoom(false);
+    setIsModalRoomOpen(false);
+    setIsModalRoomEdit(null)
   };
-  const onSubmitRoom: SubmitHandler<Room> = async (data) => {
-    console.log(data);
-    // try {
-    //   const response = await axios.post(
-    //     "http://127.0.0.1:8000/api/pengumuman",
-    //     cleanData,
-    //     {
-    //       headers: {
-    //         Authorization:
-    //           // "Bearer 27|HBtoUhr6TVjtV0CB0YKzwobzPWogxoIZGzkV8fK7ae8863d4",
-    //           "Bearer " + Cookies.get("accessToken"),
-    //       },
-    //     }
-    //   );
-    //   // Show success message with SweetAlert2
-    //   await Swal.fire({
-    //     icon: "success",
-    //     title: "Success",
-    //     customClass: {
-    //       container: "my-swal-popup ",
-    //     },
-    //     text: "Login successful!",
-    //   });
-    // } catch (err) {
-    //   console.log(err);
-    //   await Swal.fire({
-    //     icon: "error",
-    //     title: "Error",
-    //     customClass: {
-    //       container: "my-swal-popup ",
-    //     },
-    //     text: "Login failed. Please try again later.",
-    //   });
-    // }
-  };
+
   const onSubmitUser: SubmitHandler<User> = async (data) => {
     const formatedData = {
       id: editUserData?.id,
@@ -593,39 +517,7 @@ export default function User() {
       created_at: editUserData?.created_at,
       updated_at: editUserData?.updated_at,
     };
-    console.log(formatedData);
-    // try {
-    //   const response = await axios.post(
-    //     "http://127.0.0.1:8000/api/pengumuman",
-    //     cleanData,
-    //     {
-    //       headers: {
-    //         Authorization:
-    //           // "Bearer 27|HBtoUhr6TVjtV0CB0YKzwobzPWogxoIZGzkV8fK7ae8863d4",
-    //           "Bearer " + Cookies.get("accessToken"),
-    //       },
-    //     }
-    //   );
-    //   // Show success message with SweetAlert2
-    //   await Swal.fire({
-    //     icon: "success",
-    //     title: "Success",
-    //     customClass: {
-    //       container: "my-swal-popup ",
-    //     },
-    //     text: "Login successful!",
-    //   });
-    // } catch (err) {
-    //   console.log(err);
-    //   await Swal.fire({
-    //     icon: "error",
-    //     title: "Error",
-    //     customClass: {
-    //       container: "my-swal-popup ",
-    //     },
-    //     text: "Login failed. Please try again later.",
-    //   });
-    // }
+
   };
   return (
     <>
@@ -633,30 +525,31 @@ export default function User() {
       <div className=" flex flex-col items-center w-full h-full pt-16 ">
         <div className="flex flex-row justify-center w-full h-screen px-12">
           <div className="w-full h-screen ">
-            <div className="flex flex-row gap-4 items-center mb-6 ">
-              <Tooltip title="Back to home" placement="top" arrow>
-                <button
-                  className="p-3  rounded-lg  bg-white hover:bg-dark-blue-h hover:text-white"
-                  onClick={handleGoBack}
-                >
-                  <FaAngleLeft />
-                </button>
-              </Tooltip>
-              <div
-                className={`  w-fit  rounded-lg  shadow-lg 
+            <div className="flex justify-between mb-6">
+              <div className="flex flex-row gap-4 items-center">
+                <Tooltip title="Back to home" placement="top" arrow>
+                  <button
+                      className="p-3  rounded-lg  bg-white hover:bg-dark-blue-h hover:text-white"
+                      onClick={handleGoBack}
+                  >
+                    <FaAngleLeft/>
+                  </button>
+                </Tooltip>
+                <div
+                    className={`  w-fit  rounded-lg  shadow-lg 
             `}
-              >
-                <button
-                  className={`${
-                    options === "room"
-                      ? "bg-dark-blue text-white"
-                      : "bg-white hover:text-white hover:bg-dark-blue-h"
-                  } rounded-l-lg px-4 py-2`}
-                  onClick={() => setOptions("room")}
                 >
-                  Room List
-                </button>
-                {/* <button
+                  <button
+                      className={`${
+                          options === "room"
+                              ? "bg-dark-blue text-white"
+                              : "bg-white hover:text-white hover:bg-dark-blue-h"
+                      } rounded-l-lg px-4 py-2`}
+                      onClick={() => setOptions("room")}
+                  >
+                    Room List
+                  </button>
+                  {/* <button
                   className={`${
                     options === "usergroup"
                       ? "bg-dark-blue text-white"
@@ -666,21 +559,29 @@ export default function User() {
                 >
                   User Group List
                 </button> */}
-                <button
-                  className={`${
-                    options === "user"
-                      ? "bg-dark-blue text-white"
-                      : "bg-white hover:text-white hover:bg-dark-blue-h"
-                  } rounded-r-lg px-4 py-2`}
-                  onClick={() => setOptions("user")}
-                >
-                  User List
-                </button>
+                  <button
+                      className={`${
+                          options === "user"
+                              ? "bg-dark-blue text-white"
+                              : "bg-white hover:text-white hover:bg-dark-blue-h"
+                      } rounded-r-lg px-4 py-2`}
+                      onClick={() => setOptions("user")}
+                  >
+                    User List
+                  </button>
+                </div>
+
               </div>
+              <button
+                  className="bg-dark-blue text-white rounded-lg px-4 py-2"
+                  onClick={() => setIsModalRoomOpen(true)}
+              >
+                {options === "room" ? 'Tambah Room' : 'Tambah User'}
+              </button>
             </div>
 
             <Paper>
-              <TableContainer>
+                <TableContainer>
                 <MUIDataTable
                   title={
                     options === "room"
@@ -781,74 +682,7 @@ export default function User() {
           {/* </div> */}
         </div>
       </Modal>
-      <Modal open={openRoom}>
-        <div
-          className="flex flex-col items-center justify-center h-screen"
-          onClick={handleClose}
-        >
-          <div
-            className="flex flex-col items-center w-2/5 h-auto bg-white rounded-lg shadow-lg "
-            onClick={(e) => {
-              //Prevent event propagation only for this inner div
-              e.stopPropagation();
-            }}
-          >
-            <div className="w-full h-full py-4 text-2xl font-bold text-center text-white rounded-t-lg bg-dark-blue ">
-              Edit Room
-            </div>
-            <div className="w-full px-24 py-4">
-              <form
-                onSubmit={RoomForm.handleSubmit(onSubmitRoom)}
-                className="flex flex-col w-full gap-4"
-              >
-                <div>
-                  <label className=" text-gray-700 font-bold">Nama</label>
-                  <input
-                    type="text"
-                    id="title"
-                    required
-                    placeholder="Judul"
-                    defaultValue={editRoomData?.name}
-                    className="p-2 border border-gray-300 rounded-md w-full"
-                    {...RoomForm.register("name", { required: true })}
-                  />
-                </div>
-                <div>
-                  <label className=" text-gray-700 font-bold">
-                    Description
-                  </label>
-                  <input
-                    type="text"
-                    id="title"
-                    required
-                    placeholder="Description"
-                    defaultValue={editRoomData?.description}
-                    className="p-2 border border-gray-300 rounded-md w-full"
-                    {...RoomForm.register("description", { required: true })}
-                  />
-                </div>
-                <div>
-                {editRoomData?.members.map((member: any, index: number) => (
-                  <li key={index}>{member.name}</li>
-                ))}
-                </div>
-
-               
-
-                <div className="flex flex-col items-center">
-                  <button
-                    type="submit"
-                    className="px-24 py-2 mt-4 text-white bg-blue-500 rounded-lg w-fit hover:bg-blue-600"
-                  >
-                    Submit
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-          {/* </div> */}
-        </div>
-      </Modal>
+      <ModalRoom isModalOpen={isModalRoomOpen} isEdit={isModalRoomEdit} onClose={handleClose} />
     </>
   );
 }

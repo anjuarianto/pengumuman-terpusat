@@ -43,25 +43,17 @@ type PengumumanModal = {
   isModalOpen: boolean;
   isEdit: number | null;
   onClose: () => void;
+  roomActive: number;
 };
 
 export default function PengumumanModal({
   isModalOpen,
   onClose,
   isEdit,
+  roomActive
 }: PengumumanModal) {
+  
   const [editorData, setEditorData] = useState<string>("");
-  const [roomSelected, setRoomSelected] = useState(false);
-  const [roomSelectedValue, setRoomSelectedValue] = useState<{
-    value: string;
-    label: string;
-  }>();
-  const [roomOptions, setRoomOptions] = useState<
-      {
-        value: string;
-        label: string;
-      }[]
-  >([]);
 
   const [editPengumumanData, setEditPengumumanData] = useState<{
     title: string;
@@ -83,19 +75,24 @@ export default function PengumumanModal({
     value: string;
     label: string;
   }[]>([]);
-  
+
   const pengumumanForm = useForm<PengumumanData>({
     mode: "onChange",
   });
 
   useEffect(() => {
+    if (roomActive) {
+      console.log(roomActive)
+      handleRoomChange(roomActive);
+    }
+
     if (isModalOpen && isEdit) {
       loadRoomData();
       loadEditPengumuman();
     }
 
-    if(isModalOpen && !isEdit){
-        loadRoomData();
+    if (isModalOpen && !isEdit) {
+      loadRoomData();
     }
 
     return;
@@ -104,22 +101,15 @@ export default function PengumumanModal({
   const loadRoomData = async () => {
     try {
       const response = await axios.get(
-          "http://127.0.0.1:8000/api/room",
-          {
-            headers: {
-              Authorization:
-                  "Bearer " + Cookies.get("accessToken"),
-            },
-          }
+        "http://127.0.0.1:8000/api/room",
+        {
+          headers: {
+            Authorization:
+              "Bearer " + Cookies.get("accessToken"),
+          },
+        }
       );
 
-      // Map the data into the desired structure
-      const mappedData = response.data.data.map((room: any) => ({
-        value: room.id,
-        label: room.name,
-      }));
-      // Set the mapped data into state
-      setRoomOptions(mappedData);
     } catch (err) {
       console.log(err);
     }
@@ -127,7 +117,7 @@ export default function PengumumanModal({
   const handleRoomChange = async (value: any) => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/room/${value.value}`,
+        `http://127.0.0.1:8000/api/room/${value}`,
 
         {
           headers: {
@@ -142,9 +132,7 @@ export default function PengumumanModal({
       }));
       setMahasiswaOptions(mappedData);
 
-      setRoomSelected(!!value);
-      setRoomSelectedValue(value);
-    } catch (err) {}
+    } catch (err) { }
   };
 
   const loadEditPengumuman = async () => {
@@ -162,7 +150,7 @@ export default function PengumumanModal({
     const waktuParts = response.data.data.waktu.split(" ");
     const date = waktuParts[0];
     const time = waktuParts[1];
-    const room = {label: response.data.data.room.name, value: response.data.data.room.id.toString()};
+    const room = { label: response.data.data.room.name, value: response.data.data.room.id.toString() };
     const recipients = response.data.data.penerima.map((recipient: any) => ({
       value: (recipient.is_single_user ? 1 : 0) + "|" + recipient.penerima_id,
       label: recipient.name,
@@ -188,9 +176,7 @@ export default function PengumumanModal({
     onClose();
     pengumumanForm.reset();
     setEditorData("");
-    setRoomSelected(false);
     setMahasiswaSelectedValue(false);
-    setRoomSelected(false);
     setEditPengumumanData(null);
   };
 
@@ -200,7 +186,7 @@ export default function PengumumanModal({
 
       const cleanData = {
         judul: data.title,
-        room_id: roomSelectedValue ? roomSelectedValue.value : "",
+        room_id: data.room,
         waktu: formatedTime,
         konten: editorData,
         recipients: mahasiswaSelectedValue.map((recipient) => { return recipient.value }),
@@ -255,80 +241,62 @@ export default function PengumumanModal({
           onClick={handleClose}
         >
           <div
-              className="flex flex-col items-center w-2/5 h-auto bg-white rounded-lg shadow-lg "
-              onClick={(e) => {
-                //Prevent event propagation only for this inner div
-                e.stopPropagation();
-              }}
+            className="flex flex-col items-center w-2/5 h-auto bg-white rounded-lg shadow-lg "
+            onClick={(e) => {
+              //Prevent event propagation only for this inner div
+              e.stopPropagation();
+            }}
           >
             <div className="w-full h-full py-4 text-2xl font-bold text-center text-white rounded-t-lg bg-dark-blue ">
               {editPengumumanData?.isEdit
-                  ? "Edit Pengumuman"
-                  : "Add Pengumuman"}
+                ? "Edit Pengumuman"
+                : "Add Pengumuman"}
             </div>
             <div className="w-full px-24 py-4">
               <form
-                  onSubmit={pengumumanForm.handleSubmit(onSubmit)}
-                  className="flex flex-col w-full gap-4"
+                onSubmit={pengumumanForm.handleSubmit(onSubmit)}
+                className="flex flex-col w-full gap-4"
               >
+                <input type="hidden" value={roomActive} {...pengumumanForm.register("room", { required: true })} />
+
                 <div>
-                  <label className=" text-gray-700 font-bold">Room</label>
+                  <label className=" text-gray-700 font-bold">
+                    Mahasiswa
+                  </label>
                   <Controller
-                      name="room"
-                      control={pengumumanForm.control}
-                      render={({field}) => (
-                          <Select
-                              {...field}
-                              name="room"
-                              placeholder="Pilih Kelas"
-                              value={editPengumumanData?.isEdit ? roomSelectedValue : undefined}
-                              isSearchable
-                              options={roomOptions}
-                              onChange={handleRoomChange}
-                          />
-                      )}
+                    name="recipients"
+                    control={pengumumanForm.control}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        value={mahasiswaSelectedValue}
+                        placeholder="Mahasiswa :..."
+                        isMulti
+                        isSearchable
+                        options={mahasiswaOptions}
+                        className="basic-multi-select"
+                        classNamePrefix="select"
+                        onChange={(value) => { setMahasiswaSelectedValue(value); console.log(mahasiswaSelectedValue) }}
+                      />
+                    )}
                   />
                 </div>
 
-                {roomSelected && (
-                    <div>
-                      <label className=" text-gray-700 font-bold">
-                        Mahasiswa
-                      </label>
-                      <Controller
-                          name="recipients"
-                          control={pengumumanForm.control}
-                          render={({field}) => (
-                              <Select
-                                  {...field}
-                                  value={mahasiswaSelectedValue}
-                                  placeholder="Mahasiswa :..."
-                                  isMulti
-                                  isSearchable
-                                  options={mahasiswaOptions}
-                                  className="basic-multi-select"
-                                  classNamePrefix="select"
-                                  onChange={(value) => {setMahasiswaSelectedValue(value); console.log(mahasiswaSelectedValue)}}
-                              />
-                          )}
-                      />
-                    </div>
-                )}
 
                 <div>
                   <label className=" text-gray-700 font-bold">Judul</label>
                   <input
-                      type="text"
-                      id="title"
-                      required
-                      defaultValue={
-                        editPengumumanData?.isEdit
-                            ? editPengumumanData.title
-                            : ""
-                      }
-                      placeholder="Judul : ..."
-                      className="p-2 border border-gray-300 rounded-md w-full"
-                      {...pengumumanForm.register("title", {required: true})}
+                    type="text"
+                    id="title"
+                    required
+                    defaultValue={
+                      editPengumumanData?.isEdit
+                        ? editPengumumanData.title
+                        : ""
+                    }
+                    placeholder="Judul : ..."
+                    className="p-2 border border-gray-300 rounded-md w-full"
+                    {...pengumumanForm.register("title", { required: true })}
                   />
                 </div>
                 <div>
@@ -336,58 +304,58 @@ export default function PengumumanModal({
 
                   <div className="flex flex-row gap-2">
                     <input
-                        type="date"
-                        id="date"
-                        required
-                        defaultValue={
-                          editPengumumanData?.isEdit
-                              ? editPengumumanData.date
-                              : ""
-                        }
-                        className="p-2 border border-gray-300 rounded-md basis-1/2"
-                        {...pengumumanForm.register("date", {required: true})}
+                      type="date"
+                      id="date"
+                      required
+                      defaultValue={
+                        editPengumumanData?.isEdit
+                          ? editPengumumanData.date
+                          : ""
+                      }
+                      className="p-2 border border-gray-300 rounded-md basis-1/2"
+                      {...pengumumanForm.register("date", { required: true })}
                     />
                     <input
-                        type="time"
-                        id="time"
-                        required
-                        defaultValue={
-                          editPengumumanData?.isEdit
-                              ? editPengumumanData?.time
-                              : ""
-                        }
-                        className="p-2 border border-gray-300 rounded-md basis-1/2"
-                        {...pengumumanForm.register("time", {required: true})}
+                      type="time"
+                      id="time"
+                      required
+                      defaultValue={
+                        editPengumumanData?.isEdit
+                          ? editPengumumanData?.time
+                          : ""
+                      }
+                      className="p-2 border border-gray-300 rounded-md basis-1/2"
+                      {...pengumumanForm.register("time", { required: true })}
                     />
                   </div>
                 </div>
                 <div>
                   <label className=" text-gray-700 font-bold">Konten</label>
                   <Controller
-                      name="content"
-                      control={pengumumanForm.control}
-                      render={({field: {onChange, value}}) => (
-                          <CKEditor
-                              editor={Editor}
-                              config={editorConfiguration}
-                              data={
-                                editPengumumanData?.isEdit
-                                    ? editPengumumanData?.content
-                                    : editorData
-                              }
-                              onChange={(event, editor) => {
-                                const data = editor.getData();
-                                setEditorData(data);
-                              }}
-                          />
-                      )}
+                    name="content"
+                    control={pengumumanForm.control}
+                    render={({ field: { onChange, value } }) => (
+                      <CKEditor
+                        editor={Editor}
+                        config={editorConfiguration}
+                        data={
+                          editPengumumanData?.isEdit
+                            ? editPengumumanData?.content
+                            : editorData
+                        }
+                        onChange={(event, editor) => {
+                          const data = editor.getData();
+                          setEditorData(data);
+                        }}
+                      />
+                    )}
                   />
                 </div>
 
                 <div className="flex flex-col items-center">
                   <button
-                      type="submit"
-                      className="px-24 py-2 mt-4 text-white bg-blue-500 rounded-lg w-fit hover:bg-blue-600"
+                    type="submit"
+                    className="px-24 py-2 mt-4 text-white bg-blue-500 rounded-lg w-fit hover:bg-blue-600"
                   >
                     Submit
                   </button>

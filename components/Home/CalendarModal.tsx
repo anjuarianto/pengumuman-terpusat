@@ -10,7 +10,7 @@ type CalendarModalProps = {
     handleClose: () => void;
 };
 
-const CalendarModal: React.FC<CalendarModalProps> = ({ openCal, handleClose }) => {
+const CalendarModal: React.FC<CalendarModalProps> = ({ openCal, handleClose, myCalendarData}) => {
     return (
         <Modal open={openCal}>
             <div
@@ -41,23 +41,7 @@ const CalendarModal: React.FC<CalendarModalProps> = ({ openCal, handleClose }) =
                                 meridiem: true,
                             }}
                             initialView="dayGridMonth"
-                            events={[
-                                {
-                                    title: "event 1",
-                                    start: "2024-03-11T10:00:00",
-                                    end: "2024-03-11T11:00:00",
-                                },
-                                {
-                                    title: "event 1.5",
-                                    start: "2024-03-11T15:00:00",
-                                    end: "2024-03-11T11:00:00",
-                                },
-                                {
-                                    title: "event 2",
-                                    start: "2024-03-21T10:00:00",
-                                    end: "2024-03-23T11:00:00",
-                                },
-                            ]}
+                            events={myCalendarData}
                         />
                     </div>
                 </div>

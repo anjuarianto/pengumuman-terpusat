@@ -37,6 +37,7 @@ export default function Home() {
   const [pengumumanIsEdit, setpengumumanIsEdit] = useState<number | null>(null);
   const [reloadPengumuman, setReloadPengumuman] = useState(false);
   const [calendarData, setCalendarData] = useState<any>();
+  const [upcomingEvent, setUpcomingEvent] = useState<any>();
   const [myData, setMyData] = useState<any>();
   const [roomId, setRoomId] = useState<number>(1);
   const [navigate, setNavigate] = useState("");
@@ -69,7 +70,14 @@ export default function Home() {
                 end: data.waktu,
             }));
 
+            const upcomingEventData = response.data.upcoming_event.map((data: any) => ({
+                judul: data.judul,
+                waktu: data.waktu
+            }));
+
+
             setCalendarData(pengumumanData);
+            setUpcomingEvent(upcomingEventData)
         } catch (err) {
             console.log(err);
         }
@@ -213,7 +221,9 @@ export default function Home() {
               Click to open calendar
             </div>
 
-            <UpcomingWidget></UpcomingWidget>
+            <UpcomingWidget events={upcomingEvent}>
+
+            </UpcomingWidget>
           </div>
         </div>
       </div>

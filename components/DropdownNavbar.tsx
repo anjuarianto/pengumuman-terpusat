@@ -33,7 +33,7 @@ function DropdownNavbar({logout}: Props) {
         }
 
         if(event.currentTarget.textContent == "Edit Master Data"){
-            router.push('/');
+            router.push('/user');
         }
 
         setSelectedIndex(index);

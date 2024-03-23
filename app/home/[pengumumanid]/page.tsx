@@ -219,6 +219,9 @@ export default function Pengumuman({
         text: "Successful!",
       });
       loadCommentsData();
+      setEditorData("")
+      setOpenAddComment(false)
+      setOpenEditComment({isOpen:false, reply_id:0})
     } catch (err) {
       console.log(err);
       await Swal.fire({
@@ -254,7 +257,7 @@ export default function Pengumuman({
             await Swal.fire("Deleted!", response.data.message, "success");
           })
           .then(async () => {
-            await window.location.reload();
+            loadCommentsData();
           })
           .catch((error) => {
             Swal.fire("Gagal", "Gagal menghapus user", "error");

@@ -11,6 +11,7 @@ type Pengumuman = {
     judul: string;
     konten: string;
     waktu: string;
+    penerima: { penerima_id: number; name: string; is_single_user: boolean }[];
     can_reply: boolean;
     can_edit: boolean;
     can_delete: boolean;
@@ -23,6 +24,7 @@ type PengumumanListProps = {
 };
 
 const PengumumanList: React.FC<PengumumanListProps> = ({ pengumuman, editForm, reload }) => {
+
     const [selectedPengumuman, setSelectedPengumuman] = useState<{
         judul: string;
         konten: string;
@@ -92,6 +94,7 @@ const PengumumanList: React.FC<PengumumanListProps> = ({ pengumuman, editForm, r
                         time={data.waktu}
                         room_id={data.id}
                         content={data.konten}
+                        penerima={data.penerima}
                         created_by={data.created_by}
                         editForm={() => editForm(data.id)}
                         can_reply={data.can_reply}

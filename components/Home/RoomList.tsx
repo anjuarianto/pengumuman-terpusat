@@ -13,7 +13,6 @@ type RoomListProps = {
 export default function RoomList({openModal, isModalOpen, setRoomId, roomActive}: RoomListProps) {
 
         const [roomList, setRoomList] = useState<{label: string, value: string}[]>([]);
-        const [canJoin, setCanJoin] = useState(false);
 
         const loadRoomData = async () => {
             try {
@@ -26,7 +25,7 @@ export default function RoomList({openModal, isModalOpen, setRoomId, roomActive}
                         },
                     }
                 );
-                setCanJoin(response.data.role === "mahasiswa");
+
                 // Map the data into the desired structure
                 const mappedData = response.data.rooms.map((room: any) => ({
                     value: room.id,
@@ -50,7 +49,7 @@ export default function RoomList({openModal, isModalOpen, setRoomId, roomActive}
                 <div className="p-6 m-2 bg-white rounded-lg">
                     <div className="flex flex-row ">
                         <h2 className="text-left grow ">Room List</h2>{" "}
-                        {canJoin && (<FaPlus className="p-1 text-2xl hover:cursor-pointer" onClick={openModal}></FaPlus>)}
+                        <FaPlus className="p-1 text-2xl hover:cursor-pointer" onClick={openModal}></FaPlus>
                     </div>
 
                     {roomList.map((data, index) => (

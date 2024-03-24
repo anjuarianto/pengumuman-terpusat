@@ -77,9 +77,9 @@ export default function ModalRoomList({isOpen, onClose}: ModalProps) {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {data.map((item: DataItem) => (
+                                    {data.map((item: DataItem, index) => (
                                         <TableRow key={item.id}>
-                                            <TableCell>{item.id}</TableCell>
+                                            <TableCell>{index++}</TableCell>
                                             <TableCell>{item.name}</TableCell>
                                             <TableCell>
                                                 <Button

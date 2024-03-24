@@ -31,8 +31,6 @@ type ModalRoomProps = {
 
 const ModalRoom: React.FC<ModalRoomProps> = ({ isModalOpen, isEdit , onClose}) => {
   const RoomForm = useForm<Room>();
-  const [name, setName] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
   const [roomData, setRoomData] = useState<Room | null>(null);
   const [memberSelected, setMemberSelected] = useState<any>([]);
   const [memberOptions, setMemberOptions] = useState<{
@@ -66,8 +64,13 @@ const ModalRoom: React.FC<ModalRoomProps> = ({ isModalOpen, isEdit , onClose}) =
       }));
 
       setMemberSelected(members);
-      setName(response.data.data.name);
-      setDescription(response.data.data.description);
+
+      setRoomData({
+        id: response.data.data.id,
+        name: response.data.data.name,
+        description: response.data.data.description,
+        members: members
+      });
 
     } catch(error) {
       console.error(error);
@@ -85,13 +88,13 @@ const ModalRoom: React.FC<ModalRoomProps> = ({ isModalOpen, isEdit , onClose}) =
     try {
 
       const members = memberSelected.map((member: any) => member.value);
-      console.log(members)
+
       const response = await axios({
         method: isEdit ? "PUT" : "POST",
         url: isEdit ? `${API_URL}/${isEdit}` : API_URL,
         data: {
-            name: name,
-            description: description,
+            name: data.name,
+            description: data.description,
             members: members
         },
         headers: HEADERS
@@ -108,16 +111,13 @@ const ModalRoom: React.FC<ModalRoomProps> = ({ isModalOpen, isEdit , onClose}) =
         text: response.data.message,
       });
     } catch (err) {
-      console.log(err);
       await Swal.fire({
         icon: "error",
         title: "Error",
         customClass: {
           container: "my-swal-popup ",
         },
-        text: isEdit
-            ? "Gagal update pengumuman"
-            : "Gagal membuat pengumuman",
+        text: err.response.data.message,
       });
     }
   };
@@ -165,7 +165,7 @@ const ModalRoom: React.FC<ModalRoomProps> = ({ isModalOpen, isEdit , onClose}) =
                   id="title"
                   required
                   placeholder="Judul"
-                  defaultValue={isEdit ? name : ""}
+                  defaultValue={isEdit ? roomData?.name : ""}
                   className="p-2 border border-gray-300 rounded-md w-full"
                   {...RoomForm.register("name", { required: true })}
                 />
@@ -179,7 +179,7 @@ const ModalRoom: React.FC<ModalRoomProps> = ({ isModalOpen, isEdit , onClose}) =
                   id="title"
                   required
                   placeholder="Description"
-                  defaultValue={isEdit ? description : ''}
+                  defaultValue={isEdit ? roomData?.description : ''}
                   className="p-2 border border-gray-300 rounded-md w-full"
                   {...RoomForm.register("description", { required: true })}
                 />

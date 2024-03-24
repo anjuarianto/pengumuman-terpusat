@@ -261,7 +261,7 @@ export default function PengumumanModal({
 
                 <div>
                   <label className=" text-gray-700 font-bold">
-                    Mahasiswa
+                    Penerima
                   </label>
                   <Controller
                     name="recipients"
@@ -270,7 +270,7 @@ export default function PengumumanModal({
                       <Select
                         {...field}
                         value={mahasiswaSelectedValue}
-                        placeholder="Mahasiswa :..."
+                        placeholder="Penerima :..."
                         isMulti
                         isSearchable
                         options={mahasiswaOptions}

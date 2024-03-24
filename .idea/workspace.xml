@@ -5,15 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bc195841-2735-44fc-a191-7f710ccbb323" name="Changes" comment="feat: make list pengumuman modular">
-      <change afterPath="$PROJECT_DIR$/components/Home/PengumumanDetailModal.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/home/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/home/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/user/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/user/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/CardAnnouncement.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/CardAnnouncement.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/Home/CalendarModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Home/CalendarModal.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/Home/ModalRoomList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Home/ModalRoomList.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/Home/PengumumanList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Home/PengumumanList.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/Home/PengumumanModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Home/PengumumanModal.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/Home/RoomList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Home/RoomList.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/Home/UpcomingWidget.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Home/UpcomingWidget.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/Master/ModalRoom.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Master/ModalRoom.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,26 +24,88 @@
   <component name="ComposerSettings">
     <execution />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="dev" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "git-widget-placeholder": "dev",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.standard": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.standard": "",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "ts.external.directory.path": "\\\\wsl.localhost\\Ubuntu\\home\\ubuntu\\personal\\skripsi-nikke-frontend\\node_modules\\typescript\\lib"
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:\xampp\php\php.exe" />
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="2e3bdfgsc1BxKE3xymqYObsfmqF" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;fix-add-and-edit-room&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;wsl://Ubuntu-22.04@/home/ubuntu/.nvm/versions/node/v20.6.1/bin/node&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;\\home\\ubuntu\\.nvm\\versions\\node\\v20.6.1\\bin\\npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;settings.nodejs&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;\\\\wsl.localhost\\Ubuntu-22.04\\home\\ubuntu\\personal\\current-project\\skripsi-nikke-frontend\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
+    ]
   }
-}]]></component>
+}</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-php-predefined-ba97393d7c68-6f8e3395a2b4-com.jetbrains.php.sharedIndexes-PS-233.14808.18" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="bc195841-2735-44fc-a191-7f710ccbb323" name="Changes" comment="feat: make list pengumuman modular" />
+      <created>1711136305116</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1711136305116</updated>
+      <workItem from="1711136308168" duration="196000" />
+      <workItem from="1711136631115" duration="49000" />
+      <workItem from="1711136987310" duration="10452000" />
+      <workItem from="1711173982292" duration="274000" />
+    </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="feat: make list pengumuman modular" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: make list pengumuman modular" />
+    <MESSAGE value="fix: upcoming widget update" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: upcoming widget update" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

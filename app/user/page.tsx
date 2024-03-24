@@ -416,7 +416,6 @@ export default function User() {
       }));
       setUserGroupData(convertedData);
 
-      console.log(convertedData);
     } catch (err) {
       console.log(err);
     }

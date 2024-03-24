@@ -1,18 +1,16 @@
 import React, {useState} from 'react';
-import { Modal } from "@mui/material";
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from "@fullcalendar/interaction";
+import {useRouter} from 'next/navigation';
 
 type UpcomingWidgetProps = {
     events: {
+        id:number;
         judul: string;
         waktu: string;
     }[];
 };
 
 const UpcomingWidget: React.FC<UpcomingWidgetProps> = ({events}) => {
+    const router = useRouter();
 
     return (
         <div className="p-6 m-2 bg-white rounded-lg ">
@@ -21,13 +19,12 @@ const UpcomingWidget: React.FC<UpcomingWidgetProps> = ({events}) => {
                 {events && events.map((event, index) => (
                     <div
                         key={index}
+                        onClick={() => router.push('/home/' + event.id)}
                         className="flex flex-col px-2 py-1 ">
                         <span className="font-bold">{event.judul}</span>{" "}
                         <span className="text-sm">{event.waktu}</span>
                     </div>
                 ))}
-
-
             </div>
         </div>
     );

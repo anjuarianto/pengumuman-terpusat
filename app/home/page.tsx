@@ -22,6 +22,7 @@ type Pengumuman = {
   id: number;
   judul: string;
   konten: string;
+  penerima: { penerima_id: number; name: string; is_single_user: boolean }[];
   waktu: string;
   can_reply: boolean;
   can_edit: boolean;
@@ -71,6 +72,7 @@ export default function Home() {
             }));
 
             const upcomingEventData = response.data.upcoming_event.map((data: any) => ({
+                id: data.id,
                 judul: data.judul,
                 waktu: data.waktu
             }));
@@ -126,7 +128,9 @@ export default function Home() {
       );
 
       const pengumumanData: Pengumuman[] = response.data.data.data;
+
       setPengumuman(pengumumanData);
+
     } catch (err) {
       console.log(err);
     }

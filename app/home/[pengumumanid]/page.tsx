@@ -45,6 +45,7 @@ type Comments = {
   id: number;
   pengumuman_id: number;
   user_id: number;
+  name: string;
   comment: string;
   waktu: string;
   created_at: string;
@@ -79,6 +80,7 @@ export default function Pengumuman({
       id: 0,
       pengumuman_id: 0,
       user_id: 0,
+      name: "",
       comment: "",
       waktu: "",
       created_at: "",
@@ -189,35 +191,24 @@ export default function Pengumuman({
   };
   const onSubmit: SubmitHandler<{ content: string }> = async (data) => {
     try {
-      const cleanData = {
-        pengumuman_id: pid,
-        user_id: userID,
-        comment: editorData,
-      };
-      const response = await axios.post(
-        `http://127.0.0.1:8000/api/pengumuman/${pid}/reply`,
-        cleanData,
-        {
-          headers: {
-            Authorization: "Bearer " + Cookies.get("accessToken"),
-          },
-        }
-      );
+      const cleanData = openEditComment?.isOpen
+        ? { comment: editorData }
+        : { pengumuman_id: pid, user_id: userID, comment: editorData };
 
-    //   const apiUrl = openEditComment?.isOpen
-    //   ? `http://127.0.0.1:8000/api/${pid}/reply/${openEditComment.reply_id}`
-    //   : `http://127.0.0.1:8000/api/${pid}/reply`;
+      const apiUrl = openEditComment?.isOpen
+        ? `http://127.0.0.1:8000/api/pengumuman/${pid}/reply/${openEditComment.reply_id}`
+        : `http://127.0.0.1:8000/api/pengumuman/${pid}/reply`;
 
-    // const method = openEditComment?.isOpen ? "put" : "post";
+      const method = openEditComment?.isOpen ? "PUT" : "POST";
 
-    // const response = await axios({
-    //   method,
-    //   url: apiUrl,
-    //   data: cleanData,
-    //   headers: {
-    //     Authorization: "Bearer " + Cookies.get("accessToken"),
-    //   },
-    // });
+      const response = await axios({
+        method,
+        url: apiUrl,
+        data: cleanData,
+        headers: {
+          Authorization: "Bearer " + Cookies.get("accessToken"),
+        },
+      });
 
       await Swal.fire({
         icon: "success",
@@ -228,6 +219,9 @@ export default function Pengumuman({
         text: "Successful!",
       });
       loadCommentsData();
+      setEditorData("")
+      setOpenAddComment(false)
+      setOpenEditComment({isOpen:false, reply_id:0})
     } catch (err) {
       console.log(err);
       await Swal.fire({
@@ -241,7 +235,7 @@ export default function Pengumuman({
     }
   };
 
-  const deleteComment = () => {
+  const deleteComment = (replyID: number) => {
     Swal.fire({
       title: `Delete comment ?`,
       text: "You won't be able to revert this!",
@@ -252,7 +246,7 @@ export default function Pengumuman({
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const apiUrl = `http://127.0.0.1:8000/api/`;
+        const apiUrl = `http://127.0.0.1:8000/api/pengumuman/${pid}/reply/${replyID}`;
         await axios
           .delete(apiUrl, {
             headers: {
@@ -263,11 +257,12 @@ export default function Pengumuman({
             await Swal.fire("Deleted!", response.data.message, "success");
           })
           .then(async () => {
-            await window.location.reload();
+            loadCommentsData();
           })
           .catch((error) => {
             Swal.fire("Gagal", "Gagal menghapus user", "error");
           });
+        console.log(apiUrl);
       }
     });
   };
@@ -363,7 +358,7 @@ export default function Pengumuman({
                 >
                   <div className="flex flex-row items-center gap-2 text-sm justify-between">
                     <div className="flex flex-row gap-2 items-center ">
-                      <span className="font-bold">{data.user_id}</span>
+                      <span className="font-bold">{data.name}</span>
                       <span className="text-main-3">{data.updated_at}</span>
                     </div>
                   </div>
@@ -391,7 +386,7 @@ export default function Pengumuman({
                         variant="outlined"
                         color="warning"
                         size="small"
-                        onClick={deleteComment}
+                        onClick={() => deleteComment(data.id)}
                       >
                         Delete
                       </Button>

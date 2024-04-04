@@ -7,6 +7,7 @@ import Editor from "ckeditor5-custom-build";
 import Cookies from "js-cookie";
 import { Modal } from "@mui/material";
 import Swal from "sweetalert2";
+import UploadAdapter from "./UploadAdapter";
 
 const editorConfiguration = {
   toolbar: [
@@ -343,6 +344,12 @@ export default function PengumumanModal({
                             ? editPengumumanData?.content
                             : editorData
                         }
+                        onReady={(editor) => {
+                          editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader ) => {
+                            // Configure the URL to the upload script in your back-end here!
+                            return new UploadAdapter( loader );
+                          };
+                        }}
                         onChange={(event, editor) => {
                           const data = editor.getData();
                           setEditorData(data);

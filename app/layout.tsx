@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import '@/ckeditor5/sample/styles.css';
 
 const inter = Inter({ subsets: ["latin"] });
 

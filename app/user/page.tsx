@@ -633,7 +633,7 @@ export default function User() {
             <div className="w-full h-fit py-4 text-2xl font-bold text-center text-white rounded-t-lg bg-dark-blue ">
               Edit User
             </div>
-            <div className="w-full px-4 md:px-24 py-4">
+            <div className="w-full px-4 md:px-24 py-4 overflow-y-auto">
               <form
                 onSubmit={UserForm.handleSubmit(onSubmitUser)}
                 className="flex flex-col w-full gap-4"

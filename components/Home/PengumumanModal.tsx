@@ -252,10 +252,10 @@ export default function PengumumanModal({
                 ? "Edit Pengumuman"
                 : "Add Pengumuman"}
             </div>
-            <div className="w-full px-8 md:px-24 py-4 ">
+            <div className="w-full px-8 md:px-24 py-4 overflow-y-auto">
               <form
                 onSubmit={pengumumanForm.handleSubmit(onSubmit)}
-                className="flex flex-col w-full gap-4"
+                className="flex flex-col w-full gap-4 "
               >
                 <input type="hidden" value={roomActive} {...pengumumanForm.register("room", { required: true })} />
 

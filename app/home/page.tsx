@@ -180,7 +180,7 @@ export default function Home() {
     <>
       <Navbar>
       </Navbar>
-      <div className="flex flex-col items-center w-full h-full pt-16 ">
+      <div className="flex flex-col items-center w-full h-full md:pt-16 ">
 
         <Toolbar
             openModalFormPengumuman={toggleModalPengumuman}
@@ -192,7 +192,7 @@ export default function Home() {
             }}
         />
 
-        <div className="flex flex-row justify-center w-full h-screen px-12">
+        <div className="flex flex-col md:flex-row justify-center w-full md:h-screen  md:px-12 ">
 
           <RoomList
             openModal={openRoomModal}
@@ -215,7 +215,7 @@ export default function Home() {
 
 
           {/* calendar and upcoming */}
-          <div className="flex flex-col w-1/5 h-screen gap-4 ">
+          <div className="flex flex-col w-full md:w-1/5 md:h-screen gap-4 ">
             <div
               className="p-6 py-12 m-2 font-bold text-xl text-center bg-white rounded-lg hover:cursor-pointer"
               onClick={() => {
@@ -254,6 +254,7 @@ export default function Home() {
       />
 
 
+          
     </>
   );
 }

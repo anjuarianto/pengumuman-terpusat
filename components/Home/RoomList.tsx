@@ -45,8 +45,8 @@ export default function RoomList({openModal, isModalOpen, setRoomId, roomActive}
     }, [openModal]);
 
     return (
-            <div className="w-1/5 h-screen ">
-                <div className="p-6 m-2 bg-white rounded-lg">
+            <div className="w-full  h-fit md:w-1/5 md:h-screen">
+                <div className="md:p-6 p-2 m-2 bg-white rounded-lg">
                     <div className="flex flex-row ">
                         <h2 className="text-left grow ">Room List</h2>{" "}
                         <FaPlus className="p-1 text-2xl hover:cursor-pointer" onClick={openModal}></FaPlus>

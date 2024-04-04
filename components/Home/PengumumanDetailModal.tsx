@@ -26,14 +26,14 @@ const PengumumanDetailModal: React.FC<PengumumanDetailModalProps> = ({ pengumuma
                     onClick={onRequestClose}
                 >
                     <div
-                        className="flex flex-col items-center w-4/5 h-auto bg-white rounded-lg shadow-lg "
+                        className="flex flex-col items-center w-4/5 h-3/5 bg-white rounded-lg shadow-lg "
                         onClick={(e) => {
                             //Prevent event propagation only for this inner div
                             e.stopPropagation();
                         }}
                     >
                         <div
-                            className="w-full h-full py-4 text-2xl font-bold text-center text-white rounded-t-lg bg-dark-blue ">
+                            className="w-full h-fit py-4 text-2xl font-bold text-center text-white rounded-t-lg bg-dark-blue ">
                             Detail Pengumuman
                         </div>
                         <div className="flex w-full p-4 flex-col gap-2 p-2 rounded-lg ">

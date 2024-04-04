@@ -208,7 +208,7 @@ export default function User() {
                       className="p-2 text-white bg-blue-500 hover:bg-blue-600 font-bold rounded-lg "
                       onClick={() => {
                         setIsModalRoomOpen(true);
-                        setIsModalRoomEdit(tableMeta.rowData[0])
+                        setIsModalRoomEdit(tableMeta.rowData[0]);
                       }}
                     >
                       <FaEdit />
@@ -304,8 +304,7 @@ export default function User() {
                   <Tooltip title="Update User" placement="top" arrow>
                     <button
                       className="p-2 text-white bg-blue-500 hover:bg-blue-600 font-bold rounded-lg "
-                      onClick={() => {
-                      }}
+                      onClick={() => {}}
                     >
                       <FaEdit />
                     </button>
@@ -415,7 +414,6 @@ export default function User() {
         }),
       }));
       setUserGroupData(convertedData);
-
     } catch (err) {
       console.log(err);
     }
@@ -492,7 +490,7 @@ export default function User() {
     router.back(); // Navigate to previous route
   };
 
-  const handleOpen = (options: string, dataType: string, id:number) => {
+  const handleOpen = (options: string, dataType: string, id: number) => {
     if (options === "add" && dataType === "user") {
       UserForm.reset();
       setOpenUser(true);
@@ -505,7 +503,7 @@ export default function User() {
   const handleClose = () => {
     setOpenUser(false);
     setIsModalRoomOpen(false);
-    setIsModalRoomEdit(null)
+    setIsModalRoomEdit(null);
   };
 
   const onSubmitUser: SubmitHandler<User> = async (data) => {
@@ -516,35 +514,34 @@ export default function User() {
       created_at: editUserData?.created_at,
       updated_at: editUserData?.updated_at,
     };
-
   };
   return (
     <>
       <Navbar></Navbar>
-      <div className=" flex flex-col items-center w-full h-full pt-16 ">
-        <div className="flex flex-row justify-center w-full h-screen px-12">
+      <div className=" flex flex-col items-center w-full h-full pt-2 md:pt-16 ">
+        <div className="flex flex-row justify-center w-full h-screen px-2 md:px-12">
           <div className="w-full h-screen ">
-            <div className="flex justify-between mb-6">
-              <div className="flex flex-row gap-4 items-center">
+            <div className="flex flex-col md:flex-row justify-between mb-4">
+              <div className="flex flex-row gap-4 items-center my-2">
                 <Tooltip title="Back to home" placement="top" arrow>
                   <button
-                      className="p-3  rounded-lg  bg-white hover:bg-dark-blue-h hover:text-white"
-                      onClick={handleGoBack}
+                    className="p-3  rounded-lg  bg-white hover:bg-dark-blue-h hover:text-white"
+                    onClick={handleGoBack}
                   >
-                    <FaAngleLeft/>
+                    <FaAngleLeft />
                   </button>
                 </Tooltip>
                 <div
-                    className={`  w-fit  rounded-lg  shadow-lg 
+                  className={`  w-fit  rounded-lg  shadow-lg 
             `}
                 >
                   <button
-                      className={`${
-                          options === "room"
-                              ? "bg-dark-blue text-white"
-                              : "bg-white hover:text-white hover:bg-dark-blue-h"
-                      } rounded-l-lg px-4 py-2`}
-                      onClick={() => setOptions("room")}
+                    className={`${
+                      options === "room"
+                        ? "bg-dark-blue text-white"
+                        : "bg-white hover:text-white hover:bg-dark-blue-h"
+                    } rounded-l-lg px-4 py-2`}
+                    onClick={() => setOptions("room")}
                   >
                     Room List
                   </button>
@@ -559,28 +556,27 @@ export default function User() {
                   User Group List
                 </button> */}
                   <button
-                      className={`${
-                          options === "user"
-                              ? "bg-dark-blue text-white"
-                              : "bg-white hover:text-white hover:bg-dark-blue-h"
-                      } rounded-r-lg px-4 py-2`}
-                      onClick={() => setOptions("user")}
+                    className={`${
+                      options === "user"
+                        ? "bg-dark-blue text-white"
+                        : "bg-white hover:text-white hover:bg-dark-blue-h"
+                    } rounded-r-lg px-4 py-2`}
+                    onClick={() => setOptions("user")}
                   >
                     User List
                   </button>
                 </div>
-
               </div>
               <button
-                  className="bg-dark-blue text-white rounded-lg px-4 py-2"
-                  onClick={() => setIsModalRoomOpen(true)}
+                className="bg-dark-blue text-white rounded-lg px-4 py-2 "
+                onClick={() => setIsModalRoomOpen(true)}
               >
-                {options === "room" ? 'Tambah Room' : 'Tambah User'}
+                {options === "room" ? "Tambah Room" : "Tambah User"}
               </button>
             </div>
 
             <Paper>
-                <TableContainer>
+              <TableContainer>
                 <MUIDataTable
                   title={
                     options === "room"
@@ -628,16 +624,16 @@ export default function User() {
           onClick={handleClose}
         >
           <div
-            className="flex flex-col items-center w-2/5 h-auto bg-white rounded-lg shadow-lg "
+            className="flex flex-col items-center w-full md:w-2/5 h-3/5 bg-white rounded-lg shadow-lg "
             onClick={(e) => {
               //Prevent event propagation only for this inner div
               e.stopPropagation();
             }}
           >
-            <div className="w-full h-full py-4 text-2xl font-bold text-center text-white rounded-t-lg bg-dark-blue ">
+            <div className="w-full h-fit py-4 text-2xl font-bold text-center text-white rounded-t-lg bg-dark-blue ">
               Edit User
             </div>
-            <div className="w-full px-24 py-4">
+            <div className="w-full px-4 md:px-24 py-4">
               <form
                 onSubmit={UserForm.handleSubmit(onSubmitUser)}
                 className="flex flex-col w-full gap-4"
@@ -681,7 +677,11 @@ export default function User() {
           {/* </div> */}
         </div>
       </Modal>
-      <ModalRoom isModalOpen={isModalRoomOpen} isEdit={isModalRoomEdit} onClose={handleClose} />
+      <ModalRoom
+        isModalOpen={isModalRoomOpen}
+        isEdit={isModalRoomEdit}
+        onClose={handleClose}
+      />
     </>
   );
 }

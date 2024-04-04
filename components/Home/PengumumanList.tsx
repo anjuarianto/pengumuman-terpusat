@@ -70,16 +70,17 @@ const PengumumanList: React.FC<PengumumanListProps> = ({ pengumuman, editForm, r
     };
     if(pengumuman.length === 0) {
         return (
-            <div className="w-3/5 h-screen ">
+            <div className="w-full md:w-3/5 md:h-screen  order-last md:order-none">
                 <div className="flex flex-col gap-4 m-2 rounded-lg ">
                     <h1 className="text-2xl font-bold text-center">No Pengumuman</h1>
+                    
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="w-3/5 h-screen " >
+        <div className="w-full md:w-3/5 md:h-screen  order-last md:order-none" >
             <div className="flex flex-col gap-4 m-2 rounded-lg ">
                 {pengumuman.length == 0 ? (
                     <h1 className="text-2xl font-bold text-center">No Pengumuman</h1>

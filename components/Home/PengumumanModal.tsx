@@ -237,11 +237,11 @@ export default function PengumumanModal({
     <>
       <Modal open={isModalOpen}>
         <div
-          className="flex flex-col items-center justify-center h-screen"
+          className="flex flex-col items-center justify-center h-screen "
           onClick={handleClose}
         >
           <div
-            className="flex flex-col items-center w-2/5 h-auto bg-white rounded-lg shadow-lg "
+            className="flex flex-col items-center w-full md:w-2/5 h-auto bg-white rounded-lg shadow-lg "
             onClick={(e) => {
               //Prevent event propagation only for this inner div
               e.stopPropagation();
@@ -252,7 +252,7 @@ export default function PengumumanModal({
                 ? "Edit Pengumuman"
                 : "Add Pengumuman"}
             </div>
-            <div className="w-full px-24 py-4">
+            <div className="w-full px-8 md:px-24 py-4 ">
               <form
                 onSubmit={pengumumanForm.handleSubmit(onSubmit)}
                 className="flex flex-col w-full gap-4"

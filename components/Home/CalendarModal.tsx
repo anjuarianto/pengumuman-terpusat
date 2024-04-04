@@ -18,7 +18,7 @@ const CalendarModal: React.FC<CalendarModalProps> = ({ openCal, handleClose, myC
                 onClick={handleClose}
             >
                 <div
-                    className="flex flex-col items-center w-3/5 h-auto bg-white rounded-lg shadow-lg "
+                    className="flex flex-col items-center w-full md:w-3/5  h-fit md:h-auto bg-white rounded-lg shadow-lg "
                     onClick={(e) => {
                         //Prevent event propagation only for this inner div
                         e.stopPropagation();
@@ -27,7 +27,7 @@ const CalendarModal: React.FC<CalendarModalProps> = ({ openCal, handleClose, myC
                     <div className="w-full h-full py-4 text-2xl font-bold text-center text-white rounded-t-lg bg-dark-blue ">
                         Calendar
                     </div>
-                    <div className="w-full px-24 py-4">
+                    <div className="w-full px-4 md:px-24 py-4">
                         <FullCalendar
                             plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
                             headerToolbar={{

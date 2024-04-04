@@ -58,7 +58,7 @@ export default function ModalRoomList({isOpen, onClose}: ModalProps) {
                 onClick={onClose}
             >
                 <div
-                    className="flex flex-col items-center w-3/5 max-h-screen overflow-y-auto bg-white rounded-lg shadow-lg"
+                    className="flex flex-col items-center w-full md:w-3/5 h-3/5 md:max-h-screen overflow-y-auto bg-white rounded-lg shadow-lg"
                     onClick={(e) => {
                         e.stopPropagation();
                     }}
@@ -66,7 +66,7 @@ export default function ModalRoomList({isOpen, onClose}: ModalProps) {
                     <div className="w-full h-full py-4 text-2xl font-bold text-center text-white rounded-t-lg bg-dark-blue ">
                         Daftar Semua Room
                     </div>
-                    <div className="w-full px-24 py-4">
+                    <div className="w-full px-4 md:px-24 py-4">
                         <Paper>
                             <Table className="borderless">
                                 <TableHead>

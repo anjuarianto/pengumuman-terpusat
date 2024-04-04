@@ -16,17 +16,17 @@ const Toolbar: React.FC<ToolbarProps> = ({ openModalFormPengumuman, onSubmitSear
     const canCreate = myData?.permissions.includes("create-pengumuman");
 
     return (
-        <div className="w-3/5 py-2 px-10">
+        <div className="w-full md:w-3/5 py-2 px-2 md:px-10 ">
             <div className="flex flex-row items-center gap-4 text-white">
 
                 {canCreate && (
-                    <div
+                    <button
                         className="flex flex-row items-center gap-2 px-6 py-2 transition-all  rounded-lg shadow-md basis-1/5 bg-orange hover:bg-orange-h hover:shadow-lg hover:cursor-pointer"
                         onClick={openModalFormPengumuman}
                     >
                         <FaCalendarPlus/>
                         <span>Add News </span>
-                    </div>
+                    </button>
                 )}
 
 

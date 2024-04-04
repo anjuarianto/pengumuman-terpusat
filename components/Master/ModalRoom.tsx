@@ -145,15 +145,15 @@ const ModalRoom: React.FC<ModalRoomProps> = ({ isModalOpen, isEdit , onClose}) =
         onClick={handleClose}
       >
         <div
-          className="flex flex-col items-center w-2/5 h-auto bg-white rounded-lg shadow-lg "
+          className="flex flex-col items-center w-full md:w-2/5 h-auto bg-white rounded-lg shadow-lg "
           onClick={(e) => {
             e.stopPropagation();
           }}
         >
           <div className="w-full h-full py-4 text-2xl font-bold text-center text-white rounded-t-lg bg-dark-blue ">
-            Edit Room
+            {isEdit? "Edit Room":"Add Room"}
           </div>
-          <div className="w-full px-24 py-4">
+          <div className="w-full px-4 md:px-24 py-4">
             <form
               onSubmit={RoomForm.handleSubmit(onSubmit)}
               className="flex flex-col w-full gap-4"

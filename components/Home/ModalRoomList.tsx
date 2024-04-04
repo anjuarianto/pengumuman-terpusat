@@ -63,7 +63,7 @@ export default function ModalRoomList({isOpen, onClose}: ModalProps) {
                         e.stopPropagation();
                     }}
                 >
-                    <div className="w-full h-full py-4 text-2xl font-bold text-center text-white rounded-t-lg bg-dark-blue ">
+                    <div className="w-full h-fit py-4 text-2xl font-bold text-center text-white rounded-t-lg bg-dark-blue ">
                         Daftar Semua Room
                     </div>
                     <div className="w-full px-4 md:px-24 py-4">

@@ -38,6 +38,7 @@ type PengumumanData = {
   date: string;
   time: string;
   content: string;
+  attachment: ("image/jpeg" | "image/png" | "application/pdf")[];
 };
 
 type PengumumanModal = {
@@ -51,9 +52,8 @@ export default function PengumumanModal({
   isModalOpen,
   onClose,
   isEdit,
-  roomActive
+  roomActive,
 }: PengumumanModal) {
-  
   const [editorData, setEditorData] = useState<string>("");
 
   const [editPengumumanData, setEditPengumumanData] = useState<{
@@ -72,10 +72,12 @@ export default function PengumumanModal({
       label: string;
     }[]
   >([]);
-  const [mahasiswaSelectedValue, setMahasiswaSelectedValue] = useState<{
-    value: string;
-    label: string;
-  }[]>([]);
+  const [mahasiswaSelectedValue, setMahasiswaSelectedValue] = useState<
+    {
+      value: string;
+      label: string;
+    }[]
+  >([]);
 
   const pengumumanForm = useForm<PengumumanData>({
     mode: "onChange",
@@ -100,16 +102,11 @@ export default function PengumumanModal({
   }, [isModalOpen]);
   const loadRoomData = async () => {
     try {
-      const response = await axios.get(
-        "http://127.0.0.1:8000/api/room",
-        {
-          headers: {
-            Authorization:
-              "Bearer " + Cookies.get("accessToken"),
-          },
-        }
-      );
-
+      const response = await axios.get("http://127.0.0.1:8000/api/room", {
+        headers: {
+          Authorization: "Bearer " + Cookies.get("accessToken"),
+        },
+      });
     } catch (err) {
       console.log(err);
     }
@@ -131,8 +128,7 @@ export default function PengumumanModal({
         label: mahasiswa.name,
       }));
       setMahasiswaOptions(mappedData);
-
-    } catch (err) { }
+    } catch (err) {}
   };
 
   const loadEditPengumuman = async () => {
@@ -150,7 +146,10 @@ export default function PengumumanModal({
     const waktuParts = response.data.data.waktu.split(" ");
     const date = waktuParts[0];
     const time = waktuParts[1];
-    const room = { label: response.data.data.room.name, value: response.data.data.room.id.toString() };
+    const room = {
+      label: response.data.data.room.name,
+      value: response.data.data.room.id.toString(),
+    };
     const recipients = response.data.data.penerima.map((recipient: any) => ({
       value: (recipient.is_single_user ? 1 : 0) + "|" + recipient.penerima_id,
       label: recipient.name,
@@ -164,7 +163,7 @@ export default function PengumumanModal({
       room: room,
       recipients: recipients,
       isEdit: true,
-    }
+    };
 
     setEditPengumumanData(data);
 
@@ -182,6 +181,23 @@ export default function PengumumanModal({
 
   const onSubmit: SubmitHandler<PengumumanData> = async (data) => {
     try {
+      const formData = new FormData();
+      // formData.append("file", file);
+
+      
+
+      const dataFiles =
+        data.attachment && data.attachment.length !== 0
+          ? Array.from(data.attachment)
+          : undefined;
+
+      // console.log(dataFiles[0]);
+
+      const blob = new Blob([dataFiles[0].name], {type: dataFiles[0].type})
+      const img = URL.createObjectURL(blob);
+      
+      console.log(blob)
+
       const formatedTime = data.date + " " + data.time;
 
       const cleanData = {
@@ -189,8 +205,12 @@ export default function PengumumanModal({
         room_id: data.room,
         waktu: formatedTime,
         konten: editorData,
-        recipients: mahasiswaSelectedValue.map((recipient) => { return recipient.value }),
+        recipients: mahasiswaSelectedValue.map((recipient) => {
+          return recipient.value;
+        }),
+        attachment: [],
       };
+
 
       const apiUrl = editPengumumanData?.isEdit
         ? `http://127.0.0.1:8000/api/pengumuman/${isEdit}`
@@ -257,12 +277,14 @@ export default function PengumumanModal({
                 onSubmit={pengumumanForm.handleSubmit(onSubmit)}
                 className="flex flex-col w-full gap-4 "
               >
-                <input type="hidden" value={roomActive} {...pengumumanForm.register("room", { required: true })} />
+                <input
+                  type="hidden"
+                  value={roomActive}
+                  {...pengumumanForm.register("room", { required: true })}
+                />
 
                 <div>
-                  <label className=" text-gray-700 font-bold">
-                    Penerima
-                  </label>
+                  <label className=" text-gray-700 font-bold">Penerima</label>
                   <Controller
                     name="recipients"
                     control={pengumumanForm.control}
@@ -276,7 +298,10 @@ export default function PengumumanModal({
                         options={mahasiswaOptions}
                         className="basic-multi-select"
                         classNamePrefix="select"
-                        onChange={(value) => { setMahasiswaSelectedValue(value); console.log(mahasiswaSelectedValue) }}
+                        onChange={(value) => {
+                          setMahasiswaSelectedValue(value);
+                          console.log(mahasiswaSelectedValue);
+                        }}
                       />
                     )}
                   />
@@ -289,9 +314,7 @@ export default function PengumumanModal({
                     id="title"
                     required
                     defaultValue={
-                      editPengumumanData?.isEdit
-                        ? editPengumumanData.title
-                        : ""
+                      editPengumumanData?.isEdit ? editPengumumanData.title : ""
                     }
                     placeholder="Judul : ..."
                     className="p-2 border border-gray-300 rounded-md w-full"
@@ -342,9 +365,11 @@ export default function PengumumanModal({
                             : editorData
                         }
                         onReady={(editor) => {
-                          editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader ) => {
+                          editor.plugins.get(
+                            "FileRepository"
+                          ).createUploadAdapter = (loader) => {
                             // Configure the URL to the upload script in your back-end here!
-                            return new UploadAdapter( loader );
+                            return new UploadAdapter(loader);
                           };
                         }}
                         onChange={(event, editor) => {
@@ -353,6 +378,18 @@ export default function PengumumanModal({
                         }}
                       />
                     )}
+                  />
+                </div>
+
+                <div>
+                  <label className="text-gray-700 font-bold">Attachment</label>
+                  <input
+                    type="file"
+                    id="attachment"
+                    {...pengumumanForm.register("attachment")}
+                    multiple={true}
+                    className="p-2 border border-gray-300 rounded-md w-full"
+                    accept=".jpg,.jpeg,.png,.pdf,.zip"
                   />
                 </div>
 

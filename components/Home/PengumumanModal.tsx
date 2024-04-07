@@ -83,7 +83,6 @@ export default function PengumumanModal({
 
   useEffect(() => {
     if (roomActive) {
-      console.log(roomActive)
       handleRoomChange(roomActive);
     }
 
@@ -238,11 +237,11 @@ export default function PengumumanModal({
     <>
       <Modal open={isModalOpen}>
         <div
-          className="flex flex-col items-center justify-center h-screen "
+          className="flex flex-col items-center justify-center h-screen no-tailwindcss-base"
           onClick={handleClose}
         >
           <div
-            className="flex flex-col items-center w-full md:w-2/5  h-3/5  bg-white rounded-lg shadow-lg "
+            className="flex flex-col items-center w-full md:w-4/5  h-4/5  bg-white rounded-lg shadow-lg "
             onClick={(e) => {
               //Prevent event propagation only for this inner div
               e.stopPropagation();
@@ -283,7 +282,6 @@ export default function PengumumanModal({
                   />
                 </div>
 
-
                 <div>
                   <label className=" text-gray-700 font-bold">Judul</label>
                   <input
@@ -302,7 +300,6 @@ export default function PengumumanModal({
                 </div>
                 <div>
                   <label className=" text-gray-700 font-bold">Waktu</label>
-
                   <div className="flex flex-row gap-2">
                     <input
                       type="date"

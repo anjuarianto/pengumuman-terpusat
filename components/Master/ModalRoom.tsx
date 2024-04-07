@@ -157,7 +157,7 @@ const ModalRoom: React.FC<ModalRoomProps> = ({
           <div className="w-full h-fit py-4 text-2xl font-bold text-center text-white rounded-t-lg bg-dark-blue ">
             {isEdit ? "Edit Room" : "Add Room"}
           </div>
-          <div className="w-full px-4 md:px-24 py-4">
+          <div className="w-full px-4 md:px-24 py-4 overflow-y-auto">
             <form
               onSubmit={RoomForm.handleSubmit(onSubmit)}
               className="flex flex-col w-full gap-4"

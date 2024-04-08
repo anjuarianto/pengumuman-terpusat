@@ -35,10 +35,10 @@ export default function CardAnnouncement({
   can_edit,
   can_delete,
   deletePengumuman,
-    openDetailModal
+  openDetailModal
 }: EditPengumuman) {
   const router = useRouter();
-  console.log(penerima);
+
   return (
     <>
       <div className="p-2 bg-white rounded-lg hover:cursor-default" onClick={() => openDetailModal(id)}>

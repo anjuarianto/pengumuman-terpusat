@@ -52,7 +52,6 @@ const PengumumanList: React.FC<PengumumanListProps> = ({ pengumuman, editForm, r
                     .delete(apiUrl, {
                         headers: {
                             Authorization:
-                            // "Bearer 1|BHGEg2Zf3jETFJiAcK1II0Axlx9We6t03DNZuYuT34d7f4b6",
                                 "Bearer " + Cookies.get("accessToken"),
                         },
                     })

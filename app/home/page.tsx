@@ -16,6 +16,7 @@ import PengumumanModal from "@/components/Home/PengumumanModal";
 import Toolbar from "@/components/Home/Toolbar";
 import CalendarModal from "@/components/Home/CalendarModal";
 import UpcomingWidget from "@/components/Home/UpcomingWidget";
+import Calendar from "@/components/Home/Calendar";
 
 type Pengumuman = {
   created_by: string;
@@ -66,9 +67,9 @@ export default function Home() {
             setMyData(response.data);
 
             const pengumumanData = response.data.pengumuman.map((data: any) => ({
-                title: data.judul,
                 start: data.waktu,
                 end: data.waktu,
+                display: 'background',
             }));
 
             const upcomingEventData = response.data.upcoming_event.map((data: any) => ({
@@ -151,7 +152,7 @@ export default function Home() {
     setIsModalOpenPengumuman(true);
   };
 
-  const handleRoomIdChange = (id) => {
+  const handleRoomIdChange = (id: number) => {
       setRoomId(id);
     }
 
@@ -183,6 +184,7 @@ export default function Home() {
       <div className="flex flex-col items-center w-full h-full md:pt-16 ">
 
         <Toolbar
+            onSubmitSearch={searchForm.handleSubmit(handleInputChange)}
             openModalFormPengumuman={toggleModalPengumuman}
             handleInputChange={handleInputChange}
             myData={myData}
@@ -216,14 +218,9 @@ export default function Home() {
 
           {/* calendar and upcoming */}
           <div className="flex flex-col w-full md:w-1/5 md:h-screen gap-4 ">
-            <div
-              className="p-6 py-12 m-2 font-bold text-xl text-center bg-white rounded-lg hover:cursor-pointer"
-              onClick={() => {
-                setOpenCal(true);
-              }}
-            >
-              Click to open calendar
-            </div>
+              <Calendar
+                  myCalendarData={calendarData}
+              />
 
             <UpcomingWidget events={upcomingEvent}>
 
@@ -245,14 +242,6 @@ export default function Home() {
             setIsOpenRoomModal(false);
           }}
       ></ModalRoomList>
-
-      {/* modal for calendar */}
-      <CalendarModal
-          openCal={openCal}
-          handleClose={handleClose}
-        myCalendarData={calendarData}
-      />
-
 
           
     </>

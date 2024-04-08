@@ -8,6 +8,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 type CalendarModalProps = {
     openCal: boolean;
     handleClose: () => void;
+    myCalendarData: any;
 };
 
 const CalendarModal: React.FC<CalendarModalProps> = ({ openCal, handleClose, myCalendarData}) => {

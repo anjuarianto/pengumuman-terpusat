@@ -26,7 +26,7 @@ const PengumumanDetailModal: React.FC<PengumumanDetailModalProps> = ({ pengumuma
                     onClick={onRequestClose}
                 >
                     <div
-                        className="flex flex-col items-center w-full md:w-4/5 h-3/5 bg-white rounded-lg shadow-lg "
+                        className="flex flex-col items-center w-full md:w-4/5 h-3/5  bg-white rounded-lg shadow-lg "
                         onClick={(e) => {
                             //Prevent event propagation only for this inner div
                             e.stopPropagation();
@@ -36,7 +36,7 @@ const PengumumanDetailModal: React.FC<PengumumanDetailModalProps> = ({ pengumuma
                             className="w-full h-fit py-4 text-2xl font-bold text-center text-white rounded-t-lg bg-dark-blue ">
                             Detail Pengumuman
                         </div>
-                        <div className="flex w-full p-4 flex-col gap-2 p-2 rounded-lg ">
+                        <div className="flex w-full p-4 flex-col gap-2 p-2 rounded-lg overflow-y-auto">
                             <div className="flex flex-row items-center gap-2 text-sm justify-between">
                                 <div className="flex flex-row gap-4 items-center ">
                                     <span>• {pengumuman.created_by}</span>{" "}

@@ -38,7 +38,8 @@ type PengumumanData = {
   date: string;
   time: string;
   content: string;
-  attachment: ("image/jpeg" | "image/png" | "application/pdf")[];
+  // attachment: ("image/jpeg" | "image/png" | "application/pdf")[];
+  attachment: Blob[];
 };
 
 type PengumumanModal = {
@@ -181,36 +182,22 @@ export default function PengumumanModal({
 
   const onSubmit: SubmitHandler<PengumumanData> = async (data) => {
     try {
-      const formData = new FormData();
-      // formData.append("file", file);
-
-      
-
-      const dataFiles =
-        data.attachment && data.attachment.length !== 0
-          ? Array.from(data.attachment)
-          : undefined;
-
-      // console.log(dataFiles[0]);
-
-      const blob = new Blob([dataFiles[0].name], {type: dataFiles[0].type})
-      const img = URL.createObjectURL(blob);
-      
-      console.log(blob)
-
       const formatedTime = data.date + " " + data.time;
 
-      const cleanData = {
-        judul: data.title,
-        room_id: data.room,
-        waktu: formatedTime,
-        konten: editorData,
-        recipients: mahasiswaSelectedValue.map((recipient) => {
-          return recipient.value;
-        }),
-        attachment: [],
-      };
+      const formData = new FormData();
+      formData.append("judul", data.title);
+      formData.append("konten", editorData);
+      formData.append("waktu", formatedTime);
+      formData.append("room_id", data.room.toString());
 
+      mahasiswaSelectedValue.map((recipient) => {
+        formData.append("recipients[]", recipient.value);
+        return recipient.value;
+      });
+
+      for (const file of data.attachment) {
+        formData.append("attachment[]", file);
+      }
 
       const apiUrl = editPengumumanData?.isEdit
         ? `http://127.0.0.1:8000/api/pengumuman/${isEdit}`
@@ -221,9 +208,10 @@ export default function PengumumanModal({
       const response = await axios({
         method,
         url: apiUrl,
-        data: cleanData,
+        data: formData,
         headers: {
           Authorization: "Bearer " + Cookies.get("accessToken"),
+          "Content-Type": "multipart/form-data",
         },
       });
 

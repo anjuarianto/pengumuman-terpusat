@@ -16,6 +16,7 @@ import Toolbar from "@/components/Home/Toolbar";
 import UpcomingWidget from "@/components/Home/UpcomingWidget";
 import Calendar from "@/components/Home/Calendar";
 import MyPengumumanModal from "@/components/Home/MyPengumumanModal";
+import FilterModal from "@/components/Home/FilterModal";
 
 type Pengumuman = {
     created_by: string;
@@ -43,6 +44,24 @@ export default function Home() {
     const [roomId, setRoomId] = useState<number>(1);
     const [navigate, setNavigate] = useState("");
     const [isMyPengumumanOpen, setMyPengumumanOpen] = useState<string | null>();
+    const [isFilterModalOpen, setFilterModalOpen] = useState(false);
+    const [filterValue, setFilterValue] = useState<[
+        {
+            order: string;
+            min_date: string;
+            max_date: string;
+            pengirim: string;
+            penerima_id: number[];
+            file_name: string;
+        }
+    ]>([{
+        order: "desc",
+        min_date: "",
+        max_date: "",
+        pengirim: "",
+        penerima: [],
+        file_name: "",
+    }]);
 
     const openRoomModal = () => {
         setIsOpenRoomModal(true);
@@ -105,13 +124,16 @@ export default function Home() {
             if (!openCal) {
                 loadMyData();
             }
+
+
             setReloadPengumuman(false)
         });
 
-    }, [isModalOpenPengumuman, reloadPengumuman, openCal, roomId, navigate]);
+    }, [isModalOpenPengumuman, reloadPengumuman, openCal, roomId, navigate, filterValue]);
 
     const loadPengumumanData = async () => {
         try {
+
             const response = await axios.get(
                 "http://127.0.0.1:8000/api/pengumuman",
                 {
@@ -119,6 +141,12 @@ export default function Home() {
                         search: searchForm.getValues().search,
                         room_id: roomId,
                         page: 1,
+                        order: filterValue?.order,
+                        min_date: filterValue?.min_date,
+                        max_date: filterValue?.max_date,
+                        pengirim: filterValue?.pengirim,
+                        penerima_id: filterValue?.penerima_id,
+                        file_name: filterValue?.file_name,
                     },
                     headers: {
                         Authorization:
@@ -184,6 +212,7 @@ export default function Home() {
                 <Toolbar
                     onSubmitSearch={searchForm.handleSubmit(handleInputChange)}
                     openModalFormPengumuman={toggleModalPengumuman}
+                    openFilterModal={() => setFilterModalOpen(true)}
                     handleInputChange={handleInputChange}
                     myData={myData}
                     roomActive={roomId}
@@ -201,7 +230,6 @@ export default function Home() {
                         roomActive={roomId}
                     ></RoomList>
 
-                    {/* pengumuman */}
                     <PengumumanList
                         pengumuman={pengumuman}
                         editForm={(id) => {
@@ -250,6 +278,16 @@ export default function Home() {
                 onClose={() => setMyPengumumanOpen(false)}
             />
 
+            <FilterModal
+                isOpen={isFilterModalOpen}
+                onClose={() => setFilterModalOpen(false)}
+                filterValue={(filter) => {
+                    setFilterValue(filter);
+                    loadPengumumanData();
+                }}
+            >
+
+            </FilterModal>
         </>
     );
 }

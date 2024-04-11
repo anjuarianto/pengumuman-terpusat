@@ -1,17 +1,26 @@
 import React from 'react';
-import { FaCalendarPlus, FaSearch } from "react-icons/fa";
-import { useForm } from "react-hook-form";
+import {FaCalendarPlus, FaSearch} from "react-icons/fa";
+import {useForm} from "react-hook-form";
 
 type ToolbarProps = {
     openModalFormPengumuman: () => void;
     onSubmitSearch: (data: any) => void;
     handleInputChange: (event: any) => void;
-    myData : any;
+    myData: any;
     roomActive: number;
     setRoomId: (id: number) => void;
+    openFilterModal: () => void;
 }
 
-const Toolbar: React.FC<ToolbarProps> = ({ openModalFormPengumuman, onSubmitSearch, handleInputChange, myData, roomActive, setRoomId }) => {
+const Toolbar: React.FC<ToolbarProps> = ({
+                                             openModalFormPengumuman,
+                                             onSubmitSearch,
+                                             handleInputChange,
+                                             myData,
+                                             roomActive,
+                                             setRoomId,
+                                             openFilterModal
+                                         }) => {
     const searchForm = useForm<any>();
     const canCreate = myData?.permissions.includes("create-pengumuman");
 
@@ -46,9 +55,15 @@ const Toolbar: React.FC<ToolbarProps> = ({ openModalFormPengumuman, onSubmitSear
                         type="submit"
                         className="absolute top-0 right-0 mt-3 mr-4"
                     >
-                        <FaSearch />
+                        <FaSearch/>
                     </button>
                 </form>
+
+                <button
+                    onClick={openFilterModal}
+                    className="px-6 py-2 text-center rounded-lg shadow-lg basis-1/5 bg-orange">
+                    Filter
+                </button>
 
                 <div
                     onClick={setRoomId}

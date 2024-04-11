@@ -284,7 +284,6 @@ export default function PengumumanModal({
                                                 classNamePrefix="select"
                                                 onChange={(value) => {
                                                     setMahasiswaSelectedValue(value);
-                                                    console.log(mahasiswaSelectedValue)
                                                 }}
                                             />
                                         )}

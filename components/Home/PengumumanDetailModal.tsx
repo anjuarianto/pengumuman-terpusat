@@ -1,25 +1,32 @@
-import React from 'react';
-import {Button, Modal, Tooltip} from '@mui/material';
-import {Controller} from "react-hook-form";
+import React from "react";
+import { Button, Modal, Tooltip } from "@mui/material";
+import { Controller } from "react-hook-form";
 import Select from "react-select";
 import {CKEditor} from "@ckeditor/ckeditor5-react";
 import {FaAngleLeft, FaPlus, FaAngleRight} from "react-icons/fa";
 
+
 type PengumumanDetailModalProps = {
-    pengumuman: {
-        judul: string;
-        konten: string;
-        waktu: string;
-        rooms: { id: number; name: string };
-    };
-    isOpen: boolean;
-    onRequestClose: () => void;
+  pengumuman: {
+    judul: string;
+    konten: string;
+    waktu: string;
+    rooms: { id: number; name: string };
+    files: { file: string; original_name: string }[];
+  };
+  isOpen: boolean;
+  onRequestClose: () => void;
 };
 
-const PengumumanDetailModal: React.FC<PengumumanDetailModalProps> = ({ pengumuman, isOpen, onRequestClose }) => {
+const PengumumanDetailModal: React.FC<PengumumanDetailModalProps> = ({
+  pengumuman,
+  isOpen,
+  onRequestClose,
+}) => {
 
     const handleDownload = async (fileUrl: string, fileName: string) => {
         try {
+
             const tag = document.createElement("a");
             tag.target = "_blank"
             tag.href = `http://localhost:8000/storage/pengumuman/${fileUrl}`;
@@ -57,11 +64,11 @@ const PengumumanDetailModal: React.FC<PengumumanDetailModalProps> = ({ pengumuma
                                     <span className="text-main-3">{pengumuman.waktu} </span>
                                 </div>
 
-                                <span className="float-right bg-orange text-white rounded-2xl p-2">
-                                  {pengumuman.room.name}
-                                </span>
-                            </div>
-                            <h1 className="text-2xl font-bold">{pengumuman.judul}</h1>
+                <span className="float-right bg-orange text-white rounded-2xl p-2">
+                  {pengumuman.room.name}
+                </span>
+              </div>
+              <h1 className="text-2xl font-bold">{pengumuman.judul}</h1>
 
                             <p
                                 className="py-2"
@@ -92,6 +99,7 @@ const PengumumanDetailModal: React.FC<PengumumanDetailModalProps> = ({ pengumuma
             </Modal>
         </>
     );
+
 };
 
 export default PengumumanDetailModal;

@@ -33,6 +33,7 @@ const editorConfiguration = {
 };
 
 type PengumumanData = {
+
     room: { value: string; label: string }[];
     recipients: { value: string; label: string }[];
     title: string;
@@ -89,56 +90,38 @@ export default function PengumumanModal({
             handleRoomChange(roomActive);
         }
 
-        if (isModalOpen && isEdit) {
-            loadRoomData();
-            loadEditPengumuman();
-        }
-
         if (isModalOpen && !isEdit) {
             loadRoomData();
         }
+      );
 
-        return;
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isModalOpen]);
-    const loadRoomData = async () => {
-        try {
-            const response = await axios.get(
-                "http://127.0.0.1:8000/api/room",
-                {
-                    headers: {
-                        Authorization:
-                            "Bearer " + Cookies.get("accessToken"),
-                    },
-                }
-            );
+      const mappedData = response.data.data.members.map((mahasiswa: any) => ({
+        value: (mahasiswa.is_single_user ? 1 : 0) + "|" + mahasiswa.id,
+        label: mahasiswa.name,
+      }));
+      setMahasiswaOptions(mappedData);
+    } catch (err) {}
+  };
 
-        } catch (err) {
-            console.log(err);
-        }
+  const loadEditPengumuman = async () => {
+    if (isEdit === undefined) return;
+
+    const response = await axios.get(
+      `http://127.0.0.1:8000/api/pengumuman/${isEdit}`,
+      {
+        headers: {
+          Authorization: "Bearer " + Cookies.get("accessToken"),
+        },
+      }
+    );
+
+    const waktuParts = response.data.data.waktu.split(" ");
+    const date = waktuParts[0];
+    const time = waktuParts[1];
+    const room = {
+      label: response.data.data.room.name,
+      value: response.data.data.room.id.toString(),
     };
-    const handleRoomChange = async (value: any) => {
-        try {
-            const response = await axios.get(
-                `http://127.0.0.1:8000/api/room/${value}`,
-
-                {
-                    headers: {
-                        Authorization: "Bearer " + Cookies.get("accessToken"),
-                    },
-                }
-            );
-
-            const mappedData = response.data.data.members.map((mahasiswa: any) => ({
-                value: (mahasiswa.is_single_user ? 1 : 0) + "|" + mahasiswa.id,
-                label: mahasiswa.name,
-            }));
-            setMahasiswaOptions(mappedData);
-
-        } catch (err) {
-        }
-    };
-
     const loadEditPengumuman = async () => {
         if (isEdit === undefined) return;
 
@@ -403,7 +386,40 @@ export default function PengumumanModal({
                         </div>
                     </div>
                 </div>
-            </Modal>
-        </>
-    );
+
+                <div>
+                  <label className="text-gray-700 font-bold">Attachment</label>
+                  <input
+                    type="file"
+                    id="attachment"
+                    {...pengumumanForm.register("attachment")}
+                    multiple={true}
+                    className="p-2 border border-gray-300 rounded-md w-full"
+                    accept=".jpg,.jpeg,.png,.pdf,.zip"
+                  />
+                </div>
+                {editPengumumanData?.isEdit &&
+                  editPengumumanData.files.map((file, index) => (
+                    <div key={index}>
+                      <li>{file.original_name}</li>
+                    </div>
+                  ))}
+
+                <div className="flex flex-col items-center">
+                  <button
+                    type="submit"
+                    className="px-24 py-2 mt-4 text-white bg-blue-500 rounded-lg w-fit hover:bg-blue-600"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          {/* </div> */}
+        </div>
+      </Modal>
+    </>
+  );
+
 }

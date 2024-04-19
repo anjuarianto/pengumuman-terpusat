@@ -16,6 +16,8 @@ type Pengumuman = {
     can_reply: boolean;
     can_edit: boolean;
     can_delete: boolean;
+    files:{file:string; original_name:string}[];
+
 };
 
 type PengumumanListProps = {
@@ -24,7 +26,9 @@ type PengumumanListProps = {
     reload: () => void;
 };
 
+
 const PengumumanList: React.FC<PengumumanListProps> = ({pengumuman, editForm, reload}) => {
+
 
     const [selectedPengumuman, setSelectedPengumuman] = useState<{
         judul: string;
@@ -78,7 +82,8 @@ const PengumumanList: React.FC<PengumumanListProps> = ({pengumuman, editForm, re
             </div>
         );
     }
-
+    
+    
     return (
         <div className="w-full md:w-3/5 md:h-screen  order-last md:order-none">
             <div className="flex flex-col gap-4 m-2 rounded-lg ">

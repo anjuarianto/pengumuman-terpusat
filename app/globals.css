@@ -2,32 +2,33 @@
 
 @layer base {
 
-.no-tailwindcss-base {
+    .no-tailwindcss-base {
 
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-        font-size: revert;
-        font-weight: revert;
-    }
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-size: revert;
+            font-weight: revert;
+        }
 
-    ol,
-    ul {
-        list-style: revert;
-        margin: revert;
-        padding: revert;
+        ol,
+        ul {
+            list-style: revert;
+            margin: revert;
+            padding: revert;
+        }
     }
-}
 }
 
 @tailwind components;
 @tailwind utilities;
 
+
 /* custom swal z-index  */
 .my-swal-popup {
     z-index: 2000 !important;
-  
-  }
+
+}

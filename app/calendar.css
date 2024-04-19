@@ -1,0 +1,12 @@
+#myCalendar .fc-button {
+    padding: 5px;
+    font-size: 10px;
+}
+
+#myCalendar .fc-toolbar-title {
+    font-size: 13px;
+}
+
+#myCalendar .fc-col-header-cell-cushion {
+    font-size: 10px;
+}

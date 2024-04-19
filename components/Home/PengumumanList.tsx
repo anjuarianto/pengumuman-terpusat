@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import CardAnnouncement from "@/components/CardAnnouncement";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -25,7 +25,10 @@ type PengumumanListProps = {
     reload: () => void;
 };
 
-const PengumumanList: React.FC<PengumumanListProps> = ({ pengumuman, editForm, reload }) => {
+
+const PengumumanList: React.FC<PengumumanListProps> = ({pengumuman, editForm, reload}) => {
+
+
     const [selectedPengumuman, setSelectedPengumuman] = useState<{
         judul: string;
         konten: string;
@@ -35,7 +38,6 @@ const PengumumanList: React.FC<PengumumanListProps> = ({ pengumuman, editForm, r
 
     }[] | null>(null);
     const handleCardClick = (data) => {
-        console.log(data)
         setSelectedPengumuman(data)
     };
 
@@ -55,7 +57,6 @@ const PengumumanList: React.FC<PengumumanListProps> = ({ pengumuman, editForm, r
                     .delete(apiUrl, {
                         headers: {
                             Authorization:
-                            // "Bearer 1|BHGEg2Zf3jETFJiAcK1II0Axlx9We6t03DNZuYuT34d7f4b6",
                                 "Bearer " + Cookies.get("accessToken"),
                         },
                     })
@@ -71,12 +72,12 @@ const PengumumanList: React.FC<PengumumanListProps> = ({ pengumuman, editForm, r
             }
         });
     };
-    if(pengumuman.length === 0) {
+    if (pengumuman.length === 0) {
         return (
             <div className="w-full md:w-3/5 md:h-screen  order-last md:order-none">
                 <div className="flex flex-col gap-4 m-2 rounded-lg ">
                     <h1 className="text-2xl font-bold text-center">No Pengumuman</h1>
-                    
+
                 </div>
             </div>
         );
@@ -84,7 +85,7 @@ const PengumumanList: React.FC<PengumumanListProps> = ({ pengumuman, editForm, r
     
     
     return (
-        <div className="w-full md:w-3/5 md:h-screen  order-last md:order-none" >
+        <div className="w-full md:w-3/5 md:h-screen  order-last md:order-none">
             <div className="flex flex-col gap-4 m-2 rounded-lg ">
                 {pengumuman.length == 0 ? (
                     <h1 className="text-2xl font-bold text-center">No Pengumuman</h1>
@@ -108,6 +109,7 @@ const PengumumanList: React.FC<PengumumanListProps> = ({ pengumuman, editForm, r
                         can_delete={data.can_delete}
                         files={data.files}
                     />
+
                     )
                 ))}
                 {selectedPengumuman && (

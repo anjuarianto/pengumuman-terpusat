@@ -42,9 +42,6 @@ export default function CardAnnouncement({
   const router = useRouter();
   console.log(penerima);
 
-
-
-
   return (
     <>
       <div className="p-2 bg-white rounded-lg hover:cursor-default" onClick={() => openDetailModal(id)}>

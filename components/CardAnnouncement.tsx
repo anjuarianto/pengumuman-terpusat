@@ -19,6 +19,7 @@ type EditPengumuman = {
   can_delete: boolean;
   deletePengumuman: (id: number) => void;
   openDetailModal: (id:number) => void;
+  files:{file:string; original_name:string}[];
 };
 
 export default function CardAnnouncement({
@@ -35,10 +36,15 @@ export default function CardAnnouncement({
   can_edit,
   can_delete,
   deletePengumuman,
-    openDetailModal
+    openDetailModal,
+    files
 }: EditPengumuman) {
   const router = useRouter();
   console.log(penerima);
+
+
+
+
   return (
     <>
       <div className="p-2 bg-white rounded-lg hover:cursor-default" onClick={() => openDetailModal(id)}>
@@ -56,9 +62,13 @@ export default function CardAnnouncement({
             Penerima: {penerima.length > 0 ? penerima.map((penerima) => penerima.name).join(", ") : '-'}
           </div>
           <h1 className="text-2xl font-bold">{title}</h1>
-
+        
           <p className="py-2" dangerouslySetInnerHTML={{ __html: content }} />
+          
+         
+         
 
+              
           <div className="flex flex-row gap-4 text-sm">
             {can_reply && (
               <button

@@ -27,6 +27,7 @@ type Pengumuman = {
   can_reply: boolean;
   can_edit: boolean;
   can_delete: boolean;
+  files:{file:string; original_name:string}[];
 };
 
 export default function Home() {
@@ -128,6 +129,8 @@ export default function Home() {
       );
 
       const pengumumanData: Pengumuman[] = response.data.data.data;
+
+      
 
       setPengumuman(pengumumanData);
 

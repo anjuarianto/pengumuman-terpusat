@@ -38,7 +38,6 @@ type PengumumanData = {
   date: string;
   time: string;
   content: string;
-  // attachment: ("image/jpeg" | "image/png" | "application/pdf")[];
   attachment: Blob[];
 };
 
@@ -64,6 +63,7 @@ export default function PengumumanModal({
     content: string;
     room: { label: string; value: string } | undefined;
     recipients: { label: string; value: string } | undefined;
+    files: { file: string; original_name: string }[];
     isEdit: boolean;
   } | null>(null);
 
@@ -164,6 +164,7 @@ export default function PengumumanModal({
       room: room,
       recipients: recipients,
       isEdit: true,
+      files: response.data.data.files,
     };
 
     setEditPengumumanData(data);
@@ -380,6 +381,12 @@ export default function PengumumanModal({
                     accept=".jpg,.jpeg,.png,.pdf,.zip"
                   />
                 </div>
+                {editPengumumanData?.isEdit &&
+                  editPengumumanData.files.map((file, index) => (
+                    <div key={index}>
+                      <li>{file.original_name}</li>
+                    </div>
+                  ))}
 
                 <div className="flex flex-col items-center">
                   <button

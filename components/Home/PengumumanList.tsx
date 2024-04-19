@@ -15,6 +15,8 @@ type Pengumuman = {
     can_reply: boolean;
     can_edit: boolean;
     can_delete: boolean;
+    files:{file:string; original_name:string}[];
+
 };
 
 type PengumumanListProps = {
@@ -24,12 +26,13 @@ type PengumumanListProps = {
 };
 
 const PengumumanList: React.FC<PengumumanListProps> = ({ pengumuman, editForm, reload }) => {
-
     const [selectedPengumuman, setSelectedPengumuman] = useState<{
         judul: string;
         konten: string;
         waktu: string;
         rooms: { id: number; name: string };
+        files:{file:string; original_name:string}[];
+
     }[] | null>(null);
     const handleCardClick = (data) => {
         console.log(data)
@@ -78,7 +81,8 @@ const PengumumanList: React.FC<PengumumanListProps> = ({ pengumuman, editForm, r
             </div>
         );
     }
-
+    
+    
     return (
         <div className="w-full md:w-3/5 md:h-screen  order-last md:order-none" >
             <div className="flex flex-col gap-4 m-2 rounded-lg ">
@@ -102,6 +106,7 @@ const PengumumanList: React.FC<PengumumanListProps> = ({ pengumuman, editForm, r
                         can_edit={data.can_edit}
                         deletePengumuman={() => deletePengumuman(data.id)}
                         can_delete={data.can_delete}
+                        files={data.files}
                     />
                     )
                 ))}

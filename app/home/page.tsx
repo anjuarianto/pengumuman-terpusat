@@ -19,16 +19,15 @@ import MyPengumumanModal from "@/components/Home/MyPengumumanModal";
 import FilterModal from "@/components/Home/FilterModal";
 
 type Pengumuman = {
-  created_by: string;
-  id: number;
-  judul: string;
-  konten: string;
-  penerima: { penerima_id: number; name: string; is_single_user: boolean }[];
-  waktu: string;
-  can_reply: boolean;
-  can_edit: boolean;
-  can_delete: boolean;
-  files:{file:string; original_name:string}[];
+    created_by: string;
+    id: number;
+    judul: string;
+    konten: string;
+    penerima: { penerima_id: number; name: string; is_single_user: boolean }[];
+    waktu: string;
+    can_reply: boolean;
+    can_edit: boolean;
+    can_delete: boolean;
 };
 
 export default function Home() {
@@ -134,7 +133,6 @@ export default function Home() {
 
     const loadPengumumanData = async () => {
         try {
-
 
             const response = await axios.get(
                 "http://127.0.0.1:8000/api/pengumuman",

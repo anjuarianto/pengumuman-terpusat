@@ -39,6 +39,7 @@ type PengumumanData = {
     date: string;
     time: string;
     content: string;
+    attachment: Blob[];
 };
 
 type PengumumanModal = {
@@ -64,6 +65,7 @@ export default function PengumumanModal({
         content: string;
         room: { label: string; value: string } | undefined;
         recipients: { label: string; value: string } | undefined;
+        files: { file: string; original_name: string }[];
         isEdit: boolean;
     } | null>(null);
 
@@ -165,6 +167,7 @@ export default function PengumumanModal({
             content: response.data.data.konten,
             room: room,
             recipients: recipients,
+            files: response.data.data.files,
             isEdit: true,
         }
 
@@ -178,7 +181,7 @@ export default function PengumumanModal({
         onClose();
         pengumumanForm.reset();
         setEditorData("");
-        setMahasiswaSelectedValue(false);
+        setMahasiswaSelectedValue([]);
         setEditPengumumanData(null);
     };
 
@@ -186,15 +189,19 @@ export default function PengumumanModal({
         try {
             const formatedTime = data.date + " " + data.time;
 
-            const cleanData = {
-                judul: data.title,
-                room_id: data.room,
-                waktu: formatedTime,
-                konten: editorData,
-                recipients: mahasiswaSelectedValue.map((recipient) => {
-                    return recipient.value
-                }),
-            };
+            const formData = new FormData();
+            formData.append("judul", data.title);
+            formData.append("konten", editorData);
+            formData.append("waktu", formatedTime);
+            formData.append("room_id", data.room.toString());
+            mahasiswaSelectedValue.map((recipient) => {
+                formData.append("recipients[]", recipient.value);
+                return recipient.value;
+            });
+            for (const file of data.attachment) {
+                formData.append("attachment[]", file);
+            }
+
 
             const apiUrl = editPengumumanData?.isEdit
                 ? `http://127.0.0.1:8000/api/pengumuman/${isEdit}`
@@ -205,10 +212,12 @@ export default function PengumumanModal({
             const response = await axios({
                 method,
                 url: apiUrl,
-                data: cleanData,
+                data: formData,
                 headers: {
                     Authorization: "Bearer " + Cookies.get("accessToken"),
+                    "Content-Type": "multipart/form-data",
                 },
+
             });
 
             response.data.status === "success" && handleClose();
@@ -364,6 +373,24 @@ export default function PengumumanModal({
                                     />
                                 </div>
 
+                                <div>
+                                    <label className="text-gray-700 font-bold">Attachment</label>
+                                    <input
+                                        type="file"
+                                        id="attachment"
+                                        {...pengumumanForm.register("attachment")}
+                                        multiple={true}
+                                        className="p-2 border border-gray-300 rounded-md w-full"
+                                        accept=".jpg,.jpeg,.png,.pdf,.zip"
+                                    />
+                                </div>
+                                {editPengumumanData?.isEdit &&
+                                    editPengumumanData.files.map((file, index) => (
+                                        <div key={index}>
+                                            <li>{file.original_name}</li>
+                                        </div>
+                                    ))}
+
                                 <div className="flex flex-col items-center">
                                     <button
                                         type="submit"
@@ -375,7 +402,6 @@ export default function PengumumanModal({
                             </form>
                         </div>
                     </div>
-                    {/* </div> */}
                 </div>
             </Modal>
         </>

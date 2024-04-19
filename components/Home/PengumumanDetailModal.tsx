@@ -3,7 +3,7 @@ import {Button, Modal, Tooltip} from '@mui/material';
 import {Controller} from "react-hook-form";
 import Select from "react-select";
 import {CKEditor} from "@ckeditor/ckeditor5-react";
-import {FaAngleLeft, FaPlus} from "react-icons/fa";
+import {FaAngleLeft, FaPlus, FaAngleRight} from "react-icons/fa";
 
 type PengumumanDetailModalProps = {
     pengumuman: {
@@ -18,6 +18,20 @@ type PengumumanDetailModalProps = {
 
 const PengumumanDetailModal: React.FC<PengumumanDetailModalProps> = ({ pengumuman, isOpen, onRequestClose }) => {
 
+    const handleDownload = async (fileUrl: string, fileName: string) => {
+        try {
+            const tag = document.createElement("a");
+            tag.target = "_blank"
+            tag.href = `http://localhost:8000/storage/pengumuman/${fileUrl}`;
+            tag.setAttribute("download", fileName);
+            document.body.appendChild(tag);
+            tag.click();
+            tag.remove();
+        } catch (error) {
+            console.error("Error downloading file:", error);
+            // Handle download error gracefully, e.g., display an error message to the user
+        }
+    };
     return (
         <>
             <Modal open={isOpen}>
@@ -36,7 +50,7 @@ const PengumumanDetailModal: React.FC<PengumumanDetailModalProps> = ({ pengumuma
                             className="w-full h-fit py-4 text-2xl font-bold text-center text-white rounded-t-lg bg-dark-blue ">
                             Detail Pengumuman
                         </div>
-                        <div className="flex w-full p-4 flex-col gap-2 p-2 rounded-lg ">
+                        <div className="flex w-full p-4 flex-col gap-2 p-2 rounded-lg overflow-y-auto">
                             <div className="flex flex-row items-center gap-2 text-sm justify-between">
                                 <div className="flex flex-row gap-4 items-center ">
                                     <span>• {pengumuman.created_by}</span>{" "}
@@ -53,6 +67,25 @@ const PengumumanDetailModal: React.FC<PengumumanDetailModalProps> = ({ pengumuma
                                 className="py-2"
                                 dangerouslySetInnerHTML={{__html: pengumuman.konten}}
                             />
+
+                            <div>
+                                <h2>Attachment : </h2>
+                                {pengumuman.files.map((file, index) => (
+                                    <div key={index}>
+                                        <button
+                                            className="flex flex-row items-center cursor-pointer"
+                                            onClick={() =>
+                                                handleDownload(file.file, file.original_name)
+                                            }
+                                        >
+                                            <FaAngleRight/>
+                                            {file.original_name}
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+
+
                         </div>
                     </div>
                 </div>

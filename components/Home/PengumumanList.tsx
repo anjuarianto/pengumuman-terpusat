@@ -12,6 +12,7 @@ type Pengumuman = {
     konten: string;
     waktu: string;
     penerima: { penerima_id: number; name: string; is_single_user: boolean }[];
+    files:{file:string; original_name:string}[];
     can_reply: boolean;
     can_edit: boolean;
     can_delete: boolean;
@@ -30,6 +31,7 @@ const PengumumanList: React.FC<PengumumanListProps> = ({pengumuman, editForm, re
         konten: string;
         waktu: string;
         rooms: { id: number; name: string };
+        files:{file:string; original_name:string}[];
     }[] | null>(null);
     const handleCardClick = (data) => {
         setSelectedPengumuman(data)
@@ -94,6 +96,7 @@ const PengumumanList: React.FC<PengumumanListProps> = ({pengumuman, editForm, re
                             room_id={data.id}
                             content={data.konten}
                             penerima={data.penerima}
+                            files={data.files}
                             created_by={data.created_by}
                             editForm={() => editForm(data.id)}
                             can_reply={data.can_reply}

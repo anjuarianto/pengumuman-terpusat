@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { TableContainer, Paper, Tooltip, Modal, Button } from "@mui/material";
-import { FaAngleLeft, FaPlus } from "react-icons/fa";
+import { FaAngleLeft, FaPlus,FaAngleRight } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
@@ -39,6 +39,7 @@ type Pengumuman = {
   konten: string;
   waktu: string;
   room: { id: number; name: string };
+  files: { file: string; original_name: string }[];
   created_by: string;
 };
 type Comments = {
@@ -72,6 +73,7 @@ export default function Pengumuman({
     konten: "",
     waktu: "",
     room: { id: 0, name: "" },
+    files: [],
     created_by: "",
   });
 
@@ -235,6 +237,22 @@ export default function Pengumuman({
     }
   };
 
+  const handleDownload = async (fileUrl: string, fileName: string) => {
+    try {
+      const tag = document.createElement("a");
+      tag.target = "_blank";
+      tag.href = `http://localhost:8000/storage/pengumuman/${fileUrl}`;
+      tag.setAttribute("download", fileName);
+      document.body.appendChild(tag);
+      tag.click();
+      tag.remove();
+    } catch (error) {
+      console.error("Error downloading file:", error);
+      // Handle download error gracefully, e.g., display an error message to the user
+    }
+  };
+
+
   const deleteComment = (replyID: number) => {
     Swal.fire({
       title: `Delete comment ?`,
@@ -278,10 +296,10 @@ export default function Pengumuman({
                 <div className="flex flex-row gap-4 items-center ">
                   <Tooltip title="Back to home" placement="top" arrow>
                     <button
-                      className="p-3  rounded-lg  bg-white hover:bg-dark-blue-h hover:text-white border border-dark-blue-h"
-                      onClick={handleGoBack}
+                        className="p-3  rounded-lg  bg-white hover:bg-dark-blue-h hover:text-white border border-dark-blue-h"
+                        onClick={handleGoBack}
                     >
-                      <FaAngleLeft />
+                      <FaAngleLeft/>
                     </button>
                   </Tooltip>
                   <span>• {pengumuman.created_by}</span>{" "}
@@ -295,53 +313,85 @@ export default function Pengumuman({
               <h1 className="text-2xl font-bold">{pengumuman.judul}</h1>
 
               <p
-                className="py-2"
-                dangerouslySetInnerHTML={{ __html: pengumuman.konten }}
+                  className="py-2"
+                  dangerouslySetInnerHTML={{__html: pengumuman.konten}}
               />
-              {!openAddComment ? (
-                <div className="flex flex-row gap-4 text-sm">
-                  <Button
-                    variant="outlined"
-                    startIcon={<FaPlus />}
-                    onClick={() => {
-                      setOpenAddComment(true),
-                        setOpenEditComment({ reply_id: 0, isOpen: false });
-                    }}
-                  >
-                    Add Comment
-                  </Button>
-                </div>
-              ) : (
-                <form onSubmit={replyForm.handleSubmit(onSubmit)}>
-                  <Controller
-                    name="content"
-                    control={replyForm.control}
-                    render={({ field: { onChange, value } }) => (
-                      <CKEditor
-                        editor={Editor}
-                        config={editorConfiguration}
-                        data={""}
-                        onChange={(event, editor) => {
-                          const data = editor.getData();
-                          setEditorData(data);
-                        }}
-                      />
-                    )}
-                  />
 
-                  <div className="flex flex-row gap-4 py-4">
-                    <Button variant="contained" type="submit">
-                      Submit
-                    </Button>
+              <div>
+                <h2>Attachment : </h2>
+                {pengumuman.files.map((file, index) => (
+                    <div key={index}>
+                      <button
+                          className="flex flex-row items-center cursor-pointer"
+                          onClick={() =>
+                              handleDownload(file.file, file.original_name)
+                          }
+                      >
+                        <FaAngleRight/>
+                        {file.original_name}
+                      </button>
+                    </div>
+                ))}
+              </div>
+              <div>
+                {pengumuman.files.map((file, index) => (
+                    <div key={index} className="flex flex-col gap-2 text-center">
+                      {file.original_name.match(/\.(png|jpg|jpeg|gif)$/i) && (
+                          <div>
+                            <img
+                                src={`http://localhost:8000/storage/pengumuman/${file.file}`}
+                                alt={`${file.original_name}`}
+                            />
+                            <h1>{file.original_name}</h1>
+                          </div>
+                      )}
+                    </div>
+                ))}
+              </div>
+              {!openAddComment ? (
+                  <div className="flex flex-row gap-4 text-sm">
                     <Button
-                      variant="contained"
-                      color="error"
-                      onClick={() => setOpenAddComment(false)}
+                        variant="outlined"
+                        startIcon={<FaPlus/>}
+                        onClick={() => {
+                          setOpenAddComment(true),
+                              setOpenEditComment({reply_id: 0, isOpen: false});
+                        }}
                     >
-                      Cancel
+                      Add Comment
                     </Button>
                   </div>
-                </form>
+              ) : (
+                  <form onSubmit={replyForm.handleSubmit(onSubmit)}>
+                    <Controller
+                        name="content"
+                        control={replyForm.control}
+                        render={({field: {onChange, value}}) => (
+                            <CKEditor
+                                editor={Editor}
+                                config={editorConfiguration}
+                                data={""}
+                                onChange={(event, editor) => {
+                                  const data = editor.getData();
+                                  setEditorData(data);
+                                }}
+                            />
+                        )}
+                    />
+
+                    <div className="flex flex-row gap-4 py-4">
+                      <Button variant="contained" type="submit">
+                        Submit
+                      </Button>
+                      <Button
+                          variant="contained"
+                          color="error"
+                          onClick={() => setOpenAddComment(false)}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </form>
               )}
             </div>
           </div>
@@ -352,27 +402,27 @@ export default function Pengumuman({
 
             <div className="flex flex-col gap-4">
               {comments.map((data) => (
-                <div
-                  key={data.id}
-                  className="flex flex-col gap-2 p-2 rounded-lg border "
-                >
-                  <div className="flex flex-row items-center gap-2 text-sm justify-between">
-                    <div className="flex flex-row gap-2 items-center ">
-                      <span className="font-bold">{data.name}</span>
-                      <span className="text-main-3">{data.updated_at}</span>
+                  <div
+                      key={data.id}
+                      className="flex flex-col gap-2 p-2 rounded-lg border "
+                  >
+                    <div className="flex flex-row items-center gap-2 text-sm justify-between">
+                      <div className="flex flex-row gap-2 items-center ">
+                        <span className="font-bold">{data.name}</span>
+                        <span className="text-main-3">{data.updated_at}</span>
+                      </div>
                     </div>
-                  </div>
 
-                  <p
-                    className="py-2"
-                    dangerouslySetInnerHTML={{ __html: data.comment }}
-                  />
-                  {data.user_id === userID && (
-                    <div className="flex flex-row gap-4">
-                      <Button
-                        variant="outlined"
-                        size="small"
-                        onClick={() => {
+                    <p
+                        className="py-2"
+                        dangerouslySetInnerHTML={{__html: data.comment}}
+                    />
+                    {data.user_id === userID && (
+                        <div className="flex flex-row gap-4">
+                          <Button
+                              variant="outlined"
+                              size="small"
+                              onClick={() => {
                           setOpenEditComment({
                             reply_id: data.id,
                             isOpen: true,

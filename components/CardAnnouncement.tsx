@@ -13,6 +13,7 @@ type EditPengumuman = {
   room_id: number;
   content: string;
   penerima: { penerima_id: number; name: string; is_single_user: boolean; }[];
+  files:{file:string; original_name:string}[];
   editForm: (id: number) => void;
   can_reply: boolean;
   can_edit: boolean;
@@ -29,7 +30,8 @@ export default function CardAnnouncement({
   time,
   created_by,
   content,
-    penerima,
+  penerima,
+  files,
   editForm,
   can_reply,
   can_edit,

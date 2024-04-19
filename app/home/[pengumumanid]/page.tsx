@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { TableContainer, Paper, Tooltip, Modal, Button } from "@mui/material";
-import { FaAngleLeft, FaPlus,FaAngleRight } from "react-icons/fa";
+import { FaAngleLeft, FaPlus } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
@@ -10,7 +10,6 @@ import Editor from "ckeditor5-custom-build";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
-
 
 const editorConfiguration = {
   toolbar: [
@@ -41,7 +40,6 @@ type Pengumuman = {
   waktu: string;
   room: { id: number; name: string };
   created_by: string;
-  files: { file: string; original_name: string }[];
 };
 type Comments = {
   id: number;
@@ -75,7 +73,6 @@ export default function Pengumuman({
     waktu: "",
     room: { id: 0, name: "" },
     created_by: "",
-    files: [],
   });
 
   const [comments, setComments] = useState<Comments[]>([
@@ -222,9 +219,9 @@ export default function Pengumuman({
         text: "Successful!",
       });
       loadCommentsData();
-      setEditorData("");
-      setOpenAddComment(false);
-      setOpenEditComment({ isOpen: false, reply_id: 0 });
+      setEditorData("")
+      setOpenAddComment(false)
+      setOpenEditComment({isOpen:false, reply_id:0})
     } catch (err) {
       console.log(err);
       await Swal.fire({
@@ -270,21 +267,6 @@ export default function Pengumuman({
     });
   };
 
-  const handleDownload = async (fileUrl: string, fileName: string) => {
-    try {
-      const tag = document.createElement("a");
-      tag.target = "_blank";
-      tag.href = `http://localhost:8000/storage/pengumuman/${fileUrl}`;
-      tag.setAttribute("download", fileName);
-      document.body.appendChild(tag);
-      tag.click();
-      tag.remove();
-    } catch (error) {
-      console.error("Error downloading file:", error);
-      // Handle download error gracefully, e.g., display an error message to the user
-    }
-  };
-
   return (
     <>
       <Navbar></Navbar>
@@ -316,39 +298,6 @@ export default function Pengumuman({
                 className="py-2"
                 dangerouslySetInnerHTML={{ __html: pengumuman.konten }}
               />
-
-              <div>
-                <h2>Attachment : </h2>
-                {pengumuman.files.map((file, index) => (
-                  <div key={index}>
-                    <button
-                      className="flex flex-row items-center cursor-pointer"
-                      onClick={() =>
-                        handleDownload(file.file, file.original_name)
-                      }
-                    >
-                      <FaAngleRight />
-                      {file.original_name}
-                    </button>
-                  </div>
-                ))}
-              </div>
-              <div>
-                {pengumuman.files.map((file, index) => (
-                  <div key={index} className="flex flex-col gap-2 text-center">
-                    {file.original_name.match(/\.(png|jpg|jpeg|gif)$/i) && (
-                      <div>
-                        <img
-                          src={`http://localhost:8000/storage/pengumuman/${file.file}`}
-                          alt={`${file.original_name}`}
-                        />
-                        <h1>{file.original_name}</h1>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-
               {!openAddComment ? (
                 <div className="flex flex-row gap-4 text-sm">
                   <Button

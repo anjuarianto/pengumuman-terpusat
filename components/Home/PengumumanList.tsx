@@ -15,8 +15,6 @@ type Pengumuman = {
     can_reply: boolean;
     can_edit: boolean;
     can_delete: boolean;
-    files:{file:string; original_name:string}[];
-
 };
 
 type PengumumanListProps = {
@@ -25,17 +23,13 @@ type PengumumanListProps = {
     reload: () => void;
 };
 
-
 const PengumumanList: React.FC<PengumumanListProps> = ({pengumuman, editForm, reload}) => {
-
 
     const [selectedPengumuman, setSelectedPengumuman] = useState<{
         judul: string;
         konten: string;
         waktu: string;
         rooms: { id: number; name: string };
-        files:{file:string; original_name:string}[];
-
     }[] | null>(null);
     const handleCardClick = (data) => {
         setSelectedPengumuman(data)
@@ -82,34 +76,31 @@ const PengumumanList: React.FC<PengumumanListProps> = ({pengumuman, editForm, re
             </div>
         );
     }
-    
-    
+
     return (
         <div className="w-full md:w-3/5 md:h-screen  order-last md:order-none">
             <div className="flex flex-col gap-4 m-2 rounded-lg ">
                 {pengumuman.length == 0 ? (
                     <h1 className="text-2xl font-bold text-center">No Pengumuman</h1>
-                ) : ( pengumuman.map((data, index) => (
-                    <CardAnnouncement
-                        openDetailModal={() => handleCardClick(data)}
-                        key={index}
-                        id={data.id}
-                        room={data.room}
-                        title={data.judul}
-                        date={data.waktu}
-                        time={data.waktu}
-                        room_id={data.id}
-                        content={data.konten}
-                        penerima={data.penerima}
-                        created_by={data.created_by}
-                        editForm={() => editForm(data.id)}
-                        can_reply={data.can_reply}
-                        can_edit={data.can_edit}
-                        deletePengumuman={() => deletePengumuman(data.id)}
-                        can_delete={data.can_delete}
-                        files={data.files}
-                    />
-
+                ) : (pengumuman.map((data, index) => (
+                        <CardAnnouncement
+                            openDetailModal={() => handleCardClick(data)}
+                            key={index}
+                            id={data.id}
+                            room={data.room}
+                            title={data.judul}
+                            date={data.waktu}
+                            time={data.waktu}
+                            room_id={data.id}
+                            content={data.konten}
+                            penerima={data.penerima}
+                            created_by={data.created_by}
+                            editForm={() => editForm(data.id)}
+                            can_reply={data.can_reply}
+                            can_edit={data.can_edit}
+                            deletePengumuman={() => deletePengumuman(data.id)}
+                            can_delete={data.can_delete}
+                        />
                     )
                 ))}
                 {selectedPengumuman && (

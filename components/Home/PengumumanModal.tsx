@@ -202,12 +202,16 @@ export default function PengumumanModal({
                 formData.append("attachment[]", file);
             }
 
+            if(isEdit) {
+                formData.append("_method", "PUT");
+            }
+
 
             const apiUrl = editPengumumanData?.isEdit
                 ? `http://127.0.0.1:8000/api/pengumuman/${isEdit}`
                 : `http://127.0.0.1:8000/api/pengumuman`;
 
-            const method = editPengumumanData?.isEdit ? "put" : "post";
+            const method = editPengumumanData?.isEdit ? "post" : "post";
 
             const response = await axios({
                 method,

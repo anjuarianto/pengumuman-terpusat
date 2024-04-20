@@ -8,12 +8,15 @@ import Cookies from "js-cookie";
 import {useRouter} from "next/navigation";
 import DropdownNavbar from "@/components/DropdownNavbar";
 
-const session = Cookies.get("session");
-const email = session ? JSON.parse(session).email : undefined;
-const role = session ? JSON.parse(session).role : undefined;
+type Props = {
+    email: string;
+    role: string;
+};
 
-export default function Navbar() {
+
+export default function Navbar({email, role}: Props) {
     const router = useRouter();
+
     const Logout = async () => {
         try {
             Cookies.remove("accessToken");
@@ -41,7 +44,7 @@ export default function Navbar() {
                         className="flex flex-row items-center w-full md:w-fit gap-2 py-2 rounded-md mx-0 font-bold   ">
             
             <FaEdit/> {email} | ({role})
-            <DropdownNavbar logout={Logout}/>
+            <DropdownNavbar role={role} logout={Logout}/>
           </span>
                 </div>
             </div>

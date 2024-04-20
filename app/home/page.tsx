@@ -108,6 +108,11 @@ export default function Home() {
     const searchForm = useForm<any>();
 
     useEffect(() => {
+        loadMyData()
+    },[]);
+
+    useEffect(() => {
+
         tokenCheck().then(() => {
             if (!isModalOpenPengumuman) {
                 loadPengumumanData();
@@ -205,7 +210,7 @@ export default function Home() {
 
     return (
         <>
-            <Navbar>
+            <Navbar email={myData?.email} role={myData?.role}>
             </Navbar>
             <div className="flex flex-col items-center w-full h-full md:pt-16 ">
 

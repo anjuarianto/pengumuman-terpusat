@@ -11,15 +11,15 @@ import MenuList from '@mui/material/MenuList';
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
-const session = Cookies.get("session");
-const role = session ? JSON.parse(session).role : undefined;
-const options = role == 'dosen' ?  ['Edit Master Data', 'Logout'] : ['Logout'];
+
 
 type Props = {
     logout: () => void;
+    role: string;
 };
 
-function DropdownNavbar({logout}: Props) {
+function DropdownNavbar({role,logout}: Props) {
+    const options = role == 'dosen' ?  ['Edit Master Data', 'Logout'] : ['Logout'];
     const router = useRouter();
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef<HTMLDivElement>(null);

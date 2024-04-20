@@ -15,7 +15,9 @@
 }
 
 /* --------- EDITOR STYLES  ---------------------------------------------------------------------------------------- */
-
+.ck.ck-balloon-panel {
+	z-index: 1400 !important;
+}
 .editor__editable,
 /* Classic build. */
 main .ck-editor[role='application'] .ck.ck-content,

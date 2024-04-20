@@ -4,13 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bc195841-2735-44fc-a191-7f710ccbb323" name="Changes" comment="feat: make list pengumuman modular">
+    <list default="true" id="bc195841-2735-44fc-a191-7f710ccbb323" name="Changes" comment="feat: poin 1 - 3">
+      <change afterPath="$PROJECT_DIR$/components/Master/ModalUser.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/home/[pengumumanid]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/home/[pengumumanid]/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/CardAnnouncement.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/CardAnnouncement.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/Home/PengumumanDetailModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Home/PengumumanDetailModal.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/Home/PengumumanList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Home/PengumumanList.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/home/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/home/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/user/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/user/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ckeditor5/sample/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/ckeditor5/sample/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/DropdownNavbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/DropdownNavbar.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/Home/PengumumanModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Home/PengumumanModal.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/Navbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Navbar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/next.config.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/next.config.mjs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,6 +33,18 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RESET_MODE" value="MIXED" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;anjuarianto&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/anjuarianto/skripsi-nikke-frontend.git&quot;,
+    &quot;accountId&quot;: &quot;43f9105f-5d30-4964-bd06-5aea117a4518&quot;
+  }
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -41,32 +57,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "merge-branch",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.standard": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.standard": "",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_interpreter_path": "wsl://Ubuntu-22.04@/home/ubuntu/.nvm/versions/node/v20.6.1/bin/node",
-    "nodejs_package_manager_path": "\\home\\ubuntu\\.nvm\\versions\\node\\v20.6.1\\bin\\npm",
-    "settings.editor.selected.configurable": "settings.nodejs",
-    "ts.external.directory.path": "\\\\wsl.localhost\\Ubuntu-22.04\\home\\ubuntu\\personal\\current-project\\skripsi-nikke-frontend\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;wsl://Ubuntu-22.04@/home/ubuntu/.nvm/versions/node/v20.6.1/bin/node&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;\\home\\ubuntu\\.nvm\\versions\\node\\v20.6.1\\bin\\npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;settings.nodejs&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;\\\\wsl.localhost\\Ubuntu-22.04\\home\\ubuntu\\personal\\current-project\\skripsi-nikke-frontend\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-php-predefined-ba97393d7c68-6f8e3395a2b4-com.jetbrains.php.sharedIndexes-PS-233.14808.18" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-PS-241.14494.237" />
+        <option value="bundled-php-predefined-ba97393d7c68-8f0632a2a215-com.jetbrains.php.sharedIndexes-PS-241.14494.237" />
       </set>
     </attachedChunks>
   </component>
@@ -82,6 +99,10 @@
       <workItem from="1711136631115" duration="49000" />
       <workItem from="1711136987310" duration="10452000" />
       <workItem from="1711173982292" duration="274000" />
+      <workItem from="1713557218260" duration="1622000" />
+      <workItem from="1713559448769" duration="1551000" />
+      <workItem from="1713596440143" duration="152000" />
+      <workItem from="1713621972148" duration="14641000" />
     </task>
     <servers />
   </component>
@@ -102,7 +123,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="feat: make list pengumuman modular" />
     <MESSAGE value="fix: upcoming widget update" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix: upcoming widget update" />
+    <MESSAGE value="feat: poin 1 - 3" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: poin 1 - 3" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import { FaAngleLeft } from "react-icons/fa";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import ModalRoom from "@/components/Master/ModalRoom";
+import ModalUser from "@/components/Master/ModalUser";
 
 import MUIDataTable, {
   MUIDataTableColumn,
@@ -23,6 +24,7 @@ type User = {
   created_at: string;
   updated_at: string;
 };
+
 interface Member {
   id: number;
   name: string;
@@ -42,10 +44,13 @@ export default function User() {
   const [openUser, setOpenUser] = useState(false);
   const [isModalRoomOpen, setIsModalRoomOpen] = useState(false);
   const [isModalRoomEdit, setIsModalRoomEdit] = useState<number | null>(null);
+  const [isModalUserOpen, setIsModalUserOpen] = useState(false);
+  const [isModalUserEdit, setIsModalUserEdit] = useState<number | null>(null);
   const [options, setOptions] = useState<string>("room");
   const [RoomData, setRoomData] = useState<Room[]>([]);
   const [userData, setUserData] = useState<User[]>([]);
   const [userGroupData, setUserGroupData] = useState<UserGroup[]>([]);
+  const [myData, setMyData] = useState<any>();
 
   const [editUserData, setEditUserData] = useState<{
     id: number;
@@ -102,7 +107,9 @@ export default function User() {
                   <Tooltip title="Update User Group" placement="top" arrow>
                     <button
                       className="p-2 text-white bg-blue-500 hover:bg-blue-600 font-bold rounded-lg "
-                      onClick={() => {}}
+                      onClick={() => {
+
+                      }}
                     >
                       <FaEdit />
                     </button>
@@ -304,7 +311,10 @@ export default function User() {
                   <Tooltip title="Update User" placement="top" arrow>
                     <button
                       className="p-2 text-white bg-blue-500 hover:bg-blue-600 font-bold rounded-lg "
-                      onClick={() => {}}
+                      onClick={() => {
+                        setIsModalUserOpen(true);
+                        setIsModalUserEdit(tableMeta.rowData[0]);
+                      }}
                     >
                       <FaEdit />
                     </button>
@@ -366,8 +376,15 @@ export default function User() {
   ];
 
   useEffect(() => {
+    if(!isModalUserOpen) {
+      loadUserData();
+    }
+  }, [isModalUserOpen])
+
+  useEffect(() => {
     tokenCheck().then(() => {
       loadRoomData();
+      loadMyData();
       loadUserGroupData();
       loadUserData();
     });
@@ -384,6 +401,23 @@ export default function User() {
       }
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const loadMyData = async () => {
+    try {
+      const response = await axios.get(
+          "http://127.0.0.1:8000/api/me",
+          {
+            headers: {
+              Authorization:
+                  "Bearer " + Cookies.get("accessToken"),
+            },
+          }
+      );
+      setMyData(response.data);
+    } catch (err) {
+        console.log(err);
     }
   };
 
@@ -432,8 +466,9 @@ export default function User() {
           },
         }
       );
+
       // Convert timestamps for created_at and updated_at
-      const convertedData = response.data.map((user: any) => ({
+      const convertedData = response.data.data.map((user: any) => ({
         ...user,
         created_at: new Date(user.created_at).toLocaleDateString("en-US", {
           day: "2-digit",
@@ -517,7 +552,7 @@ export default function User() {
   };
   return (
     <>
-      <Navbar></Navbar>
+      <Navbar role={myData?.role} email={myData?.email}></Navbar>
       <div className=" flex flex-col items-center w-full h-full pt-2 md:pt-16 ">
         <div className="flex flex-row justify-center w-full h-screen px-2 md:px-12">
           <div className="w-full h-screen ">
@@ -569,7 +604,7 @@ export default function User() {
               </div>
               <button
                 className="bg-dark-blue text-white rounded-lg px-4 py-2 "
-                onClick={() => setIsModalRoomOpen(true)}
+                onClick={() => options === "room" ? setIsModalRoomOpen(true) : setIsModalUserOpen(true)}
               >
                 {options === "room" ? "Tambah Room" : "Tambah User"}
               </button>
@@ -618,65 +653,15 @@ export default function User() {
         </div>
       </div>
 
-      <Modal open={openUser}>
-        <div
-          className="flex flex-col items-center justify-center h-screen"
-          onClick={handleClose}
-        >
-          <div
-            className="flex flex-col items-center w-full md:w-2/5 h-3/5 bg-white rounded-lg shadow-lg "
-            onClick={(e) => {
-              //Prevent event propagation only for this inner div
-              e.stopPropagation();
-            }}
-          >
-            <div className="w-full h-fit py-4 text-2xl font-bold text-center text-white rounded-t-lg bg-dark-blue ">
-              Edit User
-            </div>
-            <div className="w-full px-4 md:px-24 py-4 overflow-y-auto">
-              <form
-                onSubmit={UserForm.handleSubmit(onSubmitUser)}
-                className="flex flex-col w-full gap-4"
-              >
-                <div>
-                  <label className=" text-gray-700 font-bold">Name</label>
-                  <input
-                    type="text"
-                    id="title"
-                    required
-                    placeholder="Room"
-                    defaultValue={editUserData?.name}
-                    className="p-2 border border-gray-300 rounded-md w-full"
-                    {...UserForm.register("name", { required: true })}
-                  />
-                </div>
-                <div>
-                  <label className=" text-gray-700 font-bold">Email</label>
-                  <input
-                    type="text"
-                    id="title"
-                    required
-                    placeholder="Email"
-                    defaultValue={editUserData?.email}
-                    className="p-2 border border-gray-300 rounded-md w-full"
-                    {...UserForm.register("email", { required: true })}
-                  />
-                </div>
+      <ModalUser
+        isOpen={isModalUserOpen}
+        isEdit={isModalUserEdit}
+        onClose={() => {
+            setIsModalUserOpen(false);
+            setIsModalUserEdit(null);
+        }}
+        />
 
-                <div className="flex flex-col items-center">
-                  <button
-                    type="submit"
-                    className="px-24 py-2 mt-4 text-white bg-blue-500 rounded-lg w-fit hover:bg-blue-600"
-                  >
-                    Submit
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-          {/* </div> */}
-        </div>
-      </Modal>
       <ModalRoom
         isModalOpen={isModalRoomOpen}
         isEdit={isModalRoomEdit}

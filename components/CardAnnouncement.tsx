@@ -59,7 +59,7 @@ export default function CardAnnouncement({
           </div>
           <h1 className="text-2xl font-bold">{title}</h1>
 
-          <p className="py-2" dangerouslySetInnerHTML={{ __html: content }} />
+          <p className="py-2 my-editor" dangerouslySetInnerHTML={{ __html: content }} />
 
           <div className="flex flex-row gap-4 text-sm">
             {can_reply && (

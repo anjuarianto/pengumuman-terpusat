@@ -4,17 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bc195841-2735-44fc-a191-7f710ccbb323" name="Changes" comment="feat: poin 1 - 3">
-      <change afterPath="$PROJECT_DIR$/components/Master/ModalUser.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+    <list default="true" id="bc195841-2735-44fc-a191-7f710ccbb323" name="Changes" comment="feat: ubah anchor tag style">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/home/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/home/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/user/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/user/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/globals.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/home/[pengumumanid]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/home/[pengumumanid]/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ckeditor5/sample/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/ckeditor5/sample/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/DropdownNavbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/DropdownNavbar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/CardAnnouncement.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/CardAnnouncement.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/Home/PengumumanDetailModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Home/PengumumanDetailModal.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/Home/PengumumanModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Home/PengumumanModal.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/Navbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Navbar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/next.config.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/next.config.mjs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,8 +99,17 @@
       <workItem from="1713557218260" duration="1622000" />
       <workItem from="1713559448769" duration="1551000" />
       <workItem from="1713596440143" duration="152000" />
-      <workItem from="1713621972148" duration="14641000" />
+      <workItem from="1713621972148" duration="19787000" />
     </task>
+    <task id="LOCAL-00001" summary="feat: poin 1 - 3">
+      <option name="closed" value="true" />
+      <created>1713649732611</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1713649732611</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -124,7 +130,8 @@
     <MESSAGE value="feat: make list pengumuman modular" />
     <MESSAGE value="fix: upcoming widget update" />
     <MESSAGE value="feat: poin 1 - 3" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: poin 1 - 3" />
+    <MESSAGE value="feat: ubah anchor tag style" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: ubah anchor tag style" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

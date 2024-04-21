@@ -252,7 +252,7 @@ export default function PengumumanModal({
     };
     return (
         <>
-            <Modal open={isModalOpen}>
+            <Modal open={isModalOpen} disableEnforceFocus>
                 <div
                     className="flex flex-col items-center justify-center h-screen no-tailwindcss-base"
                     onClick={handleClose}

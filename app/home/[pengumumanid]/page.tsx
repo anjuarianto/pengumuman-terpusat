@@ -313,7 +313,7 @@ export default function Pengumuman({
               <h1 className="text-2xl font-bold">{pengumuman.judul}</h1>
 
               <p
-                  className="py-2"
+                  className="py-2 my-editor"
                   dangerouslySetInnerHTML={{__html: pengumuman.konten}}
               />
 

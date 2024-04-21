@@ -21,6 +21,7 @@ type User = {
   id: number;
   name: string;
   email: string;
+  role: string;
   created_at: string;
   updated_at: string;
 };
@@ -291,6 +292,10 @@ export default function User() {
       label: "Email",
     },
     {
+      name: "role",
+      label: "Role"
+    },
+    {
       name: "created_at",
       label: "created_at",
     },
@@ -467,6 +472,7 @@ export default function User() {
         }
       );
 
+      console.log(response.data.data)
       // Convert timestamps for created_at and updated_at
       const convertedData = response.data.data.map((user: any) => ({
         ...user,

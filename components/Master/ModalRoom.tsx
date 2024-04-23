@@ -46,15 +46,27 @@ const ModalRoom: React.FC<ModalRoomProps> = ({
 
   const loadAllUser = async () => {
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/api/user`, {
+      const userResponse = await axios.get(`http://127.0.0.1:8000/api/user`, {
         headers: HEADERS,
       });
 
-      const members = response.data.map((user: any) => ({
+      const userGroupResponse = await axios.get(`http://127.0.0.1:8000/api/user-group`, {
+        headers: HEADERS,
+      });
+
+      const user = userResponse.data.data.map((user: any) => ({
         label: user.name,
         value: "1" + "|" + user.id,
       }));
 
+      const userGroup = userGroupResponse.data.data.map((userGroup:any) => ({
+        label: userGroup.name + "(Group)",
+        value: "0" + "|" + userGroup.id
+      }))
+
+      let members = user.concat(userGroup)
+
+      console.log(members)
       setMemberOptions(members);
     } catch (error) {
       console.log(error);

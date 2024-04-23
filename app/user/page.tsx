@@ -5,6 +5,7 @@ import { FaAngleLeft } from "react-icons/fa";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import ModalRoom from "@/components/Master/ModalRoom";
 import ModalUser from "@/components/Master/ModalUser";
+import ModalUserGroup from "@/components/Master/ModalUserGroup";
 
 import MUIDataTable, {
   MUIDataTableColumn,
@@ -26,6 +27,11 @@ type User = {
   updated_at: string;
 };
 
+type Room = {
+  id: number;
+  name: string;
+}
+
 interface Member {
   id: number;
   name: string;
@@ -43,11 +49,17 @@ export default function User() {
   const router = useRouter();
 
   const [openUser, setOpenUser] = useState(false);
+
   const [isModalRoomOpen, setIsModalRoomOpen] = useState(false);
   const [isModalRoomEdit, setIsModalRoomEdit] = useState<number | null>(null);
+
+  const [isModalUserGroupOpen, setIsModalUserGroupOpen] = useState(false);
+  const [isModalUserGroupEdit, setIsModalUserGroupEdit] = useState<number | null>(null);
+
   const [isModalUserOpen, setIsModalUserOpen] = useState(false);
   const [isModalUserEdit, setIsModalUserEdit] = useState<number | null>(null);
-  const [options, setOptions] = useState<string>("room");
+
+  const [optionsMenu, setOptionsMenu] = useState<string>("usergroup");
   const [RoomData, setRoomData] = useState<Room[]>([]);
   const [userData, setUserData] = useState<User[]>([]);
   const [userGroupData, setUserGroupData] = useState<UserGroup[]>([]);
@@ -86,7 +98,23 @@ export default function User() {
       name: "name",
       label: "User Group Name",
     },
-
+    {
+      name: "user",
+      label: "User",
+      options: {
+        customBodyRender: (value: any, tableMeta: MUIDataTableMeta) => {
+          return (
+              <>
+                <ul className="list-disc pl-4">
+                  {value.map((member: any, index: number) => (
+                      <li key={index}>{member.email}</li>
+                  ))}
+                </ul>
+              </>
+          );
+        },
+      },
+    },
     {
       name: "created_at",
       label: "created_at",
@@ -95,7 +123,6 @@ export default function User() {
       name: "updated_at",
       label: "updated_at",
     },
-
     {
       name: "action",
       label: "Action",
@@ -109,7 +136,8 @@ export default function User() {
                     <button
                       className="p-2 text-white bg-blue-500 hover:bg-blue-600 font-bold rounded-lg "
                       onClick={() => {
-
+                        setIsModalUserGroupOpen(true);
+                        setIsModalUserGroupEdit(tableMeta.rowData[0]);
                       }}
                     >
                       <FaEdit />
@@ -191,9 +219,10 @@ export default function User() {
         customBodyRender: (value: any, tableMeta: MUIDataTableMeta) => {
           return (
             <>
+
               <ul className="list-disc pl-4">
-                {value.map((member: any, index: number) => (
-                  <li key={index}>{member.name}</li>
+                {value?.map((member: any, index: number) => (
+                    <li key={index}>{member.name}</li>
                 ))}
               </ul>
             </>
@@ -472,7 +501,6 @@ export default function User() {
         }
       );
 
-      console.log(response.data.data)
       // Convert timestamps for created_at and updated_at
       const convertedData = response.data.data.map((user: any) => ({
         ...user,
@@ -531,16 +559,7 @@ export default function User() {
     router.back(); // Navigate to previous route
   };
 
-  const handleOpen = (options: string, dataType: string, id: number) => {
-    if (options === "add" && dataType === "user") {
-      UserForm.reset();
-      setOpenUser(true);
-    }
-    if (options === "edit" && dataType === "user") {
-      UserForm.reset();
-      setOpenUser(true);
-    }
-  };
+
   const handleClose = () => {
     setOpenUser(false);
     setIsModalRoomOpen(false);
@@ -556,6 +575,7 @@ export default function User() {
       updated_at: editUserData?.updated_at,
     };
   };
+
   return (
     <>
       <Navbar role={myData?.role} email={myData?.email}></Navbar>
@@ -573,46 +593,58 @@ export default function User() {
                   </button>
                 </Tooltip>
                 <div
-                  className={`  w-fit  rounded-lg  shadow-lg 
+                    className={`  w-fit  rounded-lg  shadow-lg 
             `}
                 >
                   <button
-                    className={`${
-                      options === "room"
-                        ? "bg-dark-blue text-white"
-                        : "bg-white hover:text-white hover:bg-dark-blue-h"
-                    } rounded-l-lg px-4 py-2`}
-                    onClick={() => setOptions("room")}
+                      className={`${
+                          optionsMenu === "room"
+                              ? "bg-dark-blue text-white"
+                              : "bg-white hover:text-white hover:bg-dark-blue-h"
+                      } rounded-l-lg px-4 py-2`}
+                      onClick={() => setOptionsMenu("room")}
                   >
                     Room List
                   </button>
-                  {/* <button
-                  className={`${
-                    options === "usergroup"
-                      ? "bg-dark-blue text-white"
-                      : "bg-white hover:text-white hover:bg-dark-blue-h"
-                  }  px-4 py-2`}
-                  onClick={() => setOptions("usergroup")}
-                >
-                  User Group List
-                </button> */}
                   <button
-                    className={`${
-                      options === "user"
-                        ? "bg-dark-blue text-white"
-                        : "bg-white hover:text-white hover:bg-dark-blue-h"
-                    } rounded-r-lg px-4 py-2`}
-                    onClick={() => setOptions("user")}
+                      className={`${
+                          optionsMenu === "usergroup"
+                              ? "bg-dark-blue text-white"
+                              : "bg-white hover:text-white hover:bg-dark-blue-h"
+                      } px-4 py-2`}
+                      onClick={() => setOptionsMenu("usergroup")}
+                  >
+                    User Group List
+                  </button>
+                  <button
+                      className={`${
+                          optionsMenu === "user"
+                              ? "bg-dark-blue text-white"
+                              : "bg-white hover:text-white hover:bg-dark-blue-h"
+                      } rounded-r-lg px-4 py-2`}
+                      onClick={() => setOptionsMenu("user")}
                   >
                     User List
                   </button>
                 </div>
               </div>
               <button
-                className="bg-dark-blue text-white rounded-lg px-4 py-2 "
-                onClick={() => options === "room" ? setIsModalRoomOpen(true) : setIsModalUserOpen(true)}
+                  className="bg-dark-blue text-white rounded-lg px-4 py-2 "
+                  onClick={() => {
+                    switch (optionsMenu) {
+                      case "room":
+                        setIsModalRoomOpen(true)
+                        break;
+                      case "user":
+                        setIsModalUserOpen(true);
+                        break;
+                      case "usergroup":
+                        setIsModalUserGroupOpen(true);
+                        break;
+                    }
+                  }}
               >
-                {options === "room" ? "Tambah Room" : "Tambah User"}
+                {optionsMenu === "room" ? "Tambah Room" : optionsMenu === "user" ? "Tambah User" : "Tambah User Group"}
               </button>
             </div>
 
@@ -620,23 +652,23 @@ export default function User() {
               <TableContainer>
                 <MUIDataTable
                   title={
-                    options === "room"
+                    optionsMenu === "room"
                       ? "Room List"
-                      : options === "usergroup"
+                      : optionsMenu === "usergroup"
                       ? "User Group List"
                       : "User List"
                   }
                   data={
-                    options === "room"
+                    optionsMenu === "room"
                       ? RoomData
-                      : options === "usergroup"
+                      : optionsMenu === "usergroup"
                       ? userGroupData
                       : userData
                   }
                   columns={
-                    options === "room"
+                    optionsMenu === "room"
                       ? columnsRoom
-                      : options === "usergroup"
+                      : optionsMenu === "usergroup"
                       ? columnsUserGroup
                       : columnsUser
                   }
@@ -667,6 +699,15 @@ export default function User() {
             setIsModalUserEdit(null);
         }}
         />
+
+      <ModalUserGroup
+          isOpen={isModalUserGroupOpen}
+          isEdit={isModalUserGroupEdit}
+          onClose={() => {
+            setIsModalUserGroupOpen(false);
+            setIsModalUserGroupEdit(null);
+          }}
+      />
 
       <ModalRoom
         isModalOpen={isModalRoomOpen}

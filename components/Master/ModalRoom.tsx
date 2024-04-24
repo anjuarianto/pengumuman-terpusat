@@ -66,7 +66,6 @@ const ModalRoom: React.FC<ModalRoomProps> = ({
 
       let members = user.concat(userGroup)
 
-      console.log(members)
       setMemberOptions(members);
     } catch (error) {
       console.log(error);

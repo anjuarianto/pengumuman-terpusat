@@ -4,6 +4,8 @@ import Cookies from "js-cookie";
 import { FaAngleLeft } from "react-icons/fa";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import ModalRoom from "@/components/Master/ModalRoom";
+import ModalUser from "@/components/Master/ModalUser";
+import ModalUserGroup from "@/components/Master/ModalUserGroup";
 
 import MUIDataTable, {
   MUIDataTableColumn,
@@ -20,9 +22,16 @@ type User = {
   id: number;
   name: string;
   email: string;
+  role: string;
   created_at: string;
   updated_at: string;
 };
+
+type Room = {
+  id: number;
+  name: string;
+}
+
 interface Member {
   id: number;
   name: string;
@@ -40,12 +49,21 @@ export default function User() {
   const router = useRouter();
 
   const [openUser, setOpenUser] = useState(false);
+
   const [isModalRoomOpen, setIsModalRoomOpen] = useState(false);
   const [isModalRoomEdit, setIsModalRoomEdit] = useState<number | null>(null);
-  const [options, setOptions] = useState<string>("room");
+
+  const [isModalUserGroupOpen, setIsModalUserGroupOpen] = useState(false);
+  const [isModalUserGroupEdit, setIsModalUserGroupEdit] = useState<number | null>(null);
+
+  const [isModalUserOpen, setIsModalUserOpen] = useState(false);
+  const [isModalUserEdit, setIsModalUserEdit] = useState<number | null>(null);
+
+  const [optionsMenu, setOptionsMenu] = useState<string>("usergroup");
   const [RoomData, setRoomData] = useState<Room[]>([]);
   const [userData, setUserData] = useState<User[]>([]);
   const [userGroupData, setUserGroupData] = useState<UserGroup[]>([]);
+  const [myData, setMyData] = useState<any>();
 
   const [editUserData, setEditUserData] = useState<{
     id: number;
@@ -80,7 +98,23 @@ export default function User() {
       name: "name",
       label: "User Group Name",
     },
-
+    {
+      name: "user",
+      label: "User",
+      options: {
+        customBodyRender: (value: any, tableMeta: MUIDataTableMeta) => {
+          return (
+              <>
+                <ul className="list-disc pl-4">
+                  {value.map((member: any, index: number) => (
+                      <li key={index}>{member.email}</li>
+                  ))}
+                </ul>
+              </>
+          );
+        },
+      },
+    },
     {
       name: "created_at",
       label: "created_at",
@@ -89,7 +123,6 @@ export default function User() {
       name: "updated_at",
       label: "updated_at",
     },
-
     {
       name: "action",
       label: "Action",
@@ -102,7 +135,10 @@ export default function User() {
                   <Tooltip title="Update User Group" placement="top" arrow>
                     <button
                       className="p-2 text-white bg-blue-500 hover:bg-blue-600 font-bold rounded-lg "
-                      onClick={() => {}}
+                      onClick={() => {
+                        setIsModalUserGroupOpen(true);
+                        setIsModalUserGroupEdit(tableMeta.rowData[0]);
+                      }}
                     >
                       <FaEdit />
                     </button>
@@ -183,9 +219,10 @@ export default function User() {
         customBodyRender: (value: any, tableMeta: MUIDataTableMeta) => {
           return (
             <>
+
               <ul className="list-disc pl-4">
-                {value.map((member: any, index: number) => (
-                  <li key={index}>{member.name}</li>
+                {value?.map((member: any, index: number) => (
+                    <li key={index}>{member.name}</li>
                 ))}
               </ul>
             </>
@@ -208,7 +245,7 @@ export default function User() {
                       className="p-2 text-white bg-blue-500 hover:bg-blue-600 font-bold rounded-lg "
                       onClick={() => {
                         setIsModalRoomOpen(true);
-                        setIsModalRoomEdit(tableMeta.rowData[0])
+                        setIsModalRoomEdit(tableMeta.rowData[0]);
                       }}
                     >
                       <FaEdit />
@@ -284,6 +321,10 @@ export default function User() {
       label: "Email",
     },
     {
+      name: "role",
+      label: "Role"
+    },
+    {
       name: "created_at",
       label: "created_at",
     },
@@ -305,6 +346,8 @@ export default function User() {
                     <button
                       className="p-2 text-white bg-blue-500 hover:bg-blue-600 font-bold rounded-lg "
                       onClick={() => {
+                        setIsModalUserOpen(true);
+                        setIsModalUserEdit(tableMeta.rowData[0]);
                       }}
                     >
                       <FaEdit />
@@ -367,8 +410,15 @@ export default function User() {
   ];
 
   useEffect(() => {
+    if(!isModalUserOpen) {
+      loadUserData();
+    }
+  }, [isModalUserOpen])
+
+  useEffect(() => {
     tokenCheck().then(() => {
       loadRoomData();
+      loadMyData();
       loadUserGroupData();
       loadUserData();
     });
@@ -385,6 +435,23 @@ export default function User() {
       }
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const loadMyData = async () => {
+    try {
+      const response = await axios.get(
+          "http://127.0.0.1:8000/api/me",
+          {
+            headers: {
+              Authorization:
+                  "Bearer " + Cookies.get("accessToken"),
+            },
+          }
+      );
+      setMyData(response.data);
+    } catch (err) {
+        console.log(err);
     }
   };
 
@@ -415,8 +482,6 @@ export default function User() {
         }),
       }));
       setUserGroupData(convertedData);
-
-      console.log(convertedData);
     } catch (err) {
       console.log(err);
     }
@@ -435,8 +500,9 @@ export default function User() {
           },
         }
       );
+
       // Convert timestamps for created_at and updated_at
-      const convertedData = response.data.map((user: any) => ({
+      const convertedData = response.data.data.map((user: any) => ({
         ...user,
         created_at: new Date(user.created_at).toLocaleDateString("en-US", {
           day: "2-digit",
@@ -493,20 +559,11 @@ export default function User() {
     router.back(); // Navigate to previous route
   };
 
-  const handleOpen = (options: string, dataType: string, id:number) => {
-    if (options === "add" && dataType === "user") {
-      UserForm.reset();
-      setOpenUser(true);
-    }
-    if (options === "edit" && dataType === "user") {
-      UserForm.reset();
-      setOpenUser(true);
-    }
-  };
+
   const handleClose = () => {
     setOpenUser(false);
     setIsModalRoomOpen(false);
-    setIsModalRoomEdit(null)
+    setIsModalRoomEdit(null);
   };
 
   const onSubmitUser: SubmitHandler<User> = async (data) => {
@@ -517,22 +574,22 @@ export default function User() {
       created_at: editUserData?.created_at,
       updated_at: editUserData?.updated_at,
     };
-
   };
+
   return (
     <>
-      <Navbar></Navbar>
-      <div className=" flex flex-col items-center w-full h-full pt-16 ">
-        <div className="flex flex-row justify-center w-full h-screen px-12">
+      <Navbar role={myData?.role} email={myData?.email}></Navbar>
+      <div className=" flex flex-col items-center w-full h-full pt-2 md:pt-16 ">
+        <div className="flex flex-row justify-center w-full h-screen px-2 md:px-12">
           <div className="w-full h-screen ">
-            <div className="flex justify-between mb-6">
-              <div className="flex flex-row gap-4 items-center">
+            <div className="flex flex-col md:flex-row justify-between mb-4">
+              <div className="flex flex-row gap-4 items-center my-2">
                 <Tooltip title="Back to home" placement="top" arrow>
                   <button
-                      className="p-3  rounded-lg  bg-white hover:bg-dark-blue-h hover:text-white"
-                      onClick={handleGoBack}
+                    className="p-3  rounded-lg  bg-white hover:bg-dark-blue-h hover:text-white"
+                    onClick={handleGoBack}
                   >
-                    <FaAngleLeft/>
+                    <FaAngleLeft />
                   </button>
                 </Tooltip>
                 <div
@@ -541,66 +598,77 @@ export default function User() {
                 >
                   <button
                       className={`${
-                          options === "room"
+                          optionsMenu === "room"
                               ? "bg-dark-blue text-white"
                               : "bg-white hover:text-white hover:bg-dark-blue-h"
                       } rounded-l-lg px-4 py-2`}
-                      onClick={() => setOptions("room")}
+                      onClick={() => setOptionsMenu("room")}
                   >
                     Room List
                   </button>
-                  {/* <button
-                  className={`${
-                    options === "usergroup"
-                      ? "bg-dark-blue text-white"
-                      : "bg-white hover:text-white hover:bg-dark-blue-h"
-                  }  px-4 py-2`}
-                  onClick={() => setOptions("usergroup")}
-                >
-                  User Group List
-                </button> */}
                   <button
                       className={`${
-                          options === "user"
+                          optionsMenu === "usergroup"
+                              ? "bg-dark-blue text-white"
+                              : "bg-white hover:text-white hover:bg-dark-blue-h"
+                      } px-4 py-2`}
+                      onClick={() => setOptionsMenu("usergroup")}
+                  >
+                    User Group List
+                  </button>
+                  <button
+                      className={`${
+                          optionsMenu === "user"
                               ? "bg-dark-blue text-white"
                               : "bg-white hover:text-white hover:bg-dark-blue-h"
                       } rounded-r-lg px-4 py-2`}
-                      onClick={() => setOptions("user")}
+                      onClick={() => setOptionsMenu("user")}
                   >
                     User List
                   </button>
                 </div>
-
               </div>
               <button
-                  className="bg-dark-blue text-white rounded-lg px-4 py-2"
-                  onClick={() => setIsModalRoomOpen(true)}
+                  className="bg-dark-blue text-white rounded-lg px-4 py-2 "
+                  onClick={() => {
+                    switch (optionsMenu) {
+                      case "room":
+                        setIsModalRoomOpen(true)
+                        break;
+                      case "user":
+                        setIsModalUserOpen(true);
+                        break;
+                      case "usergroup":
+                        setIsModalUserGroupOpen(true);
+                        break;
+                    }
+                  }}
               >
-                {options === "room" ? 'Tambah Room' : 'Tambah User'}
+                {optionsMenu === "room" ? "Tambah Room" : optionsMenu === "user" ? "Tambah User" : "Tambah User Group"}
               </button>
             </div>
 
             <Paper>
-                <TableContainer>
+              <TableContainer>
                 <MUIDataTable
                   title={
-                    options === "room"
+                    optionsMenu === "room"
                       ? "Room List"
-                      : options === "usergroup"
+                      : optionsMenu === "usergroup"
                       ? "User Group List"
                       : "User List"
                   }
                   data={
-                    options === "room"
+                    optionsMenu === "room"
                       ? RoomData
-                      : options === "usergroup"
+                      : optionsMenu === "usergroup"
                       ? userGroupData
                       : userData
                   }
                   columns={
-                    options === "room"
+                    optionsMenu === "room"
                       ? columnsRoom
-                      : options === "usergroup"
+                      : optionsMenu === "usergroup"
                       ? columnsUserGroup
                       : columnsUser
                   }
@@ -623,66 +691,29 @@ export default function User() {
         </div>
       </div>
 
-      <Modal open={openUser}>
-        <div
-          className="flex flex-col items-center justify-center h-screen"
-          onClick={handleClose}
-        >
-          <div
-            className="flex flex-col items-center w-2/5 h-auto bg-white rounded-lg shadow-lg "
-            onClick={(e) => {
-              //Prevent event propagation only for this inner div
-              e.stopPropagation();
-            }}
-          >
-            <div className="w-full h-full py-4 text-2xl font-bold text-center text-white rounded-t-lg bg-dark-blue ">
-              Edit User
-            </div>
-            <div className="w-full px-24 py-4">
-              <form
-                onSubmit={UserForm.handleSubmit(onSubmitUser)}
-                className="flex flex-col w-full gap-4"
-              >
-                <div>
-                  <label className=" text-gray-700 font-bold">Name</label>
-                  <input
-                    type="text"
-                    id="title"
-                    required
-                    placeholder="Room"
-                    defaultValue={editUserData?.name}
-                    className="p-2 border border-gray-300 rounded-md w-full"
-                    {...UserForm.register("name", { required: true })}
-                  />
-                </div>
-                <div>
-                  <label className=" text-gray-700 font-bold">Email</label>
-                  <input
-                    type="text"
-                    id="title"
-                    required
-                    placeholder="Email"
-                    defaultValue={editUserData?.email}
-                    className="p-2 border border-gray-300 rounded-md w-full"
-                    {...UserForm.register("email", { required: true })}
-                  />
-                </div>
+      <ModalUser
+        isOpen={isModalUserOpen}
+        isEdit={isModalUserEdit}
+        onClose={() => {
+            setIsModalUserOpen(false);
+            setIsModalUserEdit(null);
+        }}
+        />
 
-                <div className="flex flex-col items-center">
-                  <button
-                    type="submit"
-                    className="px-24 py-2 mt-4 text-white bg-blue-500 rounded-lg w-fit hover:bg-blue-600"
-                  >
-                    Submit
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-          {/* </div> */}
-        </div>
-      </Modal>
-      <ModalRoom isModalOpen={isModalRoomOpen} isEdit={isModalRoomEdit} onClose={handleClose} />
+      <ModalUserGroup
+          isOpen={isModalUserGroupOpen}
+          isEdit={isModalUserGroupEdit}
+          onClose={() => {
+            setIsModalUserGroupOpen(false);
+            setIsModalUserGroupEdit(null);
+          }}
+      />
+
+      <ModalRoom
+        isModalOpen={isModalRoomOpen}
+        isEdit={isModalRoomEdit}
+        onClose={handleClose}
+      />
     </>
   );
 }

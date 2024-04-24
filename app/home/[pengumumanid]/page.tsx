@@ -2,13 +2,14 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { TableContainer, Paper, Tooltip, Modal, Button } from "@mui/material";
-import { FaAngleLeft, FaPlus } from "react-icons/fa";
+import { FaAngleLeft, FaPlus,FaAngleRight } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import Editor from "ckeditor5-custom-build";
 import axios from "axios";
 import Cookies from "js-cookie";
+import Swal from "sweetalert2";
 
 const editorConfiguration = {
   toolbar: [
@@ -32,53 +33,24 @@ const editorConfiguration = {
   ],
 };
 
-const dummyData = [
-  {
-    id: 1,
-    mahasiswa: "John Doe",
-    date: "13 February 2023, 8:56",
-    content:
-      "Market basket analysis merupakan salah satu teknik data mining yang dimana menganalisa suatu pola dari hubungan antar item. misalnya untuk menganalisa suatu produk makanan di salah satu fastfood untuk memprediksi apakah item pembelian makanan dan minuman tertentu cukup besar, yang nantinya dapat memprediksi dengan menyediakan paket makanan dan minuman. Untuk perhitungan secara matematikanya yaitu dengan ukuran Minimal Support merupakan suatu ukuran atau nilai yang harus dipenuhi sebagai batasan besar frekuensi kejadian dari seluruh nilai dominasi suatu item atau itemset dalam keseluruhan transaksi dengan Support (X, y) = jumlah transaksi yang mengandung x dan y dibagi total transaksinya. kemudian menghitung Minimal Confidence merupakan parameter yang mendefinisikan minimum level suatu nilai hubungan antar item(confidence) yang harus dipenuhi agar menemukan aturan yang berkualitas.",
-    
-  },
-  {
-    id: 2,
-    mahasiswa: "Jane Smith",
-    date: "15 March 2024, 14:12", // Different date for each object
-    content: "This is some <em>dummy content</em> for mahasiswa Jane Smith.",
-    
-  },
-  {
-    id: 3,
-    mahasiswa: "Michael Chen",
-    date: "07 January 2024, 10:30",
-    content: "This is some plain dummy content for mahasiswa Michael Chen.",
-    
-  },
-  {
-    id: 4,
-    mahasiswa: "Alice Garcia",
-    date: "29 October 2023, 17:55",
-    content:
-      "Here's another example with <b>bold</b> text for mahasiswa Alice Garcia.",
-    
-  },
-  {
-    id: 5,
-    mahasiswa: "David Kim",
-    date: "02 December 2023, 09:28",
-    content: "<i>This content is italicized</i> for mahasiswa David Kim.",
-    
-  },
-];
-
 type Pengumuman = {
   id: number;
   judul: string;
   konten: string;
   waktu: string;
   room: { id: number; name: string };
+  files: { file: string; original_name: string }[];
   created_by: string;
+};
+type Comments = {
+  id: number;
+  pengumuman_id: number;
+  user_id: number;
+  name: string;
+  comment: string;
+  waktu: string;
+  created_at: string;
+  updated_at: string;
 };
 
 export default function Pengumuman({
@@ -89,21 +61,42 @@ export default function Pengumuman({
   const pid = params.pengumumanid;
   const router = useRouter();
   const [openAddComment, setOpenAddComment] = useState(false);
+  const [openEditComment, setOpenEditComment] = useState<{
+    reply_id: number;
+    isOpen: boolean;
+  }>();
   const [editorData, setEditorData] = useState<string>("");
+  const [userID, setUserID] = useState<number>();
   const [pengumuman, setPengumuman] = useState<Pengumuman>({
     id: 0,
     judul: "",
     konten: "",
     waktu: "",
     room: { id: 0, name: "" },
+    files: [],
     created_by: "",
   });
+
+  const [comments, setComments] = useState<Comments[]>([
+    {
+      id: 0,
+      pengumuman_id: 0,
+      user_id: 0,
+      name: "",
+      comment: "",
+      waktu: "",
+      created_at: "",
+      updated_at: "",
+    },
+  ]);
 
   const replyForm = useForm<{ content: string }>();
 
   useEffect(() => {
     tokenCheck().then(() => {
       loadPengumumanData();
+      loadCommentsData();
+      loadUserID();
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pid]);
@@ -138,17 +131,160 @@ export default function Pengumuman({
     }
   };
 
+  const loadUserID = async () => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/me`,
+
+        {
+          headers: {
+            Authorization: "Bearer " + Cookies.get("accessToken"),
+          },
+        }
+      );
+
+      const uid: number = response.data.id;
+      setUserID(uid);
+
+      console.log(uid);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const loadCommentsData = async () => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/pengumuman/${pid}/reply`,
+
+        {
+          headers: {
+            Authorization: "Bearer " + Cookies.get("accessToken"),
+          },
+        }
+      );
+
+      // const commentsData: Comments = response.data.data;
+
+      const convertedData: Comments[] = response.data.data.map(
+        (comment: any) => ({
+          ...comment,
+          created_at: new Date(comment.created_at).toLocaleDateString("en-US", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          }),
+          updated_at: new Date(comment.updated_at).toLocaleDateString("en-US", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          }),
+        })
+      );
+
+      setComments(convertedData);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const handleGoBack = () => {
     router.back(); // Navigate to previous route
   };
-  const onSubmit: SubmitHandler<{content:string}> = async (data) => {
-    try{
-      console.log(editorData)
-      console.log("^^^^^^^^^^^^^^^^^^^data")
-    }catch(err){
-        console.log(err)
+  const onSubmit: SubmitHandler<{ content: string }> = async (data) => {
+    try {
+      const cleanData = openEditComment?.isOpen
+        ? { comment: editorData }
+        : { pengumuman_id: pid, user_id: userID, comment: editorData };
+
+      const apiUrl = openEditComment?.isOpen
+        ? `http://127.0.0.1:8000/api/pengumuman/${pid}/reply/${openEditComment.reply_id}`
+        : `http://127.0.0.1:8000/api/pengumuman/${pid}/reply`;
+
+      const method = openEditComment?.isOpen ? "PUT" : "POST";
+
+      const response = await axios({
+        method,
+        url: apiUrl,
+        data: cleanData,
+        headers: {
+          Authorization: "Bearer " + Cookies.get("accessToken"),
+        },
+      });
+
+      await Swal.fire({
+        icon: "success",
+        title: "Success",
+        customClass: {
+          container: "my-swal-popup ",
+        },
+        text: "Successful!",
+      });
+      loadCommentsData();
+      setEditorData("")
+      setOpenAddComment(false)
+      setOpenEditComment({isOpen:false, reply_id:0})
+    } catch (err) {
+      console.log(err);
+      await Swal.fire({
+        icon: "error",
+        title: "Error",
+        customClass: {
+          container: "my-swal-popup ",
+        },
+        text: "Failed",
+      });
     }
-  }
+  };
+
+  const handleDownload = async (fileUrl: string, fileName: string) => {
+    try {
+      const tag = document.createElement("a");
+      tag.target = "_blank";
+      tag.href = `http://localhost:8000/storage/pengumuman/${fileUrl}`;
+      tag.setAttribute("download", fileName);
+      document.body.appendChild(tag);
+      tag.click();
+      tag.remove();
+    } catch (error) {
+      console.error("Error downloading file:", error);
+      // Handle download error gracefully, e.g., display an error message to the user
+    }
+  };
+
+
+  const deleteComment = (replyID: number) => {
+    Swal.fire({
+      title: `Delete comment ?`,
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const apiUrl = `http://127.0.0.1:8000/api/pengumuman/${pid}/reply/${replyID}`;
+        await axios
+          .delete(apiUrl, {
+            headers: {
+              Authorization: "Bearer " + Cookies.get("accessToken"),
+            },
+          })
+          .then(async (response) => {
+            await Swal.fire("Deleted!", response.data.message, "success");
+          })
+          .then(async () => {
+            loadCommentsData();
+          })
+          .catch((error) => {
+            Swal.fire("Gagal", "Gagal menghapus user", "error");
+          });
+        console.log(apiUrl);
+      }
+    });
+  };
+
   return (
     <>
       <Navbar></Navbar>
@@ -160,10 +296,10 @@ export default function Pengumuman({
                 <div className="flex flex-row gap-4 items-center ">
                   <Tooltip title="Back to home" placement="top" arrow>
                     <button
-                      className="p-3  rounded-lg  bg-white hover:bg-dark-blue-h hover:text-white border border-dark-blue-h"
-                      onClick={handleGoBack}
+                        className="p-3  rounded-lg  bg-white hover:bg-dark-blue-h hover:text-white border border-dark-blue-h"
+                        onClick={handleGoBack}
                     >
-                      <FaAngleLeft />
+                      <FaAngleLeft/>
                     </button>
                   </Tooltip>
                   <span>• {pengumuman.created_by}</span>{" "}
@@ -177,48 +313,85 @@ export default function Pengumuman({
               <h1 className="text-2xl font-bold">{pengumuman.judul}</h1>
 
               <p
-                className="py-2"
-                dangerouslySetInnerHTML={{ __html: pengumuman.konten }}
+                  className="py-2 my-editor"
+                  dangerouslySetInnerHTML={{__html: pengumuman.konten}}
               />
-              {!openAddComment ? (
-                <div className="flex flex-row gap-4 text-sm">
-                  <Button
-                    variant="outlined"
-                    startIcon={<FaPlus />}
-                    onClick={() => setOpenAddComment(true)}
-                  >
-                    Add Comment
-                  </Button>
-                </div>
-              ) : (
-                <form onSubmit={replyForm.handleSubmit(onSubmit)}>
-                  <Controller
-                    name="content"
-                    control={replyForm.control}
-                    render={({ field: { onChange, value } }) => (
-                      <CKEditor
-                        editor={Editor}
-                        config={editorConfiguration}
-                        data={""}
-                        onChange={(event, editor) => {
-                          const data = editor.getData();
-                          setEditorData(data);
-                        }}
-                      />
-                    )}
-                  />
 
-                  <div className="flex flex-row gap-4 py-4">
-                    <Button variant="contained" type="submit">Submit</Button>
+              <div>
+                <h2>Attachment : </h2>
+                {pengumuman.files.map((file, index) => (
+                    <div key={index}>
+                      <button
+                          className="flex flex-row items-center cursor-pointer"
+                          onClick={() =>
+                              handleDownload(file.file, file.original_name)
+                          }
+                      >
+                        <FaAngleRight/>
+                        {file.original_name}
+                      </button>
+                    </div>
+                ))}
+              </div>
+              <div>
+                {pengumuman.files.map((file, index) => (
+                    <div key={index} className="flex flex-col gap-2 text-center">
+                      {file.original_name.match(/\.(png|jpg|jpeg|gif)$/i) && (
+                          <div>
+                            <img
+                                src={`http://localhost:8000/storage/pengumuman/${file.file}`}
+                                alt={`${file.original_name}`}
+                            />
+                            <h1>{file.original_name}</h1>
+                          </div>
+                      )}
+                    </div>
+                ))}
+              </div>
+              {!openAddComment ? (
+                  <div className="flex flex-row gap-4 text-sm">
                     <Button
-                      variant="contained"
-                      color="error"
-                      onClick={() => setOpenAddComment(false)}
+                        variant="outlined"
+                        startIcon={<FaPlus/>}
+                        onClick={() => {
+                          setOpenAddComment(true),
+                              setOpenEditComment({reply_id: 0, isOpen: false});
+                        }}
                     >
-                      Cancel
+                      Add Comment
                     </Button>
                   </div>
-                </form>
+              ) : (
+                  <form onSubmit={replyForm.handleSubmit(onSubmit)}>
+                    <Controller
+                        name="content"
+                        control={replyForm.control}
+                        render={({field: {onChange, value}}) => (
+                            <CKEditor
+                                editor={Editor}
+                                config={editorConfiguration}
+                                data={""}
+                                onChange={(event, editor) => {
+                                  const data = editor.getData();
+                                  setEditorData(data);
+                                }}
+                            />
+                        )}
+                    />
+
+                    <div className="flex flex-row gap-4 py-4">
+                      <Button variant="contained" type="submit">
+                        Submit
+                      </Button>
+                      <Button
+                          variant="contained"
+                          color="error"
+                          onClick={() => setOpenAddComment(false)}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </form>
               )}
             </div>
           </div>
@@ -228,22 +401,88 @@ export default function Pengumuman({
             <h1 className="font-bold text-xl">Comments</h1>
 
             <div className="flex flex-col gap-4">
-              {dummyData.map((data) => (
-                <div
-                  key={data.id}
-                  className="flex flex-col gap-2 p-2 rounded-lg border "
-                >
-                  <div className="flex flex-row items-center gap-2 text-sm justify-between">
-                    <div className="flex flex-row gap-2 items-center ">
-                      <span className="font-bold">{data.mahasiswa}</span>
-                      <span className="text-main-3">{data.date}</span>
+              {comments.map((data) => (
+                  <div
+                      key={data.id}
+                      className="flex flex-col gap-2 p-2 rounded-lg border "
+                  >
+                    <div className="flex flex-row items-center gap-2 text-sm justify-between">
+                      <div className="flex flex-row gap-2 items-center ">
+                        <span className="font-bold">{data.name}</span>
+                        <span className="text-main-3">{data.updated_at}</span>
+                      </div>
                     </div>
-                  </div>
 
-                  <p
-                    className="py-2"
-                    dangerouslySetInnerHTML={{ __html: data.content }}
-                  />
+                    <p
+                        className="py-2"
+                        dangerouslySetInnerHTML={{__html: data.comment}}
+                    />
+                    {data.user_id === userID && (
+                        <div className="flex flex-row gap-4">
+                          <Button
+                              variant="outlined"
+                              size="small"
+                              onClick={() => {
+                          setOpenEditComment({
+                            reply_id: data.id,
+                            isOpen: true,
+                          }),
+                            setOpenAddComment(false);
+                        }}
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        color="warning"
+                        size="small"
+                        onClick={() => deleteComment(data.id)}
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  )}
+                  {openEditComment?.isOpen &&
+                    data.user_id === userID &&
+                    data.id === openEditComment?.reply_id && (
+                      <form onSubmit={replyForm.handleSubmit(onSubmit)}>
+                        <Controller
+                          name="content"
+                          control={replyForm.control}
+                          render={({ field: { onChange, value } }) => (
+                            <CKEditor
+                              editor={Editor}
+                              config={editorConfiguration}
+                              data={""}
+                              onChange={(event, editor) => {
+                                const data = editor.getData();
+                                setEditorData(data);
+                              }}
+                            />
+                          )}
+                        />
+
+                        <div className="flex flex-row gap-4 py-4">
+                          <Button
+                            size="small"
+                            variant="contained"
+                            type="submit"
+                          >
+                            Submit
+                          </Button>
+                          <Button
+                            size="small"
+                            variant="contained"
+                            color="error"
+                            onClick={() =>
+                              setOpenEditComment({ reply_id: 0, isOpen: false })
+                            }
+                          >
+                            Cancel
+                          </Button>
+                        </div>
+                      </form>
+                    )}
                 </div>
               ))}
             </div>

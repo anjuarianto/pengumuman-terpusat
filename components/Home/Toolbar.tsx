@@ -1,30 +1,41 @@
 import React from 'react';
-import { FaCalendarPlus, FaSearch } from "react-icons/fa";
-import { useForm } from "react-hook-form";
+import {FaCalendarPlus, FaSearch} from "react-icons/fa";
+import {useForm} from "react-hook-form";
 
 type ToolbarProps = {
     openModalFormPengumuman: () => void;
     onSubmitSearch: (data: any) => void;
     handleInputChange: (event: any) => void;
-    myData : any;
+    myData: any;
+    roomActive: number;
+    setRoomId: (id: number) => void;
+    openFilterModal: () => void;
 }
 
-const Toolbar: React.FC<ToolbarProps> = ({ openModalFormPengumuman, onSubmitSearch, handleInputChange, myData }) => {
+const Toolbar: React.FC<ToolbarProps> = ({
+                                             openModalFormPengumuman,
+                                             onSubmitSearch,
+                                             handleInputChange,
+                                             myData,
+                                             roomActive,
+                                             setRoomId,
+                                             openFilterModal
+                                         }) => {
     const searchForm = useForm<any>();
     const canCreate = myData?.permissions.includes("create-pengumuman");
 
     return (
-        <div className="w-3/5 py-2 px-10">
+        <div className="w-full md:w-3/5 py-2 px-2 md:px-10 ">
             <div className="flex flex-row items-center gap-4 text-white">
 
                 {canCreate && (
-                    <div
+                    <button
                         className="flex flex-row items-center gap-2 px-6 py-2 transition-all  rounded-lg shadow-md basis-1/5 bg-orange hover:bg-orange-h hover:shadow-lg hover:cursor-pointer"
                         onClick={openModalFormPengumuman}
                     >
                         <FaCalendarPlus/>
                         <span>Add News </span>
-                    </div>
+                    </button>
                 )}
 
 
@@ -44,11 +55,19 @@ const Toolbar: React.FC<ToolbarProps> = ({ openModalFormPengumuman, onSubmitSear
                         type="submit"
                         className="absolute top-0 right-0 mt-3 mr-4"
                     >
-                        <FaSearch />
+                        <FaSearch/>
                     </button>
                 </form>
 
-                <div className="px-6 py-2 text-center rounded-lg shadow-lg basis-1/5 bg-orange">
+                <button
+                    onClick={openFilterModal}
+                    className="px-6 py-2 text-center rounded-lg shadow-lg basis-1/5 bg-orange">
+                    Filter
+                </button>
+
+                <div
+                    onClick={setRoomId}
+                    className={`px-6 py-2 text-center rounded-lg shadow-lg basis-1/5 ${roomActive == 1 ? 'bg-amber-800' : 'bg-orange'}`}>
                     General
                 </div>
             </div>

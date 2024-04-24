@@ -15,7 +15,9 @@
 }
 
 /* --------- EDITOR STYLES  ---------------------------------------------------------------------------------------- */
-
+.ck.ck-balloon-panel {
+	z-index: 9999 !important;
+}
 .editor__editable,
 /* Classic build. */
 main .ck-editor[role='application'] .ck.ck-content,
@@ -30,6 +32,18 @@ main .ck-editor[role='application'] .ck.ck-content,
 	line-height: 1.6em;
 	min-height: var(--ck-sample-editor-min-height);
 	padding: 1.5em 2em;
+}
+
+.ck.ck-editor a {
+	text-decoration: underline;
+}
+
+.ck.ck-editor a:link {
+	color: #6900ff;
+}
+
+.ck.ck-editor a:visited {
+	color: #a5c300;
 }
 
 .ck.ck-editor__editable {

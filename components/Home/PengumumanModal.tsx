@@ -55,6 +55,9 @@ export default function PengumumanModal({
                                             isEdit,
                                             roomActive
                                         }: PengumumanModal) {
+    const HEADERS = {
+        Authorization: "Bearer " + Cookies.get("accessToken"),
+    };
 
     const [editorData, setEditorData] = useState<string>("");
 
@@ -119,21 +122,27 @@ export default function PengumumanModal({
     };
     const handleRoomChange = async (value: any) => {
         try {
-            const response = await axios.get(
-                `http://127.0.0.1:8000/api/room/${value}`,
+            const userResponse = await axios.get(`http://127.0.0.1:8000/api/user`, {
+                headers: HEADERS,
+            });
 
-                {
-                    headers: {
-                        Authorization: "Bearer " + Cookies.get("accessToken"),
-                    },
-                }
-            );
+            const userGroupResponse = await axios.get(`http://127.0.0.1:8000/api/user-group`, {
+                headers: HEADERS,
+            });
 
-            const mappedData = response.data.data.members.map((mahasiswa: any) => ({
-                value: (mahasiswa.is_single_user ? 1 : 0) + "|" + mahasiswa.id,
-                label: mahasiswa.name,
+            const user = userResponse.data.data.map((user: any) => ({
+                label: user.name,
+                value: "1" + "|" + user.id,
             }));
-            setMahasiswaOptions(mappedData);
+
+            const userGroup = userGroupResponse.data.data.map((userGroup:any) => ({
+                label: userGroup.name + "(Group)",
+                value: "0" + "|" + userGroup.id
+            }))
+
+            let members = user.concat(userGroup)
+
+            setMahasiswaOptions(members);
 
         } catch (err) {
         }

@@ -20,9 +20,7 @@ type CalendarProps = {
 
 export default function Calendar({myCalendarData, openMyPengumuman}: CalendarProps) {
     const eventDates = myCalendarData ? myCalendarData.map((event: any) => {
-        let date = new Date(event.start);
-
-        date.toLocaleString('id-ID', {timeZone: 'Asia/Jakarta'})
+        let date = new Date(event.start.split(' ')[0]);
 
         return date.toISOString().split('T')[0];
     }) : [];
@@ -49,10 +47,11 @@ export default function Calendar({myCalendarData, openMyPengumuman}: CalendarPro
                     events={myCalendarData}
                     dateClick={handleDateClick}
                     dayCellClassNames={(args) => {
-                        args.date.toLocaleString('id-ID', {timeZone: 'Asia/Jakarta'})
                         let date = args.date.toISOString().split('T')[0];
-
+                        console.log(date)
                         if (eventDates.includes(date)) {
+                            console.log('ini')
+                            console.log(date)
                             return ["bg-green-200"];
                         } else {
                             return [];

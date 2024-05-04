@@ -13,6 +13,7 @@ const HEADERS = {
 
 const PENGIRIM_SOURCE_URL = 'http://localhost:8000/api/user?role=dosen';
 const PENERIMA_SOURCE_URL = 'http://localhost:8000/api/user';
+const KATEGORI_SOURCE_URL = 'http://localhost:8000/api/room';
 
 
 type FilterModalProps = {
@@ -34,6 +35,9 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
     const [minDate, setMinDate] = useState<string>('');
     const [maxDate, setMaxDate] = useState<string>('');
     const [fileName, setFileName] = useState<string>('');
+    const [jenisPengumuman, setJenisPengumuman] = useState<any>(null)
+    const [kategoriOptions, setKategoriOptions] = useState<any>(null);
+    const [kategori, setKategori] = useState<any>(null);
 
     const orderOptions = [
         {value: 'desc', label: 'Terbaru'},
@@ -69,6 +73,18 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
         setPenerimaOptions(data);
     }
 
+    const getKategori = async () => {
+        const response = await axios.get(KATEGORI_SOURCE_URL, HEADERS);
+
+        const data = response.data.data.map((room: any) => ({
+            value: room.id,
+            label: room.name,
+        }))
+        data.unshift({value: '', label: 'Semua Kategori'});
+
+        setKategoriOptions(data);
+    }
+
     const handleApplyFilter = () => {
         const arrayPenerima = selectedPenerima?.map((item: any) => {
             return item?.value
@@ -77,6 +93,8 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
             order: selectedOrder?.value,
             min_date: minDate?.trim(),
             max_date: maxDate?.trim(),
+            jenis: jenisPengumuman?.value,
+            kategori: kategori?.value,
             pengirim: selectedPengirim?.value,
             penerima_id: arrayPenerima,
             file_name: fileName?.trim(),
@@ -91,6 +109,7 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
         if (isOpen) {
             getPenerima();
             getPengirim();
+            getKategori();
         }
 
     }, [isOpen]);
@@ -192,6 +211,42 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
                                                 setSelectedPenerima(value)
                                             }}
                                             value={selectedPenerima}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <label>Kategori: </label>
+                                        <Select
+                                            menuPortalTarget={document.body}
+                                            styles={{menuPortal: base => ({...base, zIndex: 9999})}}
+                                            placeholder="Kategori..."
+                                            options={kategoriOptions}
+                                            classNamePrefix="select"
+                                            defaultValue={kategori}
+                                            onChange={(value) => {
+                                                setKategori(value)
+                                            }}
+                                            value={kategori}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <label>Jenis Pengumuman:</label>
+                                        <Select
+                                            menuPortalTarget={document.body}
+                                            styles={{menuPortal: base => ({...base, zIndex: 9999})}}
+                                            placeholder="Jenis Pengumuman..."
+                                            options={[{
+                                                label: 'Publik',
+                                                value: '0'
+                                            }, {
+                                                label: 'Privat',
+                                                value: '1'
+                                            }]}
+                                            classNamePrefix="select"
+                                            defaultValue={jenisPengumuman}
+                                            onChange={(value) => {
+                                                setJenisPengumuman(value)
+                                            }}
+                                            value={jenisPengumuman}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>

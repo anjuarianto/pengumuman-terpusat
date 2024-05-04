@@ -51,7 +51,9 @@ export default function Home() {
             min_date: string;
             max_date: string;
             pengirim: string;
+            kategori: string;
             penerima_id: number[];
+            jenis: string;
             file_name: string;
         }
     ]>([{
@@ -59,6 +61,7 @@ export default function Home() {
         min_date: "",
         max_date: "",
         pengirim: "",
+        jenis: "",
         penerima: [],
         file_name: "",
     }]);
@@ -144,12 +147,13 @@ export default function Home() {
                 {
                     params: {
                         search: searchForm.getValues().search,
-                        room_id: roomId,
                         page: 1,
                         order: filterValue?.order,
                         min_date: filterValue?.min_date,
                         max_date: filterValue?.max_date,
+                        room_id: filterValue?.kategori,
                         pengirim: filterValue?.pengirim,
+                        is_private: filterValue?.jenis,
                         penerima_id: filterValue?.penerima_id,
                         file_name: filterValue?.file_name,
                     },
@@ -204,6 +208,7 @@ export default function Home() {
 
 
     const handleInputChange = (event: any) => {
+        console.log(event.target.value)
         searchForm.setValue('search', event.target.value);
         loadPengumumanData();
     };
@@ -228,12 +233,6 @@ export default function Home() {
 
                 <div className="flex flex-col md:flex-row justify-center w-full md:h-screen  md:px-12 ">
 
-                    <RoomList
-                        openModal={openRoomModal}
-                        isModalOpen={isOpenRoomModal}
-                        setRoomId={(id: string) => handleRoomIdChange(parseInt(id))}
-                        roomActive={roomId}
-                    ></RoomList>
 
                     <PengumumanList
                         pengumuman={pengumuman}
@@ -248,7 +247,7 @@ export default function Home() {
 
 
                     {/* calendar and upcoming */}
-                    <div className="flex flex-col w-full md:w-1/5 md:h-screen gap-4 ">
+                    <div className="flex flex-col w-full md:w-2/5 md:h-screen gap-4 ">
                         <Calendar
                             openMyPengumuman={(date: string) => {
                                 setMyPengumumanOpen(date);

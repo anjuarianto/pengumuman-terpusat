@@ -12,6 +12,7 @@ type Pengumuman = {
     konten: string;
     waktu: string;
     penerima: { penerima_id: number; name: string; is_single_user: boolean }[];
+    is_private: number;
     files:{file:string; original_name:string}[];
     can_reply: boolean;
     can_edit: boolean;
@@ -80,7 +81,7 @@ const PengumumanList: React.FC<PengumumanListProps> = ({pengumuman, editForm, re
     }
 
     return (
-        <div className="w-full md:w-3/5 md:h-screen  order-last md:order-none">
+        <div className="w-full md:w-5/5 md:h-screen  order-last md:order-none">
             <div className="flex flex-col gap-4 m-2 rounded-lg ">
                 {pengumuman.length == 0 ? (
                     <h1 className="text-2xl font-bold text-center">No Pengumuman</h1>
@@ -96,6 +97,7 @@ const PengumumanList: React.FC<PengumumanListProps> = ({pengumuman, editForm, re
                             room_id={data.id}
                             content={data.konten}
                             penerima={data.penerima}
+                            is_private={data.is_private}
                             files={data.files}
                             created_by={data.created_by}
                             editForm={() => editForm(data.id)}

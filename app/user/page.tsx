@@ -206,30 +206,30 @@ export default function User() {
     },
     {
       name: "name",
-      label: "Room Name",
+      label: "Kategori Name",
     },
     {
       name: "description",
       label: "Description",
     },
-    {
-      name: "members",
-      label: "members",
-      options: {
-        customBodyRender: (value: any, tableMeta: MUIDataTableMeta) => {
-          return (
-            <>
-
-              <ul className="list-disc pl-4">
-                {value?.map((member: any, index: number) => (
-                    <li key={index}>{member.name}</li>
-                ))}
-              </ul>
-            </>
-          );
-        },
-      },
-    },
+    // {
+    //   name: "members",
+    //   label: "members",
+    //   options: {
+    //     customBodyRender: (value: any, tableMeta: MUIDataTableMeta) => {
+    //       return (
+    //         <>
+    //
+    //           <ul className="list-disc pl-4">
+    //             {value?.map((member: any, index: number) => (
+    //                 <li key={index}>{member.name}</li>
+    //             ))}
+    //           </ul>
+    //         </>
+    //       );
+    //     },
+    //   },
+    // },
 
     {
       name: "action",
@@ -604,7 +604,7 @@ export default function User() {
                       } rounded-l-lg px-4 py-2`}
                       onClick={() => setOptionsMenu("room")}
                   >
-                    Room List
+                    Kategori List
                   </button>
                   <button
                       className={`${
@@ -644,7 +644,7 @@ export default function User() {
                     }
                   }}
               >
-                {optionsMenu === "room" ? "Tambah Room" : optionsMenu === "user" ? "Tambah User" : "Tambah User Group"}
+                {optionsMenu === "room" ? "Tambah Kategori" : optionsMenu === "user" ? "Tambah User" : "Tambah User Group"}
               </button>
             </div>
 
@@ -653,7 +653,7 @@ export default function User() {
                 <MUIDataTable
                   title={
                     optionsMenu === "room"
-                      ? "Room List"
+                      ? "Kategori List"
                       : optionsMenu === "usergroup"
                       ? "User Group List"
                       : "User List"

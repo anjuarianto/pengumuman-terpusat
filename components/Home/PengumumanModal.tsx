@@ -6,7 +6,7 @@ import axios from "axios";
 import {CKEditor} from "@ckeditor/ckeditor5-react";
 import Editor from "ckeditor5-custom-build";
 import Cookies from "js-cookie";
-import {Modal} from "@mui/material";
+import {FormControl, Modal} from "@mui/material";
 import Swal from "sweetalert2";
 import UploadAdapter from "./UploadAdapter";
 
@@ -83,28 +83,43 @@ export default function PengumumanModal({
         label: string;
     }[]>([]);
 
+    const [jenisSelectedValue, setJenisSelectedValue] = useState<{
+        value: string;
+        label: string;
+    } | null>(null);
+    const [jenisOptions, setJenisOptions] = useState<{ value: string; label: string }[]>([
+        {value: "0", label: "Publik"},
+        {value: "1", label: "Privat"},
+    ]);
+
+    const [kategoriSelectedValue, setKategoriSelectedValue] = useState<{
+        value: number;
+        label: string;
+    } | null>(null);
+
+    const [kategoriOptions, setKategoriOptions] = useState<{ value: string; label: string }[] | null>(null);
+
     const pengumumanForm = useForm<PengumumanData>({
         mode: "onChange",
     });
 
     useEffect(() => {
-        if (roomActive) {
-            handleRoomChange(roomActive);
-        }
-
         if (isModalOpen && isEdit) {
-            loadRoomData();
+            loadCategoryData();
+            handleRoomChange();
             loadEditPengumuman();
         }
 
         if (isModalOpen && !isEdit) {
-            loadRoomData();
+            loadCategoryData();
+            handleRoomChange();
         }
 
         return;
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isModalOpen]);
-    const loadRoomData = async () => {
+
+    const loadCategoryData = async () => {
         try {
             const response = await axios.get(
                 "http://127.0.0.1:8000/api/room",
@@ -116,11 +131,16 @@ export default function PengumumanModal({
                 }
             );
 
+            setKategoriOptions(response.data.data.map((room: any) => ({
+                value: room.id,
+                label: room.name,
+            })));
+
         } catch (err) {
             console.log(err);
         }
     };
-    const handleRoomChange = async (value: any) => {
+    const handleRoomChange = async () => {
         try {
             const userResponse = await axios.get(`http://127.0.0.1:8000/api/user`, {
                 headers: HEADERS,
@@ -163,27 +183,30 @@ export default function PengumumanModal({
         const waktuParts = response.data.data.waktu.split(" ");
         const date = waktuParts[0];
         const time = waktuParts[1];
-        const room = {label: response.data.data.room.name, value: response.data.data.room.id.toString()};
+        const room = {label: response.data.data.room.name, value: response.data.data.room.id};
         const recipients = response.data.data.penerima.map((recipient: any) => ({
             value: (recipient.is_single_user ? 1 : 0) + "|" + recipient.penerima_id,
             label: recipient.name,
         }));
+
+        const jenisValue = {value: response.data.data.is_private, label: response.data.data.is_private === 0 ? "Publik" : "Privat"};
 
         const data = {
             title: response.data.data.judul,
             date: date,
             time: time,
             content: response.data.data.konten,
-            room: room,
             recipients: recipients,
             files: response.data.data.files,
             isEdit: true,
         }
 
+        setJenisSelectedValue(jenisValue);
         setEditPengumumanData(data);
 
-        await handleRoomChange(room);
+        await handleRoomChange();
         setMahasiswaSelectedValue(recipients);
+        setKategoriSelectedValue(room);
     };
 
     const handleClose = () => {
@@ -192,6 +215,8 @@ export default function PengumumanModal({
         setEditorData("");
         setMahasiswaSelectedValue([]);
         setEditPengumumanData(null);
+        setJenisSelectedValue(null);
+        setKategoriSelectedValue(null);
     };
 
     const onSubmit: SubmitHandler<PengumumanData> = async (data) => {
@@ -202,7 +227,8 @@ export default function PengumumanModal({
             formData.append("judul", data.title);
             formData.append("konten", editorData);
             formData.append("waktu", formatedTime);
-            formData.append("room_id", data.room.toString());
+            formData.append("is_private", jenisSelectedValue?.value);
+            formData.append("room_id", kategoriSelectedValue?.value);
             mahasiswaSelectedValue.map((recipient) => {
                 formData.append("recipients[]", recipient.value);
                 return recipient.value;
@@ -284,8 +310,6 @@ export default function PengumumanModal({
                                 onSubmit={pengumumanForm.handleSubmit(onSubmit)}
                                 className="flex flex-col w-full gap-4 "
                             >
-                                <input type="hidden"
-                                       value={roomActive} {...pengumumanForm.register("room", {required: true})} />
 
                                 <div>
                                     <label className=" text-gray-700 font-bold">
@@ -311,7 +335,6 @@ export default function PengumumanModal({
                                         )}
                                     />
                                 </div>
-
                                 <div>
                                     <label className=" text-gray-700 font-bold">Judul</label>
                                     <input
@@ -328,6 +351,41 @@ export default function PengumumanModal({
                                         {...pengumumanForm.register("title", {required: true})}
                                     />
                                 </div>
+                                <div className="flex">
+                                    <div className="w-full md:w-3/6 mr-2">
+                                        <FormControl fullWidth size="small">
+                                            <label className=" text-gray-700 font-bold">Kategori:</label>
+                                            <Select
+                                                menuPortalTarget={document.body}
+                                                styles={{menuPortal: base => ({...base, zIndex: 9999})}}
+                                                placeholder="Kategori..."
+                                                options={kategoriOptions}
+                                                classNamePrefix="select"
+                                                defaultValue={kategoriSelectedValue}
+                                                onChange={(value) => {
+                                                    setKategoriSelectedValue(value)
+                                                }}
+                                                value={kategoriSelectedValue}
+                                            />
+                                        </FormControl>
+                                    </div>
+
+                                    <div className="w-full md:w-3/6">
+                                        <label className=" text-gray-700 font-bold">Jenis Pengumuman</label>
+                                        <Select
+                                            value={jenisSelectedValue}
+                                            placeholder="Jenis.."
+                                            options={jenisOptions}
+                                            className="basic-multi-select"
+                                            classNamePrefix="select"
+                                            onChange={(value) => {
+                                                setJenisSelectedValue(value);
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+
+
                                 <div>
                                     <label className=" text-gray-700 font-bold">Waktu</label>
                                     <div className="flex flex-row gap-2">

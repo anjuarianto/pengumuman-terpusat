@@ -65,11 +65,11 @@ const Toolbar: React.FC<ToolbarProps> = ({
                     Filter
                 </button>
 
-                <div
-                    onClick={setRoomId}
-                    className={`px-6 py-2 text-center rounded-lg shadow-lg basis-1/5 ${roomActive == 1 ? 'bg-amber-800' : 'bg-orange'}`}>
-                    General
-                </div>
+                {/*<div*/}
+                {/*    onClick={setRoomId}*/}
+                {/*    className={`px-6 py-2 text-center rounded-lg shadow-lg basis-1/5 ${roomActive == 1 ? 'bg-amber-800' : 'bg-orange'}`}>*/}
+                {/*    General*/}
+                {/*</div>*/}
             </div>
         </div>
     );

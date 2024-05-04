@@ -15,6 +15,7 @@ type EditPengumuman = {
   penerima: { penerima_id: number; name: string; is_single_user: boolean; }[];
   files:{file:string; original_name:string}[];
   editForm: (id: number) => void;
+  is_private: number;
   can_reply: boolean;
   can_edit: boolean;
   can_delete: boolean;
@@ -32,6 +33,7 @@ export default function CardAnnouncement({
   content,
   penerima,
   files,
+    is_private,
   editForm,
   can_reply,
   can_edit,
@@ -50,9 +52,10 @@ export default function CardAnnouncement({
               <span>Pengirim: {created_by}</span>{" "}
               <span className="text-main-3">Deadline: {date} </span>
             </div>
-            <span className="float-right bg-orange text-white rounded-2xl p-2">
-              {room.name}
-            </span>
+            <div className="float-right">
+              <span className="bg-orange text-white rounded-2xl p-2 mr-2">{room.name}</span>
+              <span className="text-gray-400">{is_private === 0 ? "Publik" : "Private"}</span>
+            </div>
           </div>
           <div>
             Penerima: {penerima.length > 0 ? penerima.map((penerima) => penerima.name).join(", ") : '-'}

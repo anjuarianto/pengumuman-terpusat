@@ -29,7 +29,7 @@ export default function MyPengumumanModal({isOpen, onClose, date}: ModalProps) {
     const fetchData = async (date: string) => {
         const response = await axios.get(API_URL + date, HEADERS);
 
-        const dataItem: DataItem[] = response.data.data.map((item: any) => {
+        const dataItem: DataItem[] = response.data.data?.map((item: any) => {
             return {
                 id: item.id,
                 title: item.judul,
@@ -77,7 +77,7 @@ export default function MyPengumumanModal({isOpen, onClose, date}: ModalProps) {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {data.map((item: DataItem, index) => (
+                                    {data?.map((item: DataItem, index) => (
                                         <TableRow key={item.id}>
                                             <TableCell>{index + 1}</TableCell>
                                             <TableCell>{item.title}</TableCell>

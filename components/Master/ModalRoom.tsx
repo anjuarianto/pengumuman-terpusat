@@ -166,7 +166,7 @@ const ModalRoom: React.FC<ModalRoomProps> = ({
           }}
         >
           <div className="w-full h-fit py-4 text-2xl font-bold text-center text-white rounded-t-lg bg-dark-blue ">
-            {isEdit ? "Edit Room" : "Add Room"}
+            {isEdit ? "Edit Kategori" : "Add Kategori"}
           </div>
           <div className="w-full px-4 md:px-24 py-4 overflow-y-auto">
             <form
@@ -197,30 +197,30 @@ const ModalRoom: React.FC<ModalRoomProps> = ({
                   {...RoomForm.register("description", { required: true })}
                 />
               </div>
-              <div>
-                <div>
-                  <label className=" text-gray-700 font-bold">Members</label>
-                  <Controller
-                    name="members"
-                    control={RoomForm.control}
-                    render={({ field }) => (
-                      <Select
-                        {...field}
-                        value={memberSelected}
-                        placeholder="Members :..."
-                        isMulti
-                        isSearchable
-                        options={memberOptions}
-                        className="basic-multi-select"
-                        classNamePrefix="select"
-                        onChange={(value) => {
-                          setMemberSelected(value);
-                        }}
-                      />
-                    )}
-                  />
-                </div>
-              </div>
+              {/*<div>*/}
+              {/*  <div>*/}
+              {/*    <label className=" text-gray-700 font-bold">Members</label>*/}
+              {/*    <Controller*/}
+              {/*      name="members"*/}
+              {/*      control={RoomForm.control}*/}
+              {/*      render={({ field }) => (*/}
+              {/*        <Select*/}
+              {/*          {...field}*/}
+              {/*          value={memberSelected}*/}
+              {/*          placeholder="Members :..."*/}
+              {/*          isMulti*/}
+              {/*          isSearchable*/}
+              {/*          options={memberOptions}*/}
+              {/*          className="basic-multi-select"*/}
+              {/*          classNamePrefix="select"*/}
+              {/*          onChange={(value) => {*/}
+              {/*            setMemberSelected(value);*/}
+              {/*          }}*/}
+              {/*        />*/}
+              {/*      )}*/}
+              {/*    />*/}
+              {/*  </div>*/}
+              {/*</div>*/}
 
               <div className="flex flex-col items-center">
                 <button

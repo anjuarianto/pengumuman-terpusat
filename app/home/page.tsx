@@ -66,6 +66,31 @@ export default function Home() {
         file_name: "",
     }]);
 
+    const [login, setLogin] = useState<boolean>(false);
+
+    const isLogin = async () => {
+        try {
+            const response = await axios.get(
+                "http://127.0.0.1:8000/api/me",
+                {
+                    headers: {
+                        Authorization:
+                            "Bearer " + Cookies.get("accessToken"),
+                    },
+                }
+            );
+
+            if(response.data.message === 'Unauthenticated') {
+                setLogin(false);
+            } else {
+                setLogin(true)
+            }
+
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     const openRoomModal = () => {
         setIsOpenRoomModal(true);
     };
@@ -112,6 +137,7 @@ export default function Home() {
 
     useEffect(() => {
         loadMyData()
+        isLogin();
     },[]);
 
     useEffect(() => {
@@ -141,9 +167,11 @@ export default function Home() {
 
     const loadPengumumanData = async () => {
         try {
-
+            const API_URL_PENGUMUMAN = "http://127.0.0.1:8000/api/pengumuman";
+            const API_URL_PUBLIK = "http://127.0.0.1:8000/api/pengumuman-publik";
+            const url = login ? API_URL_PENGUMUMAN : API_URL_PUBLIK;
             const response = await axios.get(
-                "http://127.0.0.1:8000/api/pengumuman",
+                url,
                 {
                     params: {
                         search: searchForm.getValues().search,

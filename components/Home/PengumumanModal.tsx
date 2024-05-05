@@ -310,9 +310,21 @@ export default function PengumumanModal({
                                 onSubmit={pengumumanForm.handleSubmit(onSubmit)}
                                 className="flex flex-col w-full gap-4 "
                             >
-
-                                <div>
-                                    <label className=" text-gray-700 font-bold">
+                                <div className="w-full md:w-3/6">
+                                    <label className=" text-gray-700 font-bold">Jenis Pengumuman</label>
+                                    <Select
+                                        value={jenisSelectedValue}
+                                        placeholder="Jenis.."
+                                        options={jenisOptions}
+                                        className="basic-multi-select"
+                                        classNamePrefix="select"
+                                        onChange={(value) => {
+                                            setJenisSelectedValue(value);
+                                        }}
+                                    />
+                                </div>
+                                <div className={jenisSelectedValue?.value == '0'?  'hidden' : 'block'}>
+                                    <label className="text-gray-700 font-bold">
                                         Penerima
                                     </label>
                                     <Controller
@@ -335,23 +347,24 @@ export default function PengumumanModal({
                                         )}
                                     />
                                 </div>
-                                <div>
-                                    <label className=" text-gray-700 font-bold">Judul</label>
-                                    <input
-                                        type="text"
-                                        id="title"
-                                        required
-                                        defaultValue={
-                                            editPengumumanData?.isEdit
-                                                ? editPengumumanData.title
-                                                : ""
-                                        }
-                                        placeholder="Judul : ..."
-                                        className="p-2 border border-gray-300 rounded-md w-full"
-                                        {...pengumumanForm.register("title", {required: true})}
-                                    />
-                                </div>
+
                                 <div className="flex">
+                                    <div className="w-full md:w-3/6 mr-2">
+                                        <label className=" text-gray-700 font-bold">Judul</label>
+                                        <input
+                                            type="text"
+                                            id="title"
+                                            required
+                                            defaultValue={
+                                                editPengumumanData?.isEdit
+                                                    ? editPengumumanData.title
+                                                    : ""
+                                            }
+                                            placeholder="Judul : ..."
+                                            className="p-2 border border-gray-300 rounded-md w-full"
+                                            {...pengumumanForm.register("title", {required: true})}
+                                        />
+                                    </div>
                                     <div className="w-full md:w-3/6 mr-2">
                                         <FormControl fullWidth size="small">
                                             <label className=" text-gray-700 font-bold">Kategori:</label>
@@ -370,19 +383,7 @@ export default function PengumumanModal({
                                         </FormControl>
                                     </div>
 
-                                    <div className="w-full md:w-3/6">
-                                        <label className=" text-gray-700 font-bold">Jenis Pengumuman</label>
-                                        <Select
-                                            value={jenisSelectedValue}
-                                            placeholder="Jenis.."
-                                            options={jenisOptions}
-                                            className="basic-multi-select"
-                                            classNamePrefix="select"
-                                            onChange={(value) => {
-                                                setJenisSelectedValue(value);
-                                            }}
-                                        />
-                                    </div>
+
                                 </div>
 
 

@@ -1,12 +1,14 @@
 "use client";
 
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {FaEdit} from "react-icons/fa";
 import Image from "next/image";
 import logo from "../public/assets/logo.png";
 import Cookies from "js-cookie";
 import {useRouter} from "next/navigation";
 import DropdownNavbar from "@/components/DropdownNavbar";
+import Button from "@mui/material/Button";
+import axios from "axios";
 
 type Props = {
     email: string;
@@ -16,6 +18,7 @@ type Props = {
 
 export default function Navbar({email, role}: Props) {
     const router = useRouter();
+    const [yalogin, setLogin] = useState<boolean>(false);
 
     const Logout = async () => {
         try {
@@ -25,6 +28,33 @@ export default function Navbar({email, role}: Props) {
             console.log(err);
         }
     };
+
+    const isLogin = async () => {
+        try {
+            const response = await axios.get(
+                "http://127.0.0.1:8000/api/me",
+                {
+                    headers: {
+                        Authorization:
+                            "Bearer " + Cookies.get("accessToken"),
+                    },
+                }
+            );
+
+            if(response.data.message === 'Unauthenticated') {
+                setLogin(false);
+            } else {
+                setLogin(true)
+            }
+
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    useEffect(() => {
+        isLogin();
+    }, []);
 
     return (
         <>
@@ -40,12 +70,25 @@ export default function Navbar({email, role}: Props) {
             Selamat Datang di Website Pengumuman Terpusat Teknik Informatika
             Itera Untuk Mengetahui Informasi
           </span>
-                    <span
-                        className="flex flex-row items-center w-full md:w-fit gap-2 py-2 rounded-md mx-0 font-bold   ">
-            
+
+                    {yalogin ? (
+                        <span
+                            className="flex flex-row items-center w-full md:w-fit gap-2 py-2 rounded-md mx-0 font-bold   ">
+
             <FaEdit/> {email} | ({role})
             <DropdownNavbar role={role} logout={Logout}/>
           </span>
+                    ) : (
+                        <span><Button
+                            style={{backgroundColor: "#2b507c", color: "white"}}
+                            size="small"
+                            aria-label="select merge strategy"
+                            aria-haspopup="menu"
+                            onClick={() => router.push("/login")}
+                        >Login</Button>
+                        </span>
+                    )}
+
                 </div>
             </div>
         </>

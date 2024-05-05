@@ -58,7 +58,7 @@ export default function CardAnnouncement({
             </div>
           </div>
           <div>
-            Penerima: {penerima.length > 0 ? penerima.map((penerima) => penerima.name).join(", ") : '-'}
+            Penerima: {penerima.length > 0 ? penerima.map((penerima) => penerima.name.concat(penerima.is_single_user ? '': '(Group)') ).join(", ") : '-'}
           </div>
           <h1 className="text-2xl font-bold">{title}</h1>
 

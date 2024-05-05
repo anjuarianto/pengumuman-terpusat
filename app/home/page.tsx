@@ -176,9 +176,9 @@ export default function Home() {
     const tokenCheck = async () => {
         try {
             const accToken = Cookies.get("accessToken");
-            if (!accToken || accToken.length == 0) {
-                router.push("/login");
-            }
+            // if (!accToken || accToken.length == 0) {
+            //     router.push("/login");
+            // }
         } catch (err) {
             console.log(err);
         }

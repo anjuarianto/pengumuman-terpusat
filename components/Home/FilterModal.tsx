@@ -11,9 +11,9 @@ const HEADERS = {
     }
 };
 
-const PENGIRIM_SOURCE_URL = 'http://localhost:8000/api/user?role=dosen';
-const PENERIMA_SOURCE_URL = 'http://localhost:8000/api/user';
-const KATEGORI_SOURCE_URL = 'http://localhost:8000/api/room';
+const PENGIRIM_SOURCE_URL = 'http://localhost:8000/api/user-list?role=dosen';
+const PENERIMA_SOURCE_URL = 'http://localhost:8000/api/user-list';
+const KATEGORI_SOURCE_URL = 'http://localhost:8000/api/room-list';
 
 
 type FilterModalProps = {
@@ -38,6 +38,7 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
     const [jenisPengumuman, setJenisPengumuman] = useState<any>(null)
     const [kategoriOptions, setKategoriOptions] = useState<any>(null);
     const [kategori, setKategori] = useState<any>(null);
+    const [isLogin, setIsLogin] = useState<boolean>(false);
 
     const orderOptions = [
         {value: 'desc', label: 'Terbaru'},
@@ -85,6 +86,29 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
         setKategoriOptions(data);
     }
 
+    const checkLogin = async () => {
+        try {
+            const response = await axios.get(
+                "http://127.0.0.1:8000/api/me",
+                {
+                    headers: {
+                        Authorization:
+                            "Bearer " + Cookies.get("accessToken"),
+                    },
+                }
+            );
+
+            if(response.data.message === 'Unauthenticated') {
+                setIsLogin(false);
+            } else {
+                setIsLogin(true)
+            }
+
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     const handleApplyFilter = () => {
         const arrayPenerima = selectedPenerima?.map((item: any) => {
             return item?.value
@@ -107,10 +131,15 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
 
     useEffect(() => {
         if (isOpen) {
+            if(isLogin) {
             getPenerima();
+
+            }
             getPengirim();
             getKategori();
         }
+
+        checkLogin();
 
     }, [isOpen]);
 
@@ -183,6 +212,7 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
                                         </Grid>
                                     </Grid>
                                     <Grid item xs={6}>
+                                        <label>Pengirim: </label>
                                         <Select
                                             menuPortalTarget={document.body}
                                             styles={{menuPortal: base => ({...base, zIndex: 9999})}}
@@ -197,7 +227,8 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
                                             value={selectedPengirim}
                                         />
                                     </Grid>
-                                    <Grid item xs={6}>
+                                    <Grid item xs={6} sx={{ display: isLogin? 'block' : 'none' }}>
+                                        <label>Penerima: </label>
                                         <Select
                                             menuPortalTarget={document.body}
                                             styles={{menuPortal: base => ({...base, zIndex: 9999})}}
@@ -228,7 +259,7 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
                                             value={kategori}
                                         />
                                     </Grid>
-                                    <Grid item xs={6}>
+                                    <Grid item xs={6} sx={{ display: isLogin? 'block' : 'none'}}>
                                         <label>Jenis Pengumuman:</label>
                                         <Select
                                             menuPortalTarget={document.body}

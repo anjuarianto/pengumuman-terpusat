@@ -181,7 +181,7 @@ export default function Login() {
                                         href={"/home"}
                                         className="pt-2 text-blue-500 hover:text-blue-700 hover:underline"
                                     >
-                                        Forgot Password?
+                                        Halaman Utama
                                     </Link>
                                 </form>
                             </>

@@ -66,7 +66,7 @@ export default function Home() {
         file_name: "",
     }]);
 
-    const [login, setLogin] = useState<boolean>(false);
+    const [yaLogin, setLogin] = useState<boolean>(false);
 
     const isLogin = async () => {
         try {
@@ -81,10 +81,13 @@ export default function Home() {
             );
 
             if(response.data.message === 'Unauthenticated') {
+                alert('masuk sini')
                 setLogin(false);
-            } else {
-                setLogin(true)
+                return;
             }
+
+            setLogin(true)
+
 
         } catch (err) {
             console.log(err);
@@ -137,14 +140,17 @@ export default function Home() {
 
     useEffect(() => {
         loadMyData()
-        isLogin();
+        isLogin()
     },[]);
 
     useEffect(() => {
+        loadPengumumanData()
+    },[yaLogin]);
 
-        tokenCheck().then(() => {
+    useEffect(() => {
+
             if (!isModalOpenPengumuman) {
-                loadPengumumanData();
+                    loadPengumumanData();
             }
 
             if (navigate) {
@@ -161,7 +167,7 @@ export default function Home() {
 
 
             setReloadPengumuman(false)
-        });
+
 
     }, [isModalOpenPengumuman, reloadPengumuman, openCal, roomId, navigate, filterValue]);
 
@@ -169,7 +175,7 @@ export default function Home() {
         try {
             const API_URL_PENGUMUMAN = "http://127.0.0.1:8000/api/pengumuman";
             const API_URL_PUBLIK = "http://127.0.0.1:8000/api/pengumuman-publik";
-            const url = login ? API_URL_PENGUMUMAN : API_URL_PUBLIK;
+            const url = yaLogin ? API_URL_PENGUMUMAN : API_URL_PUBLIK;
             const response = await axios.get(
                 url,
                 {

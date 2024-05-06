@@ -48,10 +48,8 @@ export default function Calendar({myCalendarData, openMyPengumuman}: CalendarPro
                     dateClick={handleDateClick}
                     dayCellClassNames={(args) => {
                         let date = args.date.toISOString().split('T')[0];
-                        console.log(date)
+
                         if (eventDates.includes(date)) {
-                            console.log('ini')
-                            console.log(date)
                             return ["bg-green-200"];
                         } else {
                             return [];

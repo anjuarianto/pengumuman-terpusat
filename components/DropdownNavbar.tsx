@@ -18,7 +18,7 @@ type Props = {
 };
 
 function DropdownNavbar({role,logout}: Props) {
-    const options = role == 'dosen' ?  ['Edit Master Data', 'Logout'] : ['Logout'];
+    const options = role == 'dosen' || role == 'tendik' ?  ['Edit Master Data', 'Logout'] : ['Logout'];
     const router = useRouter();
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef<HTMLDivElement>(null);

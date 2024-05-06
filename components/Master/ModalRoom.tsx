@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 import Select from "react-select";
 import { number } from "prop-types";
 
-const API_URL = "http://127.0.0.1:8000/api/room";
+const API_URL = "/api/room";
 const HEADERS = {
   Authorization: "Bearer " + Cookies.get("accessToken"),
 };
@@ -46,11 +46,11 @@ const ModalRoom: React.FC<ModalRoomProps> = ({
 
   const loadAllUser = async () => {
     try {
-      const userResponse = await axios.get(`http://127.0.0.1:8000/api/user`, {
+      const userResponse = await axios.get(`/api/user`, {
         headers: HEADERS,
       });
 
-      const userGroupResponse = await axios.get(`http://127.0.0.1:8000/api/user-group`, {
+      const userGroupResponse = await axios.get(`/api/user-group`, {
         headers: HEADERS,
       });
 

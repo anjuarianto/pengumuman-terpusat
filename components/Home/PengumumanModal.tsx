@@ -122,7 +122,7 @@ export default function PengumumanModal({
     const loadCategoryData = async () => {
         try {
             const response = await axios.get(
-                "http://127.0.0.1:8000/api/room",
+                "/api/room",
                 {
                     headers: {
                         Authorization:
@@ -142,11 +142,11 @@ export default function PengumumanModal({
     };
     const handleRoomChange = async () => {
         try {
-            const userResponse = await axios.get(`http://127.0.0.1:8000/api/user`, {
+            const userResponse = await axios.get(`/api/user`, {
                 headers: HEADERS,
             });
 
-            const userGroupResponse = await axios.get(`http://127.0.0.1:8000/api/user-group`, {
+            const userGroupResponse = await axios.get(`/api/user-group`, {
                 headers: HEADERS,
             });
 
@@ -172,7 +172,7 @@ export default function PengumumanModal({
         if (isEdit === undefined) return;
 
         const response = await axios.get(
-            `http://127.0.0.1:8000/api/pengumuman/${isEdit}`,
+            `/api/pengumuman/${isEdit}`,
             {
                 headers: {
                     Authorization: "Bearer " + Cookies.get("accessToken"),

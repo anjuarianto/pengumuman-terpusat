@@ -11,9 +11,9 @@ const HEADERS = {
     }
 };
 
-const PENGIRIM_SOURCE_URL = 'http://localhost:8000/api/user-list?role=dosen';
-const PENERIMA_SOURCE_URL = 'http://localhost:8000/api/user-list';
-const KATEGORI_SOURCE_URL = 'http://localhost:8000/api/room-list';
+const PENGIRIM_SOURCE_URL = '/api/user-list?role=dosen';
+const PENERIMA_SOURCE_URL = '/api/user-list';
+const KATEGORI_SOURCE_URL = '/api/room-list';
 
 
 type FilterModalProps = {
@@ -89,7 +89,7 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
     const checkLogin = async () => {
         try {
             const response = await axios.get(
-                "http://127.0.0.1:8000/api/me",
+                "/api/me",
                 {
                     headers: {
                         Authorization:

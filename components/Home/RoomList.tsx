@@ -17,7 +17,7 @@ export default function RoomList({openModal, isModalOpen, setRoomId, roomActive}
         const loadRoomData = async () => {
             try {
                 const response = await axios.get(
-                    "http://127.0.0.1:8000/api/me",
+                    "/api/me",
                     {
                         headers: {
                             Authorization:

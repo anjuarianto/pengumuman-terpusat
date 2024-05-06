@@ -71,7 +71,7 @@ export default function Home() {
     const isLogin = async () => {
         try {
             const response = await axios.get(
-                "http://127.0.0.1:8000/api/me",
+                "/api/me",
                 {
                     headers: {
                         Authorization:
@@ -105,7 +105,7 @@ export default function Home() {
     const loadMyData = async () => {
         try {
             const response = await axios.get(
-                "http://127.0.0.1:8000/api/me",
+                "/api/me",
                 {
                     headers: {
                         Authorization:
@@ -173,8 +173,8 @@ export default function Home() {
 
     const loadPengumumanData = async () => {
         try {
-            const API_URL_PENGUMUMAN = "http://127.0.0.1:8000/api/pengumuman";
-            const API_URL_PUBLIK = "http://127.0.0.1:8000/api/pengumuman-publik";
+            const API_URL_PENGUMUMAN = "/api/pengumuman";
+            const API_URL_PUBLIK = "/api/pengumuman-publik";
             const url = yaLogin ? API_URL_PENGUMUMAN : API_URL_PUBLIK;
             const response = await axios.get(
                 url,

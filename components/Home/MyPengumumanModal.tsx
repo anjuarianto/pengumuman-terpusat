@@ -4,7 +4,7 @@ import React, {useEffect} from "react";
 import {Button, Modal, Paper, Table, TableBody, TableCell, TableHead, TableRow} from "@mui/material";
 import Cookies from "js-cookie";
 
-const API_URL = 'http://127.0.0.1:8000/api/my-pengumuman/';
+const API_URL = '/api/my-pengumuman/';
 const HEADERS = {
     headers: {
         Authorization: "Bearer " + Cookies.get("accessToken"),

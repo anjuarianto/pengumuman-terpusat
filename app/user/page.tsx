@@ -158,7 +158,7 @@ export default function User() {
                           confirmButtonText: "Yes, delete it!",
                         }).then(async (result) => {
                           if (result.isConfirmed) {
-                            const apiUrl = `http://127.0.0.1:8000/api/user-group/${tableMeta.rowData[0]}`;
+                            const apiUrl = `/api/user-group/${tableMeta.rowData[0]}`;
                             await axios
                               .delete(apiUrl, {
                                 headers: {
@@ -266,7 +266,7 @@ export default function User() {
                           confirmButtonText: "Yes, delete it!",
                         }).then(async (result) => {
                           if (result.isConfirmed) {
-                            const apiUrl = `http://127.0.0.1:8000/api/room/${tableMeta.rowData[0]}`;
+                            const apiUrl = `/api/room/${tableMeta.rowData[0]}`;
                             await axios
                               .delete(apiUrl, {
                                 headers: {
@@ -368,7 +368,7 @@ export default function User() {
                           confirmButtonText: "Yes, delete it!",
                         }).then(async (result) => {
                           if (result.isConfirmed) {
-                            const apiUrl = `http://127.0.0.1:8000/api/user/${tableMeta.rowData[0]}`;
+                            const apiUrl = `/api/user/${tableMeta.rowData[0]}`;
                             await axios
                               .delete(apiUrl, {
                                 headers: {
@@ -441,7 +441,7 @@ export default function User() {
   const loadMyData = async () => {
     try {
       const response = await axios.get(
-          "http://127.0.0.1:8000/api/me",
+          "/api/me",
           {
             headers: {
               Authorization:
@@ -458,7 +458,7 @@ export default function User() {
   const loadUserGroupData = async () => {
     try {
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/user-group",
+        "/api/user-group",
 
         {
           headers: {
@@ -490,7 +490,7 @@ export default function User() {
   const loadUserData = async () => {
     try {
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/user",
+        "/api/user",
 
         {
           headers: {
@@ -523,7 +523,7 @@ export default function User() {
   const loadRoomData = async () => {
     try {
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/room",
+        "/api/room",
 
         {
           headers: {

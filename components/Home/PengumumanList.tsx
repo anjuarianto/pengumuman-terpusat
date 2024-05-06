@@ -49,7 +49,7 @@ const PengumumanList: React.FC<PengumumanListProps> = ({pengumuman, editForm, re
             confirmButtonText: "Yes, delete it!",
         }).then(async (result) => {
             if (result.isConfirmed) {
-                const apiUrl = `http://127.0.0.1:8000/api/pengumuman/${id}`;
+                const apiUrl = `/api/pengumuman/${id}`;
                 await axios
                     .delete(apiUrl, {
                         headers: {

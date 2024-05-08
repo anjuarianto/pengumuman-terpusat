@@ -115,7 +115,7 @@ export default function Pengumuman({
   const loadPengumumanData = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/pengumuman/${pid}`,
+        `/api/pengumuman/${pid}`,
 
         {
           headers: {
@@ -134,7 +134,7 @@ export default function Pengumuman({
   const loadUserID = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/me`,
+        `/api/me`,
 
         {
           headers: {
@@ -155,7 +155,7 @@ export default function Pengumuman({
   const loadCommentsData = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/pengumuman/${pid}/reply`,
+        `/api/pengumuman/${pid}/reply`,
 
         {
           headers: {
@@ -198,8 +198,8 @@ export default function Pengumuman({
         : { pengumuman_id: pid, user_id: userID, comment: editorData };
 
       const apiUrl = openEditComment?.isOpen
-        ? `http://127.0.0.1:8000/api/pengumuman/${pid}/reply/${openEditComment.reply_id}`
-        : `http://127.0.0.1:8000/api/pengumuman/${pid}/reply`;
+        ? `/api/pengumuman/${pid}/reply/${openEditComment.reply_id}`
+        : `/api/pengumuman/${pid}/reply`;
 
       const method = openEditComment?.isOpen ? "PUT" : "POST";
 
@@ -241,7 +241,7 @@ export default function Pengumuman({
     try {
       const tag = document.createElement("a");
       tag.target = "_blank";
-      tag.href = `http://localhost:8000/storage/pengumuman/${fileUrl}`;
+      tag.href = `/storage/pengumuman/${fileUrl}`;
       tag.setAttribute("download", fileName);
       document.body.appendChild(tag);
       tag.click();
@@ -264,7 +264,7 @@ export default function Pengumuman({
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const apiUrl = `http://127.0.0.1:8000/api/pengumuman/${pid}/reply/${replyID}`;
+        const apiUrl = `/api/pengumuman/${pid}/reply/${replyID}`;
         await axios
           .delete(apiUrl, {
             headers: {
@@ -339,7 +339,7 @@ export default function Pengumuman({
                       {file.original_name.match(/\.(png|jpg|jpeg|gif)$/i) && (
                           <div>
                             <img
-                                src={`http://localhost:8000/storage/pengumuman/${file.file}`}
+                                src={`/storage/pengumuman/${file.file}`}
                                 alt={`${file.original_name}`}
                             />
                             <h1>{file.original_name}</h1>

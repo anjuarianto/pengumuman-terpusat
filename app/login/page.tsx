@@ -51,7 +51,7 @@ export default function Login() {
 
     const getSessionData = async (accesToken: string) => {
         try {
-            const response = await axios.get(`http://127.0.0.1:8000/api/me`, {
+            const response = await axios.get(`/api/me`, {
                 headers: {
                     Authorization: "Bearer " + accesToken,
                 },

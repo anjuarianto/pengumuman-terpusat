@@ -66,7 +66,7 @@ export default function Home() {
         file_name: "",
     }]);
 
-    const [yaLogin, setLogin] = useState<boolean>(false);
+    const [yaLogin, setLogin] = useState<boolean | null>(null);
 
     const isLogin = async () => {
         try {
@@ -81,7 +81,6 @@ export default function Home() {
             );
 
             if(response.data.message === 'Unauthenticated') {
-                alert('masuk sini')
                 setLogin(false);
                 return;
             }
@@ -144,7 +143,10 @@ export default function Home() {
     },[]);
 
     useEffect(() => {
-        loadPengumumanData()
+        if(yaLogin != null) {
+            loadPengumumanData()
+        }
+
     },[yaLogin]);
 
     useEffect(() => {

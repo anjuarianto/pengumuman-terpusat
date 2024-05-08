@@ -243,8 +243,8 @@ export default function PengumumanModal({
 
 
             const apiUrl = editPengumumanData?.isEdit
-                ? `http://127.0.0.1:8000/api/pengumuman/${isEdit}`
-                : `http://127.0.0.1:8000/api/pengumuman`;
+                ? `/api/pengumuman/${isEdit}`
+                : `/api/pengumuman`;
 
             const method = editPengumumanData?.isEdit ? "post" : "post";
 

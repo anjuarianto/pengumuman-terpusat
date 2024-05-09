@@ -11,12 +11,17 @@ import {useRouter} from "next/navigation";
 import RoomList from "@/components/Home/RoomList";
 import ModalRoomList from "@/components/Home/ModalRoomList";
 import PengumumanList from "@/components/Home/PengumumanList";
-import PengumumanModal from "@/components/Home/PengumumanModal";
+// import PengumumanModal from "@/components/Home/PengumumanModal";
 import Toolbar from "@/components/Home/Toolbar";
 import UpcomingWidget from "@/components/Home/UpcomingWidget";
 import Calendar from "@/components/Home/Calendar";
 import MyPengumumanModal from "@/components/Home/MyPengumumanModal";
 import FilterModal from "@/components/Home/FilterModal";
+import dynamic from "next/dynamic";
+
+const PengumumanModal = dynamic(() => import("@/components/Home/PengumumanModal"), {
+    ssr: false,
+  });
 
 type Pengumuman = {
     created_by: string;

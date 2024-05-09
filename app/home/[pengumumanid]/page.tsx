@@ -67,6 +67,8 @@ export default function Pengumuman({
   }>();
   const [editorData, setEditorData] = useState<string>("");
   const [userID, setUserID] = useState<number>();
+  const [myData, setMyData] = useState<any>();
+
   const [pengumuman, setPengumuman] = useState<Pengumuman>({
     id: 0,
     judul: "",
@@ -97,6 +99,7 @@ export default function Pengumuman({
       loadPengumumanData();
       loadCommentsData();
       loadUserID();
+      loadMyData();
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pid]);
@@ -187,6 +190,40 @@ export default function Pengumuman({
       console.log(err);
     }
   };
+
+  const loadMyData = async () => {
+    try {
+        const response = await axios.get(
+            "/api/me",
+            {
+                headers: {
+                    Authorization:
+                        "Bearer " + Cookies.get("accessToken"),
+                },
+            }
+        );
+
+        setMyData(response.data);
+
+        const pengumumanData = response.data.pengumuman.map((data: any) => ({
+            start: data.waktu,
+            end: data.waktu,
+            display: 'background',
+        }));
+
+        const upcomingEventData = response.data.upcoming_event.map((data: any) => ({
+            id: data.id,
+            judul: data.judul,
+            waktu: data.waktu
+        }));
+
+
+        // setCalendarData(pengumumanData);
+        // setUpcomingEvent(upcomingEventData)
+    } catch (err) {
+        console.log(err);
+    }
+};
 
   const handleGoBack = () => {
     router.back(); // Navigate to previous route
@@ -287,7 +324,8 @@ export default function Pengumuman({
 
   return (
     <>
-      <Navbar></Navbar>
+      <Navbar email={myData?.email} role={myData?.role}>
+            </Navbar>
       <div className="flex flex-col items-center w-full h-full pt-16 ">
         <div className="flex flex-col  w-full h-screen px-12">
           <div className="w-full h-fit p-2 bg-white rounded-lg hover:cursor-default">

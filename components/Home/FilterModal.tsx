@@ -168,7 +168,7 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
                                         <FormControl fullWidth size="small">
                                             <label>Urutkan berdasarkan:</label>
                                             <Select
-                                                menuPortalTarget={document.body}
+                                                // menuPortalTarget={document.body}
                                                 styles={{menuPortal: base => ({...base, zIndex: 9999})}}
                                                 placeholder="Urutkan Berdasarkan..."
                                                 options={orderOptions}
@@ -214,7 +214,7 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
                                     <Grid item xs={6}>
                                         <label>Pengirim: </label>
                                         <Select
-                                            menuPortalTarget={document.body}
+                                            // menuPortalTarget={document.body}
                                             styles={{menuPortal: base => ({...base, zIndex: 9999})}}
                                             placeholder="--Pilih Pengirim--"
                                             options={pengirimOptions}
@@ -230,7 +230,7 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
                                     <Grid item xs={6} sx={{ display: isLogin? 'block' : 'none' }}>
                                         <label>Penerima: </label>
                                         <Select
-                                            menuPortalTarget={document.body}
+                                            // menuPortalTarget={document.body}
                                             styles={{menuPortal: base => ({...base, zIndex: 9999})}}
                                             placeholder="--Semua Penerima--"
                                             isSearchable
@@ -247,7 +247,7 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
                                     <Grid item xs={6}>
                                         <label>Kategori: </label>
                                         <Select
-                                            menuPortalTarget={document.body}
+                                            // menuPortalTarget={document.body}
                                             styles={{menuPortal: base => ({...base, zIndex: 9999})}}
                                             placeholder="Kategori..."
                                             options={kategoriOptions}
@@ -262,7 +262,7 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
                                     <Grid item xs={6} sx={{ display: isLogin? 'block' : 'none'}}>
                                         <label>Jenis Pengumuman:</label>
                                         <Select
-                                            menuPortalTarget={document.body}
+                                            // menuPortalTarget={document.body}
                                             styles={{menuPortal: base => ({...base, zIndex: 9999})}}
                                             placeholder="Jenis Pengumuman..."
                                             options={[{

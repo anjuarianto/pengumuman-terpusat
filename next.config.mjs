@@ -12,11 +12,11 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "http://127.0.0.1:8000/api/:path*",
+        destination: "https://informasi-if.top/api/:path*",
       },
       {
         source: "/storage/:path*",
-        destination: "http://127.0.0.1:8000/storage/:path*",
+        destination: "https://informasi-if.top/storage/:path*",
       },
     ];
   },

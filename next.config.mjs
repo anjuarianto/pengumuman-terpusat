@@ -8,6 +8,11 @@ const nextConfig = {
   env: {
     API_URL: process.env.API_URL,
   },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '2mb',
+    },
+  },
   async rewrites() {
     return [
       {
@@ -16,7 +21,7 @@ const nextConfig = {
       },
       {
         source: "/storage/:path*",
-        destination: "https://localhost:8000/storage/:path*",
+        destination: process.env.API_URL+"storage/:path*",
       },
     ];
   },

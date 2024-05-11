@@ -226,7 +226,7 @@ export default function Pengumuman({
 };
 
   const handleGoBack = () => {
-    router.back(); // Navigate to previous route
+    router.push("/home");
   };
   const onSubmit: SubmitHandler<{ content: string }> = async (data) => {
     try {

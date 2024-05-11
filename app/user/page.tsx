@@ -556,7 +556,7 @@ export default function User() {
     }
   };
   const handleGoBack = () => {
-    router.back(); // Navigate to previous route
+    router.push('/home'); // Navigate to previous route
   };
 
 

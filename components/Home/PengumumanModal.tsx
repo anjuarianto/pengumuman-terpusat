@@ -272,7 +272,7 @@ export default function PengumumanModal({
                     : "Berhasil membuat pengumuman",
             });
         } catch (err) {
-            console.log(err);
+
             await Swal.fire({
                 icon: "error",
                 title: "Error",
@@ -280,7 +280,7 @@ export default function PengumumanModal({
                     container: "my-swal-popup ",
                 },
                 text: editPengumumanData?.isEdit
-                    ? "Gagal update pengumuman"
+                    ? "Gagal update pengumuman\n" + err.response.data.message
                     : "Gagal membuat pengumuman",
             });
         }

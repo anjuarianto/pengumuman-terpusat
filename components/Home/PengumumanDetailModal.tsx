@@ -69,7 +69,7 @@ const PengumumanDetailModal: React.FC<PengumumanDetailModalProps> = ({ pengumuma
                             />
 
                             <div>
-                                <h2>Attachment : </h2>
+                                <h2>File Rujukan : </h2>
                                 {pengumuman.files.map((file, index) => (
                                     <div key={index}>
                                         <button

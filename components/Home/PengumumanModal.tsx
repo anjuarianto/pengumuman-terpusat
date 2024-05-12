@@ -280,8 +280,8 @@ export default function PengumumanModal({
                     container: "my-swal-popup ",
                 },
                 text: editPengumumanData?.isEdit
-                    ? "Gagal update pengumuman\n" + err.response.data.message
-                    : "Gagal membuat pengumuman",
+                    ? "Gagal update pengumuman\n" + err.response.data?.message
+                    : "Gagal membuat pengumuman" + err.response.data?.message,
             });
         }
     };
@@ -417,7 +417,7 @@ export default function PengumumanModal({
                                     </div>
                                 </div>
                                 <div>
-                                    <label className=" text-gray-700 font-bold">Konten</label>
+                                    <label className=" text-gray-700 font-bold">Isi Pengumuman</label>
                                     <Controller
                                         name="content"
                                         control={pengumumanForm.control}
@@ -446,14 +446,14 @@ export default function PengumumanModal({
                                 </div>
 
                                 <div>
-                                    <label className="text-gray-700 font-bold">Attachment</label>
+                                    <label className="text-gray-700 font-bold">File Rujukan (Max:25MB)</label>
                                     <input
                                         type="file"
                                         id="attachment"
                                         {...pengumumanForm.register("attachment")}
                                         multiple={true}
                                         className="p-2 border border-gray-300 rounded-md w-full"
-                                        accept=".jpg,.jpeg,.png,.pdf,.zip"
+                                        accept=".jpg,.jpeg,.png,.pdf,.zip,.doc,.docx,.xls,.xlsx"
                                     />
                                 </div>
                                 {editPengumumanData?.isEdit &&

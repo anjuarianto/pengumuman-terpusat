@@ -288,18 +288,21 @@ export default function Home() {
 
 
                     {/* calendar and upcoming */}
-                    <div className="flex flex-col w-full md:w-2/5 md:h-screen gap-4 ">
-                        <Calendar
-                            openMyPengumuman={(date: string) => {
-                                setMyPengumumanOpen(date);
-                            }}
-                            myCalendarData={calendarData}
-                        />
+                    {yaLogin ? (
+                        <div className="flex flex-col w-full md:w-2/5 md:h-screen gap-4 ">
+                            <Calendar
+                                openMyPengumuman={(date: string) => {
+                                    setMyPengumumanOpen(date);
+                                }}
+                                myCalendarData={calendarData}
+                            />
 
-                        <UpcomingWidget events={upcomingEvent}>
+                            <UpcomingWidget events={upcomingEvent}>
 
-                        </UpcomingWidget>
-                    </div>
+                            </UpcomingWidget>
+                        </div>
+                    ) : ''}
+
                 </div>
             </div>
 

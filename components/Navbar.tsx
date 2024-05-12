@@ -63,11 +63,11 @@ export default function Navbar({email, role}: Props) {
                     <Image alt="logo" src={logo} className=" w-auto h-auto max-h-10 md:max-h-20"/>
                 </div>
                 <div className="px-4 py-2 text-center font-bold text-2xl md:text-3xl cursor-default  text-black">
-                    Pengumuman Terpusat
+                    Pusat Informasi
                 </div>
                 <div className="flex flex-col md:flex-row  md:items-center px-4 py-2 text-sm bg-dark-blue ">
           <span className="grow cursor-default md:text-lg">
-            Selamat Datang di Website Pengumuman Terpusat Teknik Informatika
+            Selamat Datang di Website Pusat Informasi Teknik Informatika
             Itera Untuk Mengetahui Informasi
           </span>
 

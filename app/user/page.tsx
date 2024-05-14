@@ -92,7 +92,23 @@ export default function User() {
   const columnsUserGroup: MUIDataTableColumn[] = [
     {
       name: "id",
-      label: "ID",
+      label: "Id",
+      options: {
+        display: false
+      }
+    },
+    {
+      name: "number",
+        label: "No.",
+        options: {
+          customBodyRender: (value: any, tableMeta: MUIDataTableMeta) => {
+            return (
+                <>
+                  {tableMeta.rowIndex + 1}
+                </>
+            );
+          },
+        },
     },
     {
       name: "name",
@@ -202,7 +218,23 @@ export default function User() {
   const columnsRoom: MUIDataTableColumn[] = [
     {
       name: "id",
-      label: "ID",
+      label: "Id",
+      options: {
+        display: false
+      }
+    },
+    {
+      name: "number",
+      label: "No.",
+      options: {
+        customBodyRender: (value: any, tableMeta: MUIDataTableMeta) => {
+          return (
+              <>
+                {tableMeta.rowIndex + 1}
+              </>
+          );
+        },
+      },
     },
     {
       name: "name",
@@ -310,7 +342,23 @@ export default function User() {
   const columnsUser: MUIDataTableColumn[] = [
     {
       name: "id",
-      label: "ID",
+      label: "Id",
+      options: {
+        display: false
+      }
+    },
+    {
+      name: "number",
+      label: "No.",
+      options: {
+        customBodyRender: (value: any, tableMeta: MUIDataTableMeta) => {
+          return (
+              <>
+                {tableMeta.rowIndex + 1}
+              </>
+          );
+        },
+      },
     },
     {
       name: "name",

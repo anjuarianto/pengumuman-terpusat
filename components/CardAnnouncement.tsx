@@ -39,9 +39,17 @@ export default function CardAnnouncement({
   can_edit,
   can_delete,
   deletePengumuman,
-  openDetailModal
+  openDetailModal,
+    created_at
 }: EditPengumuman) {
   const router = useRouter();
+
+  const dateTimeToIso = (date: string) => {
+    const dateTime = new Date(date);
+    return dateTime.toISOString().split("T")[0]
+        .split("-").reverse().join("-") + " "
+        + dateTime.toTimeString().split(" ")[0]
+  }
 
   return (
     <>
@@ -49,8 +57,9 @@ export default function CardAnnouncement({
         <div className="flex flex-col gap-2 p-2 rounded-lg ">
           <div className="flex flex-row items-center gap-2 text-sm justify-between">
             <div>
-              <span>Pengirim: {created_by}</span>{" "}
-              <span className="text-main-3">Deadline: {date} </span>
+              <span>Pengirim: <strong>{created_by}</strong></span>{" | "}
+              <span className="ms-2">Dibuat: <strong>{dateTimeToIso(created_at)}</strong> </span>{" | "}
+              <span className="text-main-3 ms-2">Deadline: <strong>{dateTimeToIso(date)}</strong> </span>
             </div>
             <div className="float-right">
               <span className="bg-orange text-white rounded-2xl p-2 mr-2">{room.name}</span>

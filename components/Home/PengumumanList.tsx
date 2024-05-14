@@ -100,6 +100,7 @@ const PengumumanList: React.FC<PengumumanListProps> = ({pengumuman, editForm, re
                             is_private={data.is_private}
                             files={data.files}
                             created_by={data.created_by}
+                            created_at={data.created_at}
                             editForm={() => editForm(data.id)}
                             can_reply={data.can_reply}
                             can_edit={data.can_edit}

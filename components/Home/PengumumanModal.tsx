@@ -102,6 +102,9 @@ export default function PengumumanModal({
     const pengumumanForm = useForm<PengumumanData>({
         mode: "onChange",
     });
+    const [judul, setJudul] = useState<string>("");
+    const [date, setDate] = useState<string>("");
+    const [time, setTime] = useState<string>("");
 
     useEffect(() => {
         if (isModalOpen && isEdit) {
@@ -203,6 +206,9 @@ export default function PengumumanModal({
 
         setJenisSelectedValue(jenisValue);
         setEditPengumumanData(data);
+        setJudul(response.data.data.judul);
+        setDate(date);
+        setTime(time);
 
         await handleRoomChange();
         setMahasiswaSelectedValue(recipients);
@@ -217,14 +223,17 @@ export default function PengumumanModal({
         setEditPengumumanData(null);
         setJenisSelectedValue(null);
         setKategoriSelectedValue(null);
+        setJudul("");
+        setDate("");
+        setTime("");
     };
 
     const onSubmit: SubmitHandler<PengumumanData> = async (data) => {
         try {
-            const formatedTime = data.date + " " + data.time;
+            const formatedTime = date + " " + time;
 
             const formData = new FormData();
-            formData.append("judul", data.title);
+            formData.append("judul", judul);
             formData.append("konten", editorData);
             formData.append("waktu", formatedTime);
             formData.append("is_private", jenisSelectedValue?.value);
@@ -311,7 +320,7 @@ export default function PengumumanModal({
                                 className="flex flex-col w-full gap-4 "
                             >
                                 <div className="w-full md:w-3/6">
-                                    <label className=" text-gray-700 font-bold">Jenis Pengumuman</label>
+                                    <label className=" text-gray-700 font-bold">Jenis Pengumuman<small className="text-red-600">*</small></label>
                                     <Select
                                         value={jenisSelectedValue}
                                         placeholder="Jenis.."
@@ -350,24 +359,22 @@ export default function PengumumanModal({
 
                                 <div className="flex">
                                     <div className="w-full md:w-3/6 mr-2">
-                                        <label className=" text-gray-700 font-bold">Judul</label>
+                                        <label className=" text-gray-700 font-bold">Judul<small
+                                            className="text-red-600">*</small></label>
                                         <input
                                             type="text"
                                             id="title"
+                                            defaultValue={editPengumumanData?.isEdit ? editPengumumanData.title : ""}
                                             required
-                                            defaultValue={
-                                                editPengumumanData?.isEdit
-                                                    ? editPengumumanData.title
-                                                    : ""
-                                            }
+                                            onChange={(e) => setJudul(e.target.value)}
                                             placeholder="Judul : ..."
                                             className="p-2 border border-gray-300 rounded-md w-full"
-                                            {...pengumumanForm.register("title", {required: true})}
                                         />
                                     </div>
                                     <div className="w-full md:w-3/6 mr-2">
                                         <FormControl fullWidth size="small">
-                                            <label className=" text-gray-700 font-bold">Kategori:</label>
+                                            <label className=" text-gray-700 font-bold">Kategori:<small
+                                                className="text-red-600">*</small></label>
                                             <Select
                                                 menuPortalTarget={document.body}
                                                 styles={{menuPortal: base => ({...base, zIndex: 9999})}}
@@ -388,19 +395,16 @@ export default function PengumumanModal({
 
 
                                 <div>
-                                    <label className=" text-gray-700 font-bold">Waktu</label>
+                                    <label className=" text-gray-700 font-bold">Waktu<small
+                                        className="text-red-600">*</small></label>
                                     <div className="flex flex-row gap-2">
                                         <input
                                             type="date"
                                             id="date"
+                                            defaultValue={editPengumumanData?.isEdit ? editPengumumanData.date : ""}
                                             required
-                                            defaultValue={
-                                                editPengumumanData?.isEdit
-                                                    ? editPengumumanData.date
-                                                    : ""
-                                            }
                                             className="p-2 border border-gray-300 rounded-md basis-1/2"
-                                            {...pengumumanForm.register("date", {required: true})}
+                                            onChange={(e) => setDate(e.target.value)}
                                         />
                                         <input
                                             type="time"
@@ -412,12 +416,13 @@ export default function PengumumanModal({
                                                     : ""
                                             }
                                             className="p-2 border border-gray-300 rounded-md basis-1/2"
-                                            {...pengumumanForm.register("time", {required: true})}
+                                            onChange={(e) =>  setTime(e.target.value) }
                                         />
                                     </div>
                                 </div>
                                 <div>
-                                    <label className=" text-gray-700 font-bold">Isi Pengumuman</label>
+                                    <label className=" text-gray-700 font-bold">Isi Pengumuman<small
+                                        className="text-red-600">*</small></label>
                                     <Controller
                                         name="content"
                                         control={pengumumanForm.control}

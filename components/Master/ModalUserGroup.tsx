@@ -30,7 +30,7 @@ type User = {
 }
 
 export default function ModalUserGroup({isOpen, isEdit, onClose}: Props) {
-    const API_URL = process.env.API_URL + "/user-group";
+    const API_URL = "api/user-group";
     const HEADERS = {
         Authorization: "Bearer " + Cookies.get("accessToken"),
     };
@@ -129,7 +129,7 @@ export default function ModalUserGroup({isOpen, isEdit, onClose}: Props) {
                 customClass: {
                     container: "my-swal-popup ",
                 },
-                text: response.data.message,
+                text: response.data?.message,
             });
         } catch(err) {
             await Swal.fire({
@@ -138,7 +138,7 @@ export default function ModalUserGroup({isOpen, isEdit, onClose}: Props) {
                 customClass: {
                     container: "my-swal-popup ",
                 },
-                text: err.response.data.message,
+                text: err.response.data?.message,
             });
         }
     }

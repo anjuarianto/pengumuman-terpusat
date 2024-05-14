@@ -129,6 +129,20 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
         onClose()
     }
 
+    const handleClearFilter = () => {
+        setSelectedOrder({value: 'desc', label: 'Terbaru'});
+        setSelectedPengirim(null);
+        setSelectedPenerima(null);
+        setMinDate('');
+        setMaxDate('');
+        setFileName('');
+        setJenisPengumuman(null);
+        setKategori(null);
+
+        filterValue({})
+        onClose()
+    }
+
     useEffect(() => {
         if (isOpen) {
             if(isLogin) {
@@ -247,7 +261,7 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
                                     <Grid item xs={6}>
                                         <label>Kategori: </label>
                                         <Select
-                                            // menuPortalTarget={document.body}
+                                            menuPortalTarget={document.body}
                                             styles={{menuPortal: base => ({...base, zIndex: 9999})}}
                                             placeholder="Kategori..."
                                             options={kategoriOptions}
@@ -291,15 +305,25 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
                                             />
                                         </FormControl>
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid item xs={6}>
+                                        <button
+                                            type="button"
+                                            onClick={handleClearFilter}
+                                            className="px-24 py-2 mt-4 float-start text-white bg-blue-500 rounded-lg w-fit hover:bg-gray-600"
+                                        >
+                                            Clear Filter
+                                        </button>
+                                    </Grid>
+                                    <Grid item xs={6}>
                                         <button
                                             type="button"
                                             onClick={handleApplyFilter}
-                                            className="px-24 py-2 mt-4 text-white bg-blue-500 rounded-lg w-fit hover:bg-blue-600"
+                                            className="px-24 py-2 mt-4 float-end text-white bg-blue-500 rounded-lg w-fit hover:bg-blue-600"
                                         >
                                             Apply
                                         </button>
                                     </Grid>
+
                                 </Grid>
 
 

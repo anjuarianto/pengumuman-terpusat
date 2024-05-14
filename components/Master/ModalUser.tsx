@@ -21,7 +21,7 @@ type User = {
 
 
 export default function ModalUser({isOpen, isEdit, onClose}: Props) {
-    const API_URL = process.env.API_URL + "/user";
+    const API_URL = "api/user";
     const HEADERS = {
         Authorization: "Bearer " + Cookies.get("accessToken"),
     };
@@ -52,6 +52,7 @@ export default function ModalUser({isOpen, isEdit, onClose}: Props) {
             const url = isEdit ? `${API_URL}/${isEdit}` : API_URL;
 
             const method = isEdit ? "PUT" : "POST"
+
 
             const dataForm = {
                 name: data.name,
@@ -84,7 +85,7 @@ export default function ModalUser({isOpen, isEdit, onClose}: Props) {
                 customClass: {
                     container: "my-swal-popup ",
                 },
-                text: err.response.data.message,
+                text: err.response.data?.message,
             });
         }
     }

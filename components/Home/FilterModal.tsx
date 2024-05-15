@@ -244,8 +244,9 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
                                     <Grid item xs={6} sx={{ display: isLogin? 'block' : 'none' }}>
                                         <label>Penerima: </label>
                                         <Select
-                                            // menuPortalTarget={document.body}
-                                            styles={{menuPortal: base => ({...base, zIndex: 9999})}}
+                                            menuPortalTarget={document.body}
+                                            styles={{menuPortal: base => ({...base, height: 35,
+                                                    minHeight: 35, zIndex: 9999})}}
                                             placeholder="--Semua Penerima--"
                                             isSearchable
                                             options={penerimaOptions}
@@ -262,7 +263,8 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
                                         <label>Kategori: </label>
                                         <Select
                                             menuPortalTarget={document.body}
-                                            styles={{menuPortal: base => ({...base, zIndex: 9999})}}
+                                            styles={{menuPortal: base => ({...base, height: 35,
+                                                    minHeight: 35, zIndex: 9999})}}
                                             placeholder="Kategori..."
                                             options={kategoriOptions}
                                             classNamePrefix="select"

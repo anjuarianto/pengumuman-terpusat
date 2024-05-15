@@ -7,6 +7,9 @@ import {CKEditor} from "@ckeditor/ckeditor5-react";
 import Editor from "ckeditor5-custom-build";
 import Cookies from "js-cookie";
 import {FormControl, Modal} from "@mui/material";
+import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
+import Tooltip from '@mui/material/Tooltip';
+
 import Swal from "sweetalert2";
 import UploadAdapter from "./UploadAdapter";
 
@@ -228,6 +231,21 @@ export default function PengumumanModal({
         setTime("");
     };
 
+    const handleDeleteAttachment = async (e: any) => {
+
+        const response = await axios({
+            method: 'POST',
+            url: `/api/delete-attachment/${e}`,
+            headers: {
+                Authorization: "Bearer " + Cookies.get("accessToken"),
+                "Content-Type": "multipart/form-data",
+            },
+
+        });
+
+        response.data.status === "success" && loadEditPengumuman();
+    }
+
     const onSubmit: SubmitHandler<PengumumanData> = async (data) => {
         try {
             const formatedTime = date + " " + time;
@@ -341,7 +359,8 @@ export default function PengumumanModal({
                                         control={pengumumanForm.control}
                                         render={({field}) => (
                                             <Select
-                                                {...field}
+                                                menuPortalTarget={document.body}
+                                                styles={{menuPortal: base => ({...base, zIndex: 9999})}}
                                                 value={mahasiswaSelectedValue}
                                                 placeholder="Penerima :..."
                                                 isMulti
@@ -464,7 +483,7 @@ export default function PengumumanModal({
                                 {editPengumumanData?.isEdit &&
                                     editPengumumanData.files.map((file, index) => (
                                         <div key={index}>
-                                            <li>{file.original_name}</li>
+                                            <li>{file.original_name} <Tooltip title="Delete Attachment" placement="top" arrow><CancelRoundedIcon onClick={(e) => {handleDeleteAttachment(file?.file)}} color="error"></CancelRoundedIcon></Tooltip></li>
                                         </div>
                                     ))}
 

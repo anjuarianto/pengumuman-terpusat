@@ -231,11 +231,11 @@ export default function PengumumanModal({
         setTime("");
     };
 
-    const handleDeleteAttachment = async (e: any) => {
+    const handleDeleteAttachment = async (id: any) => {
 
         const response = await axios({
             method: 'POST',
-            url: `/api/delete-attachment/${e}`,
+            url: `/api/delete-attachment/${id}`,
             headers: {
                 Authorization: "Bearer " + Cookies.get("accessToken"),
                 "Content-Type": "multipart/form-data",
@@ -483,7 +483,7 @@ export default function PengumumanModal({
                                 {editPengumumanData?.isEdit &&
                                     editPengumumanData.files.map((file, index) => (
                                         <div key={index}>
-                                            <li>{file.original_name} <Tooltip title="Delete Attachment" placement="top" arrow><CancelRoundedIcon onClick={(e) => {handleDeleteAttachment(file?.file)}} color="error"></CancelRoundedIcon></Tooltip></li>
+                                            <li>{file.original_name} <Tooltip title="Delete Attachment" placement="top" arrow><CancelRoundedIcon onClick={(e) => {handleDeleteAttachment(file?.id)}} color="error"></CancelRoundedIcon></Tooltip></li>
                                         </div>
                                     ))}
 

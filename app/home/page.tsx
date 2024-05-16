@@ -43,10 +43,10 @@ export default function Home() {
   const router = useRouter();
   const [pengumuman, setPengumuman] = useState<Pengumuman[]>([]);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [meta, setMeta] = useState();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [meta, setMeta] = useState<{ currentPage: number; lastPage: number }>({
+    currentPage: 1,
+    lastPage: 1,
+  });
 
   const [isModalOpenPengumuman, setIsModalOpenPengumuman] = useState(false);
   const [openCal, setOpenCal] = useState(false);
@@ -154,13 +154,13 @@ export default function Home() {
 
   useEffect(() => {
     if (yaLogin != null) {
-      loadPengumumanData(currentPage);
+      loadPengumumanData(meta.currentPage);
     }
   }, [yaLogin]);
 
   useEffect(() => {
     if (!isModalOpenPengumuman) {
-      loadPengumumanData(currentPage);
+      loadPengumumanData(meta.currentPage);
     }
 
     if (navigate) {
@@ -186,8 +186,6 @@ export default function Home() {
   ]);
 
   const loadPengumumanData = async (page: any) => {
-    setIsLoading(true);
-    setError(null);
     try {
       const API_URL_PENGUMUMAN = "/api/pengumuman";
       const API_URL_PUBLIK = "/api/pengumuman-publik";
@@ -212,7 +210,10 @@ export default function Home() {
 
       const pengumumanData: Pengumuman[] = response.data.data.data;
       console.log(response.data.data.meta.current_page);
-      setCurrentPage(response.data.data.meta.current_page);
+      setMeta({
+        currentPage: response.data.data.meta.current_page,
+        lastPage: response.data.data.meta.last_page,
+      });
       setPengumuman(pengumumanData);
     } catch (err) {
       console.log(err);
@@ -220,7 +221,7 @@ export default function Home() {
   };
 
   const handlePageChange = (pageNumber: any) => {
-    setCurrentPage(pageNumber);
+    setMeta({ ...meta, currentPage: pageNumber });
     loadPengumumanData(pageNumber);
   };
 
@@ -259,7 +260,7 @@ export default function Home() {
   const handleInputChange = (event: any) => {
     console.log(event.target.value);
     searchForm.setValue("search", event.target.value);
-    loadPengumumanData(currentPage);
+    loadPengumumanData(meta.currentPage);
   };
 
   return (
@@ -278,29 +279,55 @@ export default function Home() {
           }}
         />
 
-          {/* pagination */}
+        {/* pagination */}
         <div className="flex flex-row itmes-center gap-2">
           <Button
             className="bg-blue-500 text-white p-1"
             variant="contained"
             onClick={() => {
-              handlePageChange(currentPage - 1);
+              handlePageChange(meta.currentPage - 1);
             }}
           >
             prev page
           </Button>
 
-          <div className="px-4 py-2 rounded-md  m-auto text-white bg-slate-700">{currentPage}</div>
+          {meta.currentPage != 1 && (
+            <div
+              className="px-4 py-2 rounded-md  m-auto text-white bg-slate-700 transition cursor-default hover:cursor-default hover:bg-sky-600"
+              onClick={() => {
+                handlePageChange(1);
+              }}
+            >
+              1
+            </div>
+          )}
 
-          <Button
-            className="bg-blue-500 text-white p-1"
-            variant="contained"
-            onClick={() => {
-              handlePageChange(currentPage + 1);
-            }}
-          >
-            next page
-          </Button>
+          <div className="px-4 py-2 rounded-md  m-auto text-white border-2 border-sky-600 bg-slate-700">
+            {meta.currentPage}
+          </div>
+
+          {meta.currentPage != meta.lastPage && (
+            <div
+              className="px-4 py-2 rounded-md  m-auto text-white bg-slate-700 transition cursor-default hover:cursor-default hover:bg-sky-600"
+              onClick={() => {
+                handlePageChange(meta.lastPage);
+              }}
+            >
+              7
+            </div>
+          )}
+
+          {meta.lastPage !== meta.currentPage && (
+            <Button
+              className="bg-blue-500 text-white p-1"
+              variant="contained"
+              onClick={() => {
+                handlePageChange(meta.currentPage + 1);
+              }}
+            >
+              next page {meta.lastPage}
+            </Button>
+          )}
         </div>
 
         <div className="flex flex-col md:flex-row justify-center w-full md:h-screen  md:px-12 ">
@@ -358,7 +385,7 @@ export default function Home() {
         onClose={() => setFilterModalOpen(false)}
         filterValue={(filter) => {
           setFilterValue(filter);
-          loadPengumumanData(currentPage);
+          loadPengumumanData(meta.currentPage);
         }}
       ></FilterModal>
     </>

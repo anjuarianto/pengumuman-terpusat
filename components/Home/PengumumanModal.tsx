@@ -352,7 +352,8 @@ export default function PengumumanModal({
                                 </div>
                                 <div className={jenisSelectedValue?.value == '0'?  'hidden' : 'block'}>
                                     <label className="text-gray-700 font-bold">
-                                        Penerima
+                                        Penerima <small
+                                        className="text-red-600">*</small>
                                     </label>
                                     <Controller
                                         name="recipients"
@@ -490,7 +491,7 @@ export default function PengumumanModal({
                                 <div className="flex flex-col items-center">
                                     <button
                                         type="submit"
-                                        className="px-24 py-2 mt-4 text-white bg-blue-500 rounded-lg w-fit hover:bg-blue-600"
+                                        className="px-4 py-2 rounded-md  m-auto text-white border-sky-600 bg-dark-blue hover:cursor-pointer transition cursor-pointer hover:bg-dark-blue-500"
                                     >
                                         Submit
                                     </button>

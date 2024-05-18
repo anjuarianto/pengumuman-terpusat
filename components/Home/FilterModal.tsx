@@ -310,7 +310,7 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
                                         <button
                                             type="button"
                                             onClick={handleClearFilter}
-                                            className="px-24 py-2 mt-4 float-start text-white bg-blue-500 rounded-lg w-fit hover:bg-gray-600"
+                                            className="px-4 py-2 rounded-md  m-auto text-white border-sky-600 bg-dark-blue hover:cursor-pointer transition cursor-pointer hover:bg-dark-blue-500"
                                         >
                                             Clear Filter
                                         </button>
@@ -319,7 +319,7 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
                                         <button
                                             type="button"
                                             onClick={handleApplyFilter}
-                                            className="px-24 py-2 mt-4 float-end text-white bg-blue-500 rounded-lg w-fit hover:bg-blue-600"
+                                            className="px-4 py-2 rounded-md float-end text-white border-sky-600 bg-dark-blue hover:cursor-pointer transition cursor-pointer hover:bg-dark-blue-500"
                                         >
                                             Apply
                                         </button>

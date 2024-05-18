@@ -85,8 +85,8 @@ export default function MyPengumumanModal({isOpen, onClose, date}: ModalProps) {
                                             <TableCell>
                                                 <Button
                                                     onClick={handleButtonClick(item)}
-                                                    variant="outlined"
-                                                    color="primary">
+                                                    variant="contained"
+                                                    sx={{backgroundColor: "#2b507c", color: "white"}}>
                                                     Open
                                                 </Button>
                                             </TableCell>

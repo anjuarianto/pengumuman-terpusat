@@ -1,15 +1,18 @@
-import React, {useState} from 'react';
+"use client"
+import React, {useEffect, useState} from 'react';
 import CardAnnouncement from "@/components/CardAnnouncement";
 import Swal from "sweetalert2";
 import axios from "axios";
 import Cookies from "js-cookie";
 import PengumumanDetailModal from "@/components/Home/PengumumanDetailModal";
+import Pagination from "@/components/Home/Pagination";
 
 type Pengumuman = {
     created_by: string;
     id: number;
     judul: string;
     konten: string;
+    room: { id: number; name: string };
     waktu: string;
     penerima: { penerima_id: number; name: string; is_single_user: boolean }[];
     is_private: number;
@@ -17,28 +20,93 @@ type Pengumuman = {
     can_reply: boolean;
     can_edit: boolean;
     can_delete: boolean;
+    created_at: string;
 };
 
 type PengumumanListProps = {
-    pengumuman: Pengumuman[];
     editForm: (id: number) => void;
-    reload: () => void;
+    filter: {
+        order: null;
+        min_date: null;
+        max_date: null;
+        jenis: null;
+        kategori: null;
+        pengirim: null;
+        penerima_id: null;
+        file_name: null;
+    };
+    search: string;
 };
 
-const PengumumanList: React.FC<PengumumanListProps> = ({pengumuman, editForm, reload}) => {
-
+const PengumumanList: React.FC<PengumumanListProps> = ({editForm, search, filter}) => {
+    const [pengumuman, setPengumuman] = useState<Pengumuman[]>([]);
     const [selectedPengumuman, setSelectedPengumuman] = useState<{
         judul: string;
         konten: string;
         waktu: string;
-        rooms: { id: number; name: string };
+        created_by: string;
+        room: { id: number; name: string };
         files:{file:string; original_name:string}[];
-    }[] | null>(null);
-    const handleCardClick = (data) => {
+    } | null>(null);
+    const [reload, setReload] = useState(false);
+    const handleCardClick = (data:any) => {
         setSelectedPengumuman(data)
     };
+    const [meta, setMeta] = useState<{ currentPage: number; lastPage: number }>({
+        currentPage: 1,
+        lastPage: 1,
+    });
 
-    const deletePengumuman = async (id) => {
+    const loadPengumumanData = async (page: any) => {
+        try {
+            const API_URL_PENGUMUMAN = "/api/pengumuman";
+            const response = await axios.get(API_URL_PENGUMUMAN, {
+                params: {
+                    search: search,
+                    page: page,
+                    order: filter?.order,
+                    min_date: filter?.min_date,
+                    max_date: filter?.max_date,
+                    room_id: filter?.kategori,
+                    pengirim: filter?.pengirim,
+                    is_private: filter?.jenis,
+                    penerima_id: filter?.penerima_id,
+                    file_name: filter?.file_name,
+                },
+                headers: {
+                    Authorization: "Bearer " + Cookies.get("accessToken"),
+                },
+            });
+
+            const pengumumanData: Pengumuman[] = response.data.data.data;
+
+            setMeta({
+                currentPage: response.data.data.meta.current_page,
+                lastPage: response.data.data.meta.last_page
+            });
+
+            setPengumuman(pengumumanData);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    useEffect(() => {
+        loadPengumumanData(1);
+    },[]);
+
+    useEffect(() => {
+        if(reload) {
+            loadPengumumanData(meta.currentPage);
+            setReload(false)
+        }
+    }, [reload]);
+
+    useEffect(() => {
+            loadPengumumanData(1);
+    }, [search, filter]);
+
+    const deletePengumuman = async (id:number) => {
         Swal.fire({
             title: `Delete Pengumuman ?`,
             text: "You won't be able to revert this!",
@@ -61,7 +129,7 @@ const PengumumanList: React.FC<PengumumanListProps> = ({pengumuman, editForm, re
                         await Swal.fire("Deleted!", response.data.message, "success");
                     })
                     .then(async () => {
-                        reload()
+                        // reload()
                     })
                     .catch((error) => {
                         Swal.fire("Gagal", error, "error");
@@ -69,22 +137,20 @@ const PengumumanList: React.FC<PengumumanListProps> = ({pengumuman, editForm, re
             }
         });
     };
-    if (pengumuman.length === 0) {
-        return (
-            <div className="w-full md:w-3/5 md:h-screen  order-last md:order-none">
-                <div className="flex flex-col gap-4 m-2 rounded-lg ">
-                    <h1 className="text-2xl font-bold text-center">No Pengumuman</h1>
-
-                </div>
-            </div>
-        );
-    }
 
     return (
         <div className="w-full md:w-5/5 md:h-screen  order-last md:order-none">
+            <Pagination
+                meta={meta}
+                setMeta={setMeta}
+                reload={() => { setReload(true) }}
+            />
             <div className="flex flex-col gap-4 m-2 rounded-lg ">
                 {pengumuman.length == 0 ? (
-                    <h1 className="text-2xl font-bold text-center">No Pengumuman</h1>
+                    <div className="min-h-52 flex justify-center">
+                        <h1 className="text-2xl mt-auto mb-auto font-bold text-center">No Pengumuman</h1>
+                    </div>
+
                 ) : (pengumuman.map((data, index) => (
                         <CardAnnouncement
                             openDetailModal={() => handleCardClick(data)}
@@ -117,6 +183,12 @@ const PengumumanList: React.FC<PengumumanListProps> = ({pengumuman, editForm, re
                     />
                 )}
             </div>
+
+            <Pagination
+                meta={meta}
+                setMeta={setMeta}
+                reload={() => { setReload(true) }}
+            />
         </div>
     );
 };

@@ -31,7 +31,6 @@ export default function ModalRoomList({isOpen, onClose}: ModalProps) {
             let url = data.is_joined ? `${API_URL}/unjoin` : `${API_URL}/join`;
             const response = await axios.post(url, { room_id : data.id }, HEADERS);
             setReload(true);
-
         } catch (error) {
             console.log(error)
         }

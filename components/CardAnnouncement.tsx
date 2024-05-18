@@ -19,6 +19,7 @@ type EditPengumuman = {
   can_reply: boolean;
   can_edit: boolean;
   can_delete: boolean;
+  created_at: string;
   deletePengumuman: (id: number) => void;
   openDetailModal: (id:number) => void;
 };
@@ -40,7 +41,7 @@ export default function CardAnnouncement({
   can_delete,
   deletePengumuman,
   openDetailModal,
-    created_at
+  created_at
 }: EditPengumuman) {
   const router = useRouter();
 
@@ -57,9 +58,9 @@ export default function CardAnnouncement({
         <div className="flex flex-col gap-2 p-2 rounded-lg ">
           <div className="flex flex-row items-center gap-2 text-sm justify-between">
             <div>
-              <span className="me-2">Pengirim: <strong>{created_by}</strong></span>{" | "}
-              <span className="me-2">Dibuat: <strong>{dateTimeToIso(created_at)}</strong> </span>{" | "}
-              <span className="text-main-3">Deadline: <strong>{dateTimeToIso(date)}</strong> </span>
+              <div className="me-2">Pengirim: <strong>{created_by}</strong></div>
+              <div className="me-2">Dibuat: <strong>{dateTimeToIso(created_at)}</strong> </div>
+              <div>Deadline: <strong>{dateTimeToIso(date)}</strong> </div>
             </div>
             <div className="float-right">
               <span className="bg-orange text-white rounded-2xl p-2 mr-2">{room.name}</span>

@@ -10,8 +10,10 @@ type PengumumanDetailModalProps = {
         judul: string;
         konten: string;
         waktu: string;
-        rooms: { id: number; name: string };
-    };
+        room: { id: number; name: string };
+        created_by: string;
+        files:{file:string; original_name:string}[];
+    } | null;
     isOpen: boolean;
     onRequestClose: () => void;
 };
@@ -53,24 +55,22 @@ const PengumumanDetailModal: React.FC<PengumumanDetailModalProps> = ({ pengumuma
                         <div className="flex w-full p-4 flex-col gap-2 p-2 rounded-lg overflow-y-auto">
                             <div className="flex flex-row items-center gap-2 text-sm justify-between">
                                 <div className="flex flex-row gap-4 items-center ">
-                                    <span>• {pengumuman.created_by}</span>{" "}
-                                    <span className="text-main-3">{pengumuman.waktu} </span>
+                                    <span>• {pengumuman?.created_by}</span>{" "}
+                                    <span className="text-main-3">{pengumuman?.waktu} </span>
                                 </div>
 
                                 <span className="float-right bg-orange text-white rounded-2xl p-2">
-                                  {pengumuman.room.name}
+                                  {pengumuman?.room.name}
                                 </span>
                             </div>
-                            <h1 className="text-2xl font-bold">{pengumuman.judul}</h1>
-
+                            <h1 className="text-2xl font-bold">{pengumuman?.judul}</h1>
                             <p
-                                className="py-2 my-editor"
-                                dangerouslySetInnerHTML={{__html: pengumuman.konten}}
-                            />
+                                className="py-2 my-editor">{ pengumuman?.konten}</p>
+
 
                             <div>
                                 <h2>File Rujukan : </h2>
-                                {pengumuman.files.map((file, index) => (
+                                {pengumuman?.files.map((file, index) => (
                                     <div key={index}>
                                         <button
                                             className="flex flex-row items-center cursor-pointer"

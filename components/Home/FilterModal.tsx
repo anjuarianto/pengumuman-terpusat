@@ -18,7 +18,7 @@ const KATEGORI_SOURCE_URL = '/api/room-list';
 
 type FilterModalProps = {
     isOpen: boolean;
-    filterValue: () => void;
+    filterValue: (filter: any) => void;
     onClose: () => void;
 };
 
@@ -113,7 +113,7 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
         const arrayPenerima = selectedPenerima?.map((item: any) => {
             return item?.value
         });
-        const filter = {
+        const newFilter = {
             order: selectedOrder?.value,
             min_date: minDate?.trim(),
             max_date: maxDate?.trim(),
@@ -124,9 +124,8 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
             file_name: fileName?.trim(),
         }
 
-        filterValue(filter)
-
-        onClose()
+        filterValue(newFilter); // Pass the new filter to the parent component
+        onClose();
     }
 
     const handleClearFilter = () => {
@@ -244,7 +243,7 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
                                     <Grid item xs={6} sx={{ display: isLogin? 'block' : 'none' }}>
                                         <label>Penerima: </label>
                                         <Select
-                                            menuPortalTarget={document.body}
+                                            // menuPortalTarget={document.body}
                                             styles={{menuPortal: base => ({...base, height: 35,
                                                     minHeight: 35, zIndex: 9999})}}
                                             placeholder="--Semua Penerima--"
@@ -262,7 +261,7 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
                                     <Grid item xs={6}>
                                         <label>Kategori: </label>
                                         <Select
-                                            menuPortalTarget={document.body}
+                                            // menuPortalTarget={document.body}
                                             styles={{menuPortal: base => ({...base, height: 35,
                                                     minHeight: 35, zIndex: 9999})}}
                                             placeholder="Kategori..."

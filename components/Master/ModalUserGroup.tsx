@@ -194,7 +194,7 @@ export default function ModalUserGroup({isOpen, isEdit, onClose}: Props) {
                                     <label className=" text-gray-700 font-bold">Members</label>
 
                                         <Select
-                                            menuPortalTarget={document.body}
+                                            // menuPortalTarget={document.body}
                                             styles={{menuPortal: base => ({...base, height: 35,
                                                     minHeight: 35, zIndex: 9999})}}
                                             value={userSelected}

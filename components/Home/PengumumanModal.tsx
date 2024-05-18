@@ -359,7 +359,7 @@ export default function PengumumanModal({
                                         control={pengumumanForm.control}
                                         render={({field}) => (
                                             <Select
-                                                menuPortalTarget={document.body}
+                                                // menuPortalTarget={document.body}
                                                 styles={{menuPortal: base => ({...base, zIndex: 9999})}}
                                                 value={mahasiswaSelectedValue}
                                                 placeholder="Penerima :..."
@@ -395,7 +395,7 @@ export default function PengumumanModal({
                                             <label className=" text-gray-700 font-bold">Kategori:<small
                                                 className="text-red-600">*</small></label>
                                             <Select
-                                                menuPortalTarget={document.body}
+                                                // menuPortalTarget={document.body}
                                                 styles={{menuPortal: base => ({...base, zIndex: 9999})}}
                                                 placeholder="Kategori..."
                                                 options={kategoriOptions}

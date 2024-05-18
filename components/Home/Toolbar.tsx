@@ -1,27 +1,23 @@
 import React from 'react';
 import {FaCalendarPlus, FaSearch} from "react-icons/fa";
 import {useForm} from "react-hook-form";
+import {TextField} from "@mui/material";
 
 type ToolbarProps = {
-    openModalFormPengumuman: () => void;
-    onSubmitSearch: (data: any) => void;
-    handleInputChange: (event: any) => void;
-    myData: any;
-    roomActive: number;
-    setRoomId: (id: number) => void;
-    openFilterModal: () => void;
+    openModalFormPengumuman: () => void,
+    myData: any,
+    roomActive: number,
+    setRoomId: (id: number) => void,
+    openFilterModal: () => void,
+    handleSearchChange?: (event: any) => void
 }
 
 const Toolbar: React.FC<ToolbarProps> = ({
                                              openModalFormPengumuman,
-                                             onSubmitSearch,
-                                             handleInputChange,
                                              myData,
-                                             roomActive,
-                                             setRoomId,
-                                             openFilterModal
+                                             openFilterModal,
+                                             handleSearchChange
                                          }) => {
-    const searchForm = useForm<any>();
     const canCreate = myData?.permissions.includes("create-pengumuman");
 
     return (
@@ -39,26 +35,13 @@ const Toolbar: React.FC<ToolbarProps> = ({
                 )}
 
 
-                <form
-                    className="relative w-full mx-auto text-gray-600 "
-                    onSubmit={searchForm.handleSubmit(onSubmitSearch)}
-                >
-                    <input
-                        className="h-10 px-5 pr-16 text-sm w-full bg-white border-2 border-gray-300 rounded-lg focus:outline-none"
-                        type="search"
-                        placeholder="Search"
-                        {...searchForm.register("search", {
-                            onChange: handleInputChange,
-                        })}
-                    />
-                    <button
-                        type="submit"
-                        className="absolute top-0 right-0 mt-3 mr-4"
-                    >
-                        <FaSearch/>
-                    </button>
-                </form>
-
+                <TextField
+                    sx={{width: "100%", background: 'white', borderRadius: '5px'}}
+                    variant="outlined"
+                    size={"small"}
+                    placeholder="Search..."
+                    onChange={handleSearchChange}
+                />
                 <button
                     onClick={openFilterModal}
                     className="px-6 py-2 text-center rounded-lg shadow-lg basis-1/5 bg-orange">

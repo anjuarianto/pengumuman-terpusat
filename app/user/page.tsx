@@ -190,7 +190,7 @@ export default function User() {
                                 );
                               })
                               .then(async () => {
-                                await window.location.reload();
+                                loadUserGroupData();
                               })
                               .catch((error) => {
                                 Swal.fire(
@@ -314,7 +314,7 @@ export default function User() {
                                 );
                               })
                               .then(async () => {
-                                await window.location.reload();
+                                loadRoomData();
                               })
                               .catch((error) => {
                                 Swal.fire(
@@ -432,7 +432,7 @@ export default function User() {
                                 );
                               })
                               .then(async () => {
-                                await window.location.reload();
+                                loadUserData();
                               })
                               .catch((error) => {
                                 Swal.fire(
@@ -461,7 +461,15 @@ export default function User() {
     if(!isModalUserOpen) {
       loadUserData();
     }
-  }, [isModalUserOpen])
+
+    if(!isModalUserGroupOpen) {
+      loadUserGroupData();
+    }
+
+    if(!isModalRoomOpen) {
+      loadRoomData();
+    }
+  }, [isModalUserOpen, isModalUserGroupOpen, isModalRoomOpen]);
 
   useEffect(() => {
     tokenCheck().then(() => {
@@ -610,6 +618,9 @@ export default function User() {
 
   const handleClose = () => {
     setOpenUser(false);
+    loadUserData();
+    loadRoomData();
+    loadUserGroupData();
     setIsModalRoomOpen(false);
     setIsModalRoomEdit(null);
   };

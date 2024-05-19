@@ -182,6 +182,7 @@ export default function Home() {
   const handleClosePengumumanModal = () => {
     setIsModalOpenPengumuman(false);
     setpengumumanIsEdit(null);
+    setReloadPengumuman(true);
   };
 
   const editForm = async (id: number) => {
@@ -215,7 +216,8 @@ export default function Home() {
               editForm(id);
             }}
             filter={filter}
-           search={search}
+            search={search}
+            load={reloadPengumuman}
           />
 
           {/* calendar and upcoming */}

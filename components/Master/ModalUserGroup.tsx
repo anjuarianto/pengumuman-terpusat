@@ -101,7 +101,8 @@ export default function ModalUserGroup({isOpen, isEdit, onClose}: Props) {
     };
 
 
-    const onSubmit = async () => {
+    const onSubmit = async (e: any) => {
+        e.preventDefault()
         try {
             const url = isEdit ? `${API_URL}/${isEdit}` : API_URL;
 

@@ -36,9 +36,10 @@ type PengumumanListProps = {
         file_name: null;
     };
     search: string;
+    load: boolean;
 };
 
-const PengumumanList: React.FC<PengumumanListProps> = ({editForm, search, filter}) => {
+const PengumumanList: React.FC<PengumumanListProps> = ({editForm, search, filter, load}) => {
     const [pengumuman, setPengumuman] = useState<Pengumuman[]>([]);
     const [selectedPengumuman, setSelectedPengumuman] = useState<{
         judul: string;
@@ -104,7 +105,7 @@ const PengumumanList: React.FC<PengumumanListProps> = ({editForm, search, filter
 
     useEffect(() => {
             loadPengumumanData(1);
-    }, [search, filter]);
+    }, [search, filter, load]);
 
     const deletePengumuman = async (id:number) => {
         Swal.fire({

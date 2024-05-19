@@ -44,7 +44,7 @@ export default function Pagination({meta, setMeta, reload}: PaginationProps) {
                     </div>
                 )}
 
-                <div className="px-4 py-2 rounded-md  m-auto text-white border-sky-600 bg-dark-blue hover:cursor-pointer transition cursor-pointer hover:bg-dark-blue-500" >
+                <div className="px-4 py-2 rounded-md  m-auto text-white border-2 border-white bg-dark-blue hover:cursor-pointer transition cursor-pointer hover:bg-dark-blue-500" >
                     {meta.currentPage}
                 </div>
                 {meta.currentPage != meta.lastPage && meta.currentPage != meta.lastPage-1 && (

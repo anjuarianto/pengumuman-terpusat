@@ -307,8 +307,8 @@ export default function PengumumanModal({
                     container: "my-swal-popup ",
                 },
                 text: editPengumumanData?.isEdit
-                    ? "Gagal update pengumuman\n" + err.response.data?.message
-                    : "Gagal membuat pengumuman" + err.response.data?.message,
+                    ? "Gagal update pengumuman " + err.response.data?.message
+                    : "Gagal membuat pengumuman " + err.response.data?.message,
             });
         }
     };

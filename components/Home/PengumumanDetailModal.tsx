@@ -64,8 +64,7 @@ const PengumumanDetailModal: React.FC<PengumumanDetailModalProps> = ({ pengumuma
                                 </span>
                             </div>
                             <h1 className="text-2xl font-bold">{pengumuman?.judul}</h1>
-                            <p
-                                className="py-2 my-editor">{ pengumuman?.konten}</p>
+                            <p className="py-2" dangerouslySetInnerHTML={{__html: pengumuman?.konten}}/>
 
 
                             <div>

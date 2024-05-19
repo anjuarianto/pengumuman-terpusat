@@ -1,8 +1,9 @@
 "use client";
 import React, { useState } from "react";
 
-import { FaEdit, FaTrash, FaCommentAlt } from "react-icons/fa";
+import {FaEdit, FaTrash, FaCommentAlt, FaFile} from "react-icons/fa";
 import { useRouter } from "next/navigation";
+
 type EditPengumuman = {
   id: number;
   room: { id: number; name: string };
@@ -59,8 +60,8 @@ export default function CardAnnouncement({
           <div className="flex flex-row items-center gap-2 text-sm justify-between">
             <div>
               <div className="me-2">Pengirim: <strong>{created_by}</strong></div>
-              <div className="me-2">Dibuat: <strong>{dateTimeToIso(created_at)}</strong> </div>
-              <div>Deadline: <strong>{dateTimeToIso(date)}</strong> </div>
+              <div className="me-2">Dibuat: <strong>{dateTimeToIso(created_at)}</strong></div>
+              <div>Deadline: <strong>{dateTimeToIso(date)}</strong></div>
             </div>
             <div className="float-right">
               <span className="bg-orange text-white rounded-2xl p-2 mr-2">{room.name}</span>
@@ -68,46 +69,56 @@ export default function CardAnnouncement({
             </div>
           </div>
           <div>
-            Penerima: {penerima.length > 0 ? penerima.map((penerima) => penerima.name.concat(penerima.is_single_user ? '': '(Group)') ).join(", ") : '-'}
+            Penerima: {penerima.length > 0 ? penerima.map((penerima) => penerima.name.concat(penerima.is_single_user ? '' : '(Group)')).join(", ") : '-'}
           </div>
           <h1 className="text-2xl font-bold">{title}</h1>
 
-          <p className="py-2 my-editor" dangerouslySetInnerHTML={{ __html: content }} />
+          <p className="py-2 my-editor" dangerouslySetInnerHTML={{__html: content}}/>
+
+          <div>
+          {/* if files exists print count of files*/}
+            {files.length > 0 && (
+                <div className="flex flex-row items-center">
+                  <FaFile/> <span>{files.length} Attachment</span>
+
+                </div>
+            )}
+          </div>
 
           <div className="flex flex-row gap-4 text-sm">
             {can_reply && (
-              <button
-                className="flex flex-row items-center gap-2 px-4 py-1 border rounded-lg hover:bg-gray-200"
-                onClick={(e) => {
-                    e.stopPropagation();
-                    router.push(`/home/${id}`)
-                  }
-                }
-              >
-                <FaCommentAlt /> Reply
-              </button>
+                <button
+                    className="flex flex-row items-center gap-2 px-4 py-1 border rounded-lg hover:bg-gray-200"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      router.push(`/home/${id}`)
+                    }
+                    }
+                >
+                  <FaCommentAlt/> Reply
+                </button>
             )}
             {can_edit && (
-              <button
-                className="flex flex-row items-center gap-2 px-4 py-1 border rounded-lg hover:bg-gray-200"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  editForm(id);
-                }}
-              >
-                <FaEdit /> Edit
-              </button>
+                <button
+                    className="flex flex-row items-center gap-2 px-4 py-1 border rounded-lg hover:bg-gray-200"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      editForm(id);
+                    }}
+                >
+                  <FaEdit/> Edit
+                </button>
             )}
             {can_delete && (
-              <button
-                className="flex flex-row items-center gap-2 px-4 py-1 border rounded-lg hover:bg-gray-200"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  deletePengumuman(id);
-                }}
-              >
-                <FaTrash /> Delete
-              </button>
+                <button
+                    className="flex flex-row items-center gap-2 px-4 py-1 border rounded-lg hover:bg-gray-200"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deletePengumuman(id);
+                    }}
+                >
+                  <FaTrash/> Delete
+                </button>
             )}
           </div>
         </div>

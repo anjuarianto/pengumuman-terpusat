@@ -61,7 +61,12 @@ const PengumumanList: React.FC<PengumumanListProps> = ({editForm, search, filter
     const loadPengumumanData = async (page: any) => {
         try {
             const API_URL_PENGUMUMAN = "/api/pengumuman";
-            const response = await axios.get(API_URL_PENGUMUMAN, {
+            const API_URL_PENGUMUMAN_PUBLIK = "/api/pengumuman-publik";
+
+            // if authenticated url is /api/pengumuman, else /api/pengumuman-publik
+const url = Cookies.get("accessToken") ? API_URL_PENGUMUMAN : API_URL_PENGUMUMAN_PUBLIK;
+
+            const response = await axios.get(url, {
                 params: {
                     search: search,
                     page: page,

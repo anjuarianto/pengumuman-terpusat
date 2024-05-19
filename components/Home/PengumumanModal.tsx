@@ -471,7 +471,7 @@ export default function PengumumanModal({
                                 </div>
 
                                 <div>
-                                    <label className="text-gray-700 font-bold">File Rujukan (Max:25MB)</label>
+                                    <label className="text-gray-700 font-bold">File Rujukan (Max:5MB)</label>
                                     <input
                                         type="file"
                                         id="attachment"

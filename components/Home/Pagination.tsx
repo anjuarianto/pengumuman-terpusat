@@ -22,7 +22,7 @@ export default function Pagination({meta, setMeta, reload}: PaginationProps) {
                 sx={{backgroundColor: "#2b507c", color: "white"}}
                 className="mr-2"
             >
-                Previous
+                Sebelumnya
             </Button>
             <div className="flex gap-2">
                 {meta.currentPage != 1 && (
@@ -73,7 +73,7 @@ export default function Pagination({meta, setMeta, reload}: PaginationProps) {
                 sx={{backgroundColor: "#2b507c", color: "white"}}
                 className="ml-2"
             >
-                Next
+                Selanjutnya
             </Button>
         </div>
     );

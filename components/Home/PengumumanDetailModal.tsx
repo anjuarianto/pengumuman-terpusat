@@ -30,7 +30,7 @@ const PengumumanDetailModal: React.FC<PengumumanDetailModalProps> = ({ pengumuma
             tag.click();
             tag.remove();
         } catch (error) {
-            console.error("Error downloading file:", error);
+            console.error("Gagal Mengunduh File:", error);
             // Handle download error gracefully, e.g., display an error message to the user
         }
     };

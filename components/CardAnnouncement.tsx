@@ -61,7 +61,7 @@ export default function CardAnnouncement({
             <div>
               <div className="me-2">Pengirim: <strong>{created_by}</strong></div>
               <div className="me-2">Dibuat: <strong>{dateTimeToIso(created_at)}</strong></div>
-              <div>Deadline: <strong>{dateTimeToIso(date)}</strong></div>
+              <div>Tenggat Waktu: <strong>{dateTimeToIso(date)}</strong></div>
             </div>
             <div className="float-right">
               <span className="bg-orange text-white rounded-2xl p-2 mr-2">{room.name}</span>
@@ -79,7 +79,7 @@ export default function CardAnnouncement({
           {/* if files exists print count of files*/}
             {files.length > 0 && (
                 <div className="flex flex-row items-center">
-                  <FaFile/> <span>{files.length} Attachment</span>
+                  <FaFile/> <span>{files.length} File Rujukan</span>
 
                 </div>
             )}
@@ -95,7 +95,7 @@ export default function CardAnnouncement({
                     }
                     }
                 >
-                  <FaCommentAlt/> Reply
+                  <FaCommentAlt/> Komentar
                 </button>
             )}
             {can_edit && (
@@ -106,7 +106,7 @@ export default function CardAnnouncement({
                       editForm(id);
                     }}
                 >
-                  <FaEdit/> Edit
+                  <FaEdit/> Ubah
                 </button>
             )}
             {can_delete && (
@@ -117,7 +117,7 @@ export default function CardAnnouncement({
                       deletePengumuman(id);
                     }}
                 >
-                  <FaTrash/> Delete
+                  <FaTrash/> Hapus
                 </button>
             )}
           </div>

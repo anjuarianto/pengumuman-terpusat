@@ -121,7 +121,7 @@ const ModalRoom: React.FC<ModalRoomProps> = ({
 
       await Swal.fire({
         icon: "success",
-        title: "Success",
+        title: "Berhasil",
         customClass: {
           container: "my-swal-popup ",
         },
@@ -130,7 +130,7 @@ const ModalRoom: React.FC<ModalRoomProps> = ({
     } catch (err) {
       await Swal.fire({
         icon: "error",
-        title: "Error",
+        title: "Gagal",
         customClass: {
           container: "my-swal-popup ",
         },
@@ -186,7 +186,7 @@ const ModalRoom: React.FC<ModalRoomProps> = ({
                 />
               </div>
               <div>
-                <label className=" text-gray-700 font-bold">Description</label>
+                <label className=" text-gray-700 font-bold">Deskripsi</label>
                 <input
                   type="text"
                   id="title"
@@ -227,7 +227,7 @@ const ModalRoom: React.FC<ModalRoomProps> = ({
                   type="submit"
                   className="px-24 py-2 mt-4 text-white bg-blue-500 rounded-lg w-fit hover:bg-blue-600"
                 >
-                  Submit
+                  Kirim
                 </button>
               </div>
             </form>

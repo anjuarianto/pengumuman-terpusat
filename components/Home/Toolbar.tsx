@@ -30,7 +30,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
                         onClick={openModalFormPengumuman}
                     >
                         <FaCalendarPlus/>
-                        <span>Add News</span>
+                        <span>Pengumuman Baru</span>
                     </button>
                 )}
 

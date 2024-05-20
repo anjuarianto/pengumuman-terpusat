@@ -126,7 +126,7 @@ export default function ModalUserGroup({isOpen, isEdit, onClose}: Props) {
 
             await Swal.fire({
                 icon: "success",
-                title: "Success",
+                title: "Berhasil",
                 customClass: {
                     container: "my-swal-popup ",
                 },
@@ -135,7 +135,7 @@ export default function ModalUserGroup({isOpen, isEdit, onClose}: Props) {
         } catch(err) {
             await Swal.fire({
                 icon: "error",
-                title: "Error",
+                title: "Gagal",
                 customClass: {
                     container: "my-swal-popup ",
                 },
@@ -171,7 +171,7 @@ export default function ModalUserGroup({isOpen, isEdit, onClose}: Props) {
                     }}
                 >
                     <div className="w-full h-fit py-4 text-2xl font-bold text-center text-white rounded-t-lg bg-dark-blue ">
-                        {!isEdit ? "Create User Group" : "Edit User Group"}
+                        {!isEdit ? "Buat Kelompok Pengguna" : "Edit Kelompok Pengguna"}
                     </div>
                     <div className="w-full px-4 md:px-24 py-4 overflow-y-auto">
                         <form
@@ -218,7 +218,7 @@ export default function ModalUserGroup({isOpen, isEdit, onClose}: Props) {
                                     type="submit"
                                     className="px-24 py-2 mt-4 text-white bg-blue-500 rounded-lg w-fit hover:bg-blue-600"
                                 >
-                                    Submit
+                                    Kirim
                                 </button>
                             </div>
                         </form>

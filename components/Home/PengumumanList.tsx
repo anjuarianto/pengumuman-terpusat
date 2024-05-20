@@ -114,13 +114,14 @@ const url = Cookies.get("accessToken") ? API_URL_PENGUMUMAN : API_URL_PENGUMUMAN
 
     const deletePengumuman = async (id:number) => {
         Swal.fire({
-            title: `Delete Pengumuman ?`,
-            text: "You won't be able to revert this!",
+            title: `Yakin Akan Hapus Pengumuman ini ?`,
+            text: "Kamu Tidak Bisa Mengembalikan Ini",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!",
+            confirmButtonText: "YA, Hapus",
+            cancelButtonText: "Tidak"
         }).then(async (result) => {
             if (result.isConfirmed) {
                 const apiUrl = `/api/pengumuman/${id}`;
@@ -132,7 +133,7 @@ const url = Cookies.get("accessToken") ? API_URL_PENGUMUMAN : API_URL_PENGUMUMAN
                         },
                     })
                     .then(async (response) => {
-                        await Swal.fire("Deleted!", response.data.message, "success");
+                        await Swal.fire("Terhapus!", response.data.message, "Berhasil");
                     })
                     .then(async () => {
                         // reload()

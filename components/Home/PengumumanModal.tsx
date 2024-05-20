@@ -302,7 +302,7 @@ export default function PengumumanModal({
 
             await Swal.fire({
                 icon: "error",
-                title: "Error",
+                title: "Gagal",
                 customClass: {
                     container: "my-swal-popup ",
                 },
@@ -329,8 +329,8 @@ export default function PengumumanModal({
                         <div
                             className="w-full h-fit py-4 text-2xl font-bold text-center text-white rounded-t-lg bg-dark-blue ">
                             {editPengumumanData?.isEdit
-                                ? "Edit Pengumuman"
-                                : "Add Pengumuman"}
+                                ? "Ubah Pengumuman"
+                                : "Tambah Pengumuman"}
                         </div>
                         <div className="w-full px-8 md:px-24 py-4 overflow-y-auto">
                             <form
@@ -484,7 +484,7 @@ export default function PengumumanModal({
                                 {editPengumumanData?.isEdit &&
                                     editPengumumanData.files.map((file, index) => (
                                         <div key={index}>
-                                            <li>{file.original_name} <Tooltip title="Delete Attachment" placement="top" arrow><CancelRoundedIcon onClick={(e) => {handleDeleteAttachment(file?.id)}} color="error"></CancelRoundedIcon></Tooltip></li>
+                                            <li>{file.original_name} <Tooltip title="Hapus File Rujukan" placement="top" arrow><CancelRoundedIcon onClick={(e) => {handleDeleteAttachment(file?.id)}} color="error"></CancelRoundedIcon></Tooltip></li>
                                         </div>
                                     ))}
 
@@ -493,7 +493,7 @@ export default function PengumumanModal({
                                         type="submit"
                                         className="px-4 py-2 rounded-md  m-auto text-white border-sky-600 bg-dark-blue hover:cursor-pointer transition cursor-pointer hover:bg-dark-blue-500"
                                     >
-                                        Submit
+                                        Kirim
                                     </button>
                                 </div>
                             </form>

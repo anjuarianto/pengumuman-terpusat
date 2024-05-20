@@ -265,7 +265,7 @@ export default function Pengumuman({
       console.log(err);
       await Swal.fire({
         icon: "error",
-        title: "Error",
+        title: "Gagal",
         customClass: {
           container: "my-swal-popup ",
         },
@@ -292,13 +292,14 @@ export default function Pengumuman({
 
   const deleteComment = (replyID: number) => {
     Swal.fire({
-      title: `Delete comment ?`,
-      text: "You won't be able to revert this!",
+      title: `Hapus Komentar ?`,
+      text: "Kamu Tidak Bisa Mengembalikan Ini",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Ya, Hapus",
+      cancelButtonText: "Tidak"
     }).then(async (result) => {
       if (result.isConfirmed) {
         const apiUrl = `/api/pengumuman/${pid}/reply/${replyID}`;
@@ -356,7 +357,7 @@ export default function Pengumuman({
               />
 
               <div>
-                <h2>Attachment : </h2>
+                <h2>File Rujukan : </h2>
                 {pengumuman.files.map((file, index) => (
                     <div key={index}>
                       <button
@@ -396,7 +397,7 @@ export default function Pengumuman({
                               setOpenEditComment({reply_id: 0, isOpen: false});
                         }}
                     >
-                      Add Comment
+                      Tambah Komentar
                     </Button>
                   </div>
               ) : (
@@ -419,14 +420,14 @@ export default function Pengumuman({
 
                     <div className="flex flex-row gap-4 py-4">
                       <Button variant="contained" type="submit">
-                        Submit
+                        Kirim
                       </Button>
                       <Button
                           variant="contained"
                           color="error"
                           onClick={() => setOpenAddComment(false)}
                       >
-                        Cancel
+                        Batalkan
                       </Button>
                     </div>
                   </form>
@@ -436,7 +437,7 @@ export default function Pengumuman({
 
           {/* comments */}
           <div className="w-full h-fit my-4 pl-8 pr-4 py-2 bg-white rounded-lg hover:cursor-default">
-            <h1 className="font-bold text-xl">Comments</h1>
+            <h1 className="font-bold text-xl">Komentar</h1>
 
             <div className="flex flex-col gap-4">
               {comments.map((data) => (
@@ -468,7 +469,7 @@ export default function Pengumuman({
                             setOpenAddComment(false);
                         }}
                       >
-                        Edit
+                        Ubah
                       </Button>
                       <Button
                         variant="outlined"
@@ -476,7 +477,7 @@ export default function Pengumuman({
                         size="small"
                         onClick={() => deleteComment(data.id)}
                       >
-                        Delete
+                        Hapus
                       </Button>
                     </div>
                   )}

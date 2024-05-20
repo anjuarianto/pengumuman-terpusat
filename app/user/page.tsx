@@ -112,11 +112,11 @@ export default function User() {
     },
     {
       name: "name",
-      label: "User Group Name",
+      label: "Nama Kelompok",
     },
     {
       name: "user",
-      label: "User",
+      label: "Pengguna",
       options: {
         customBodyRender: (value: any, tableMeta: MUIDataTableMeta) => {
           return (
@@ -133,22 +133,22 @@ export default function User() {
     },
     {
       name: "created_at",
-      label: "created_at",
+      label: "Dibuat Pada",
     },
     {
       name: "updated_at",
-      label: "updated_at",
+      label: "Diperarui Pada",
     },
     {
       name: "action",
-      label: "Action",
+      label: "Aksi",
       options: {
         customBodyRender: (value: any, tableMeta: MUIDataTableMeta) => {
           return (
             <>
               {
                 <div className="flex flex-row gap-2">
-                  <Tooltip title="Update User Group" placement="top" arrow>
+                  <Tooltip title="Perbarui Kelompok Pengguna" placement="top" arrow>
                     <button
                       className="p-2 text-white bg-blue-500 hover:bg-blue-600 font-bold rounded-lg "
                       onClick={() => {
@@ -160,18 +160,19 @@ export default function User() {
                     </button>
                   </Tooltip>
 
-                  <Tooltip title="Remove User Group" placement="top" arrow>
+                  <Tooltip title="Hapus" placement="top" arrow>
                     <button
                       className="p-2 text-white bg-red-500 hover:bg-red-600 font-bold rounded-lg "
                       onClick={() => {
                         Swal.fire({
-                          title: `Delete ${tableMeta.rowData[1]} ?`,
-                          text: "You won't be able to revert this!",
+                          title: `Hapus ${tableMeta.rowData[1]} ?`,
+                          text: "Anda Tidak Dapat Mengembalikan Ini",
                           icon: "warning",
                           showCancelButton: true,
                           confirmButtonColor: "#3085d6",
                           cancelButtonColor: "#d33",
-                          confirmButtonText: "Yes, delete it!",
+                          confirmButtonText: "Ya, Hapus",
+                          cancelButtonText: "Tidak"
                         }).then(async (result) => {
                           if (result.isConfirmed) {
                             const apiUrl = `/api/user-group/${tableMeta.rowData[0]}`;
@@ -184,9 +185,9 @@ export default function User() {
                               })
                               .then(async (response) => {
                                 await Swal.fire(
-                                  "Deleted!",
+                                  "Terhapus!",
                                   response.data.message,
-                                  "success"
+                                  "Berasil"
                                 );
                               })
                               .then(async () => {
@@ -196,7 +197,7 @@ export default function User() {
                                 Swal.fire(
                                   "Gagal",
                                   "Gagal menghapus kelas",
-                                  "error"
+                                  "Gagal"
                                 );
                               });
                           }
@@ -238,11 +239,11 @@ export default function User() {
     },
     {
       name: "name",
-      label: "Kategori Name",
+      label: "Nama Kategori",
     },
     {
       name: "description",
-      label: "Description",
+      label: "Deskripsi",
     },
     // {
     //   name: "members",
@@ -265,14 +266,14 @@ export default function User() {
 
     {
       name: "action",
-      label: "Action",
+      label: "Aksi",
       options: {
         customBodyRender: (value: any, tableMeta: MUIDataTableMeta) => {
           return (
             <>
               {
                 <div className="flex flex-row gap-2">
-                  <Tooltip title="Update Room" placement="top" arrow>
+                  <Tooltip title="Perbarui Kategori" placement="top" arrow>
                     <button
                       className="p-2 text-white bg-blue-500 hover:bg-blue-600 font-bold rounded-lg "
                       onClick={() => {
@@ -284,18 +285,19 @@ export default function User() {
                     </button>
                   </Tooltip>
 
-                  <Tooltip title="Remove Room" placement="top" arrow>
+                  <Tooltip title="Hapus Kategori" placement="top" arrow>
                     <button
                       className="p-2 text-white bg-red-500 hover:bg-red-600 font-bold rounded-lg "
                       onClick={() => {
                         Swal.fire({
-                          title: `Delete ${tableMeta.rowData[2]} ?`,
-                          text: "You won't be able to revert this!",
+                          title: `Hapus ${tableMeta.rowData[2]} ?`,
+                          text: "Anda Tidak Dapat Mengembalikan Ini",
                           icon: "warning",
                           showCancelButton: true,
                           confirmButtonColor: "#3085d6",
                           cancelButtonColor: "#d33",
-                          confirmButtonText: "Yes, delete it!",
+                          confirmButtonText: "Ya, Hapus",
+                          cancelButtonText: "Tidak"
                         }).then(async (result) => {
                           if (result.isConfirmed) {
                             const apiUrl = `/api/room/${tableMeta.rowData[0]}`;
@@ -308,9 +310,9 @@ export default function User() {
                               })
                               .then(async (response) => {
                                 await Swal.fire(
-                                  "Deleted!",
+                                  "Terhapus!",
                                   response.data.message,
-                                  "success"
+                                  "Berhasil"
                                 );
                               })
                               .then(async () => {
@@ -320,7 +322,7 @@ export default function User() {
                                 Swal.fire(
                                   "Gagal",
                                   "Gagal menghapus kelas",
-                                  "error"
+                                  "Gagal"
                                 );
                               });
                           }
@@ -362,7 +364,7 @@ export default function User() {
     },
     {
       name: "name",
-      label: "User Name",
+      label: "Nama Pengguna",
     },
     {
       name: "email",
@@ -374,23 +376,23 @@ export default function User() {
     },
     {
       name: "created_at",
-      label: "created_at",
+      label: "Dibuat Pada",
     },
     {
       name: "updated_at",
-      label: "updated_at",
+      label: "Diperbarui Pada",
     },
 
     {
       name: "action",
-      label: "Action",
+      label: "Aksi",
       options: {
         customBodyRender: (value: any, tableMeta: MUIDataTableMeta) => {
           return (
             <>
               {
                 <div className="flex flex-row gap-2">
-                  <Tooltip title="Update User" placement="top" arrow>
+                  <Tooltip title="Perbarui Pengguna" placement="top" arrow>
                     <button
                       className="p-2 text-white bg-blue-500 hover:bg-blue-600 font-bold rounded-lg "
                       onClick={() => {
@@ -402,18 +404,19 @@ export default function User() {
                     </button>
                   </Tooltip>
 
-                  <Tooltip title="Remove User" placement="top" arrow>
+                  <Tooltip title="Hapus Pengguna" placement="top" arrow>
                     <button
                       className="p-2 text-white bg-red-500 hover:bg-red-600 font-bold rounded-lg "
                       onClick={() => {
                         Swal.fire({
-                          title: `Delete ${tableMeta.rowData[2]} ?`,
-                          text: "You won't be able to revert this!",
+                          title: `Hapus ${tableMeta.rowData[2]} ?`,
+                          text: "Kamu Tidak dapat mengembalikan ini!",
                           icon: "warning",
                           showCancelButton: true,
                           confirmButtonColor: "#3085d6",
                           cancelButtonColor: "#d33",
-                          confirmButtonText: "Yes, delete it!",
+                          confirmButtonText: "Ya, Hapus",
+                          cancelButtonText: "Tidak"
                         }).then(async (result) => {
                           if (result.isConfirmed) {
                             const apiUrl = `/api/user/${tableMeta.rowData[0]}`;
@@ -426,9 +429,9 @@ export default function User() {
                               })
                               .then(async (response) => {
                                 await Swal.fire(
-                                  "Deleted!",
+                                  "Terhapus!",
                                   response.data.message,
-                                  "success"
+                                  "Berhasil"
                                 );
                               })
                               .then(async () => {
@@ -438,7 +441,7 @@ export default function User() {
                                 Swal.fire(
                                   "Gagal",
                                   "Gagal menghapus user",
-                                  "error"
+                                  "Gagal"
                                 );
                               });
                           }
@@ -673,7 +676,7 @@ export default function User() {
                       } px-4 py-2`}
                       onClick={() => setOptionsMenu("usergroup")}
                   >
-                    User Group List
+                    Kelompok Pengguna
                   </button>
                   <button
                       className={`${
@@ -683,7 +686,7 @@ export default function User() {
                       } rounded-r-lg px-4 py-2`}
                       onClick={() => setOptionsMenu("user")}
                   >
-                    User List
+                    Daftar Pengguna
                   </button>
                 </div>
               </div>
@@ -703,7 +706,7 @@ export default function User() {
                     }
                   }}
               >
-                {optionsMenu === "room" ? "Tambah Kategori" : optionsMenu === "user" ? "Tambah User" : "Tambah User Group"}
+                {optionsMenu === "room" ? "Tambah Kategori" : optionsMenu === "user" ? "Tambah Pengguna" : "Tambah Kelompok"}
               </button>
             </div>
 
@@ -714,8 +717,8 @@ export default function User() {
                     optionsMenu === "room"
                       ? "Kategori List"
                       : optionsMenu === "usergroup"
-                      ? "User Group List"
-                      : "User List"
+                      ? "Daftar Kelompok Pengguna"
+                      : "Daftar Pengguna"
                   }
                   data={
                     optionsMenu === "room"

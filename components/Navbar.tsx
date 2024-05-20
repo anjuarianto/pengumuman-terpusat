@@ -85,7 +85,7 @@ export default function Navbar({email, role}: Props) {
                             aria-label="select merge strategy"
                             aria-haspopup="menu"
                             onClick={() => router.push("/login")}
-                        >Login</Button>
+                        >Masuk</Button>
                         </span>
                     )}
 

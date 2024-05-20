@@ -18,7 +18,7 @@ type Props = {
 };
 
 function DropdownNavbar({role,logout}: Props) {
-    const options = role == 'dosen' || role == 'tendik' ?  ['Edit Master Data', 'Logout'] : ['Logout'];
+    const options = role == 'dosen' || role == 'tendik' ?  ['Ubah Data', 'Keluar'] : ['Keluar'];
     const router = useRouter();
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef<HTMLDivElement>(null);
@@ -27,11 +27,11 @@ function DropdownNavbar({role,logout}: Props) {
         event: React.MouseEvent<HTMLLIElement, MouseEvent>,
         index: number,
     ) => {
-        if(event.currentTarget.textContent == "Logout"){
+        if(event.currentTarget.textContent == "Keluar"){
             logout();
         }
 
-        if(event.currentTarget.textContent == "Edit Master Data"){
+        if(event.currentTarget.textContent == "Ubah Data"){
             router.push('/user');
         }
 

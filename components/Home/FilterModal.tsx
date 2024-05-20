@@ -197,7 +197,7 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
                                     <Grid item xs={6}>
                                         <Grid container spacing={3}>
                                             <Grid item xs={6}>
-                                                <label>Min Date</label>
+                                                <label>Min Waktu</label>
                                                 <input
                                                     type="date"
                                                     name="min_date"
@@ -210,7 +210,7 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
                                                 />
                                             </Grid>
                                             <Grid item xs={6}>
-                                                <label>Max Date</label>
+                                                <label>Max Waktu</label>
                                                 <input
                                                     type="date"
                                                     name="max_date"
@@ -300,7 +300,7 @@ export default function FilterModal({isOpen, onClose, filterValue}: FilterModalP
                                             <TextField
                                                 variant="outlined"
                                                 size={"small"}
-                                                label="Nama Attachment"
+                                                label="Perihal"
                                                 onChange={(e) => setFileName(e.target.value)}
                                                 value={fileName}
                                             />

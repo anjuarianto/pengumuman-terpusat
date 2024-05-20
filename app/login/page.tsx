@@ -82,14 +82,15 @@ export default function Login() {
             // Show success message with SweetAlert2
             await Swal.fire({
                 icon: "success",
-                title: "Success",
-                text: "Login successful!",
+                title: "Berhasil",
+                text: "Berhasil Masuk!",
+                confirmButtonText : "YA"
             });
         } catch (error) {
             await Swal.fire({
                 icon: "error",
-                title: "Error",
-                text: "Login failed. Please try again later.",
+                title: "Gagal",
+                text: "Gagal Masuk, Diharapkan Coba Lagi.",
             });
         }
     };
@@ -104,8 +105,8 @@ export default function Login() {
         } catch (error) {
             await Swal.fire({
                 icon: "error",
-                title: "Error",
-                text: "Login failed. Please try again later.",
+                title: "Gagal",
+                text: "Gagal Masuk, Coba Lagi Kembali.",
             });
         }
     };
@@ -137,7 +138,7 @@ export default function Login() {
                                 >
                                     <div
                                         className="flex flex-row items-center justify-center w-full gap-2 p-3 border border-gray-300 rounded-md hover:cursor-pointer">
-                                        <div className=""><strong>SSO</strong> Login</div>
+                                        <div className=""><strong>SSO</strong> Masuk</div>
                                     </div>
                                     <div>or</div>
                                     <input
@@ -175,7 +176,7 @@ export default function Login() {
                                         type="submit"
                                         className="px-12 py-3 font-semibold text-white transition duration-300 bg-blue-600 rounded-md shadow-lg hover:bg-blue-800"
                                     >
-                                        Login
+                                        Masuk
                                     </button>
                                     <Link
                                         href={"/home"}

@@ -14,7 +14,7 @@ const UpcomingWidget: React.FC<UpcomingWidgetProps> = ({events}) => {
 
     return (
         <div className="p-6 m-2 bg-white rounded-lg ">
-            <h2 className="py-2 text-xl text-center ">Upcoming</h2>
+            <h2 className="py-2 text-xl text-center ">Agenda Terdekat</h2>
             <div className="divide-y ">
                 {events && events.map((event, index) => (
                     <button

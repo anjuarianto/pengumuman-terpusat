@@ -25,7 +25,7 @@ const PengumumanDetailModal: React.FC<PengumumanDetailModalProps> = ({ pengumuma
             const tag = document.createElement("a");
             tag.target = "_blank"
             tag.href = `/storage/pengumuman/${fileUrl}`;
-            tag.setAttribute("download", fileName);
+            // tag.setAttribute("download", fileName);
             document.body.appendChild(tag);
             tag.click();
             tag.remove();

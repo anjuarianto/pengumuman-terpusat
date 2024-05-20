@@ -1,3 +1,5 @@
+import Cookies from 'js-cookie';
+
 class UploadAdapter {
     loader: any;
     xhr: XMLHttpRequest = new XMLHttpRequest();
@@ -25,6 +27,7 @@ class UploadAdapter {
         const xhr = this.xhr = new XMLHttpRequest();
 
         xhr.open('POST', '/api/upload', true);
+        xhr.setRequestHeader('Authorization', 'Bearer ' + Cookies.get('accessToken'));
         xhr.responseType = 'json';
     }
 

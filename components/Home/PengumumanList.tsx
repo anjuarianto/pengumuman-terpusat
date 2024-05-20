@@ -136,7 +136,7 @@ const url = Cookies.get("accessToken") ? API_URL_PENGUMUMAN : API_URL_PENGUMUMAN
                         await Swal.fire("Terhapus!", response.data.message, "Berhasil");
                     })
                     .then(async () => {
-                        // reload()
+                        setReload(true)
                     })
                     .catch((error) => {
                         Swal.fire("Gagal", error, "error");

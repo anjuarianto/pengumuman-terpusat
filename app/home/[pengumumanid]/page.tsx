@@ -406,14 +406,10 @@ export default function Pengumuman({
                         name="content"
                         control={replyForm.control}
                         render={({field: {onChange, value}}) => (
-                            <CKEditor
-                                editor={Editor}
-                                config={editorConfiguration}
-                                data={""}
-                                onChange={(event, editor) => {
-                                  const data = editor.getData();
-                                  setEditorData(data);
-                                }}
+                           <textarea
+                                 className="w-full p-2 border rounded-lg"
+                                 value={editorData}
+                                 onChange={(e) => setEditorData(e.target.value)}
                             />
                         )}
                     />
@@ -489,14 +485,10 @@ export default function Pengumuman({
                           name="content"
                           control={replyForm.control}
                           render={({ field: { onChange, value } }) => (
-                            <CKEditor
-                              editor={Editor}
-                              config={editorConfiguration}
-                              data={""}
-                              onChange={(event, editor) => {
-                                const data = editor.getData();
-                                setEditorData(data);
-                              }}
+                            <textarea
+                                className="w-full p-2 border rounded-lg"
+                                value={editorData}
+                                onChange={(e) => setEditorData(e.target.value)}
                             />
                           )}
                         />

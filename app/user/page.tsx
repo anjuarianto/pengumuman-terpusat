@@ -696,6 +696,7 @@ export default function User() {
                         onClick={() => {
                           setIsModalUploadExcelOpen(true);
                         }}
+                        
                       >
                         Upload Excel
                       </button>
@@ -770,6 +771,7 @@ export default function User() {
       <ModalUploadExcel
         isOpen={isModalUploadExcelOpen}
         onClose={() => setIsModalUploadExcelOpen(false)}
+        loadTableData={loadUserData}
       />
 
       <ModalUser

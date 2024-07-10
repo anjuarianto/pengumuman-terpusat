@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import { Modal, Box, Typography, Button } from '@mui/material';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import Swal from 'sweetalert2';
 
 interface ModalUploadExcelProps {
     isOpen: boolean;
     onClose: () => void;
+    loadTableData: () => void;
 }
 
 interface ModalUploadExcelState {
@@ -23,26 +27,42 @@ class ModalUploadExcel extends Component<ModalUploadExcelProps, ModalUploadExcel
         this.setState({ file });
     };
 
-    handleUpload = () => {
+    handleUpload = async () => {
         if (this.state.file) {
             // Handle file upload logic here
             console.log('Uploading file:', this.state.file);
             const formData = new FormData();
-            const url = process.env.API_URL + '/upload-user-excel';
+            const API_URL = 'api/user-excel-upload';
             formData.append('file', this.state.file);
 
-            fetch(url, {
-                method: 'POST',
-                body: formData,
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Success:', data);
-                    // You can add more logic here to handle the response
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
+            try {
+                const response = await axios.post(API_URL, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: "Bearer " + Cookies.get("accessToken"),
+                    },
                 });
+
+                if (response.status === 200) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'File uploaded successfully!',
+                    });
+
+                    this.props.onClose();
+                    // Assuming you have a method to load the data of the table
+                    this.props.loadTableData();
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Failed to upload file.',
+                    });
+                }
+            } catch (error: any) {
+                alert('Error uploading file: ' + error.message);
+            }
         }
     };
 

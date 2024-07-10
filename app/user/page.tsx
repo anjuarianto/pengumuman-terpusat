@@ -6,6 +6,7 @@ import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import ModalRoom from "@/components/Master/ModalRoom";
 import ModalUser from "@/components/Master/ModalUser";
 import ModalUserGroup from "@/components/Master/ModalUserGroup";
+import ModalUploadExcel from "@/components/Master/ModalUploadExcel";
 
 import MUIDataTable, {
   MUIDataTableColumn,
@@ -55,6 +56,7 @@ export default function User() {
 
   const [isModalUserGroupOpen, setIsModalUserGroupOpen] = useState(false);
   const [isModalUserGroupEdit, setIsModalUserGroupEdit] = useState<number | null>(null);
+  const [isModalUploadExcelOpen, setIsModalUploadExcelOpen] = useState(false);
 
   const [isModalUserOpen, setIsModalUserOpen] = useState(false);
   const [isModalUserEdit, setIsModalUserEdit] = useState<number | null>(null);
@@ -99,16 +101,16 @@ export default function User() {
     },
     {
       name: "number",
-        label: "No.",
-        options: {
-          customBodyRender: (value: any, tableMeta: MUIDataTableMeta) => {
-            return (
-                <>
-                  {tableMeta.rowIndex + 1}
-                </>
-            );
-          },
+      label: "No.",
+      options: {
+        customBodyRender: (value: any, tableMeta: MUIDataTableMeta) => {
+          return (
+            <>
+              {tableMeta.rowIndex + 1}
+            </>
+          );
         },
+      },
     },
     {
       name: "name",
@@ -120,13 +122,13 @@ export default function User() {
       options: {
         customBodyRender: (value: any, tableMeta: MUIDataTableMeta) => {
           return (
-              <>
-                <ul className="list-disc pl-4">
-                  {value.map((member: any, index: number) => (
-                      <li key={index}>{member.email}</li>
-                  ))}
-                </ul>
-              </>
+            <>
+              <ul className="list-disc pl-4">
+                {value.map((member: any, index: number) => (
+                  <li key={index}>{member.email}</li>
+                ))}
+              </ul>
+            </>
           );
         },
       },
@@ -230,9 +232,9 @@ export default function User() {
       options: {
         customBodyRender: (value: any, tableMeta: MUIDataTableMeta) => {
           return (
-              <>
-                {tableMeta.rowIndex + 1}
-              </>
+            <>
+              {tableMeta.rowIndex + 1}
+            </>
           );
         },
       },
@@ -355,9 +357,9 @@ export default function User() {
       options: {
         customBodyRender: (value: any, tableMeta: MUIDataTableMeta) => {
           return (
-              <>
-                {tableMeta.rowIndex + 1}
-              </>
+            <>
+              {tableMeta.rowIndex + 1}
+            </>
           );
         },
       },
@@ -461,15 +463,15 @@ export default function User() {
   ];
 
   useEffect(() => {
-    if(!isModalUserOpen) {
+    if (!isModalUserOpen) {
       loadUserData();
     }
 
-    if(!isModalUserGroupOpen) {
+    if (!isModalUserGroupOpen) {
       loadUserGroupData();
     }
 
-    if(!isModalRoomOpen) {
+    if (!isModalRoomOpen) {
       loadRoomData();
     }
   }, [isModalUserOpen, isModalUserGroupOpen, isModalRoomOpen]);
@@ -500,17 +502,17 @@ export default function User() {
   const loadMyData = async () => {
     try {
       const response = await axios.get(
-          "/api/me",
-          {
-            headers: {
-              Authorization:
-                  "Bearer " + Cookies.get("accessToken"),
-            },
-          }
+        "/api/me",
+        {
+          headers: {
+            Authorization:
+              "Bearer " + Cookies.get("accessToken"),
+          },
+        }
       );
       setMyData(response.data);
     } catch (err) {
-        console.log(err);
+      console.log(err);
     }
   };
 
@@ -655,59 +657,72 @@ export default function User() {
                   </button>
                 </Tooltip>
                 <div
-                    className={`  w-fit  rounded-lg  shadow-lg 
+                  className={`  w-fit  rounded-lg  shadow-lg 
             `}
                 >
-                  <button
-                      className={`${
-                          optionsMenu === "room"
-                              ? "bg-dark-blue text-white"
-                              : "bg-white hover:text-white hover:bg-dark-blue-h"
-                      } rounded-l-lg px-4 py-2`}
+                  <div>
+
+
+                    <button
+                      className={`${optionsMenu === "room"
+                        ? "bg-dark-blue text-white"
+                        : "bg-white hover:text-white hover:bg-dark-blue-h"
+                        } rounded-l-lg px-4 py-2`}
                       onClick={() => setOptionsMenu("room")}
-                  >
-                    Kategori List
-                  </button>
-                  <button
-                      className={`${
-                          optionsMenu === "usergroup"
-                              ? "bg-dark-blue text-white"
-                              : "bg-white hover:text-white hover:bg-dark-blue-h"
-                      } px-4 py-2`}
+                    >
+                      Kategori List
+                    </button>
+                    <button
+                      className={`${optionsMenu === "usergroup"
+                        ? "bg-dark-blue text-white"
+                        : "bg-white hover:text-white hover:bg-dark-blue-h"
+                        } px-4 py-2`}
                       onClick={() => setOptionsMenu("usergroup")}
-                  >
-                    Kelompok Pengguna
-                  </button>
-                  <button
-                      className={`${
-                          optionsMenu === "user"
-                              ? "bg-dark-blue text-white"
-                              : "bg-white hover:text-white hover:bg-dark-blue-h"
-                      } rounded-r-lg px-4 py-2`}
+                    >
+                      Kelompok Pengguna
+                    </button>
+                    <button
+                      className={`${optionsMenu === "user"
+                        ? "bg-dark-blue text-white"
+                        : "bg-white hover:text-white hover:bg-dark-blue-h"
+                        } rounded-r-lg px-4 py-2`}
                       onClick={() => setOptionsMenu("user")}
-                  >
-                    Daftar Pengguna
-                  </button>
+                    >
+                      Daftar Pengguna
+                    </button>
+                    {optionsMenu === "user" && (
+                      <button
+                        className="bg-dark-blue text-white rounded-lg px-4 py-2 ml-2"
+                        onClick={() => {
+                          setIsModalUploadExcelOpen(true);
+                        }}
+                        
+                      >
+                        Upload Excel
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
               <button
-                  className="bg-dark-blue text-white rounded-lg px-4 py-2 "
-                  onClick={() => {
-                    switch (optionsMenu) {
-                      case "room":
-                        setIsModalRoomOpen(true)
-                        break;
-                      case "user":
-                        setIsModalUserOpen(true);
-                        break;
-                      case "usergroup":
-                        setIsModalUserGroupOpen(true);
-                        break;
-                    }
-                  }}
+                className="bg-dark-blue text-white rounded-lg px-4 py-2 "
+                onClick={() => {
+                  switch (optionsMenu) {
+                    case "room":
+                      setIsModalRoomOpen(true)
+                      break;
+                    case "user":
+                      setIsModalUserOpen(true);
+                      break;
+                    case "usergroup":
+                      setIsModalUserGroupOpen(true);
+                      break;
+                  }
+                }}
               >
                 {optionsMenu === "room" ? "Tambah Kategori" : optionsMenu === "user" ? "Tambah Pengguna" : "Tambah Kelompok"}
               </button>
+
             </div>
 
             <Paper>
@@ -717,22 +732,22 @@ export default function User() {
                     optionsMenu === "room"
                       ? "Kategori List"
                       : optionsMenu === "usergroup"
-                      ? "Daftar Kelompok Pengguna"
-                      : "Daftar Pengguna"
+                        ? "Daftar Kelompok Pengguna"
+                        : "Daftar Pengguna"
                   }
                   data={
                     optionsMenu === "room"
                       ? RoomData
                       : optionsMenu === "usergroup"
-                      ? userGroupData
-                      : userData
+                        ? userGroupData
+                        : userData
                   }
                   columns={
                     optionsMenu === "room"
                       ? columnsRoom
                       : optionsMenu === "usergroup"
-                      ? columnsUserGroup
-                      : columnsUser
+                        ? columnsUserGroup
+                        : columnsUser
                   }
                   options={{
                     rowsPerPage: 10,
@@ -753,22 +768,28 @@ export default function User() {
         </div>
       </div>
 
+      <ModalUploadExcel
+        isOpen={isModalUploadExcelOpen}
+        onClose={() => setIsModalUploadExcelOpen(false)}
+        loadTableData={loadUserData}
+      />
+
       <ModalUser
         isOpen={isModalUserOpen}
         isEdit={isModalUserEdit}
         onClose={() => {
-            setIsModalUserOpen(false);
-            setIsModalUserEdit(null);
+          setIsModalUserOpen(false);
+          setIsModalUserEdit(null);
         }}
-        />
+      />
 
       <ModalUserGroup
-          isOpen={isModalUserGroupOpen}
-          isEdit={isModalUserGroupEdit}
-          onClose={() => {
-            setIsModalUserGroupOpen(false);
-            setIsModalUserGroupEdit(null);
-          }}
+        isOpen={isModalUserGroupOpen}
+        isEdit={isModalUserGroupEdit}
+        onClose={() => {
+          setIsModalUserGroupOpen(false);
+          setIsModalUserGroupEdit(null);
+        }}
       />
 
       <ModalRoom

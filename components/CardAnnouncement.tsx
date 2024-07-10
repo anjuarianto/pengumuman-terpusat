@@ -68,9 +68,13 @@ export default function CardAnnouncement({
               <span className="text-gray-400">{is_private === 0 ? "Publik" : "Private"}</span>
             </div>
           </div>
-          <div>
-            Penerima: {penerima.length > 0 ? penerima.map((penerima) => penerima.name.concat(penerima.is_single_user ? '' : '(Group)')).join(", ") : '-'}
-          </div>
+          {/*if publik dont show the div*/}
+            {is_private === 1 && (
+                <div>
+                  Penerima: {penerima.length > 0 ? penerima.map((penerima) => penerima.name.concat(penerima.is_single_user ? '' : '(Group)')).join(", ") : '-'}
+                </div>
+            )}
+
           <h1 className="text-2xl font-bold">{title}</h1>
 
           <p className="py-2 my-editor" dangerouslySetInnerHTML={{__html: content}}/>
